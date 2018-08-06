@@ -2,6 +2,7 @@
   "name": "trimm-client",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "type-check": "tsc",
@@ -9,13 +10,16 @@
     "build": "webpack --config webpack.prod.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Richard Oliver Bray",
   "license": "ISC",
   "dependencies": {
-    "babel-loader": "^8.0.0-beta.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "webpack": "^4.16.4"
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.55",
@@ -24,6 +28,10 @@
     "@babel/preset-typescript": "^7.0.0-beta.56",
     "@types/react": "^16.4.7",
     "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^6.0.6",
+    "babel-loader": "^8.0.0-beta.4",
+    "redux-devtools-extension": "^2.13.5",
+    "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
     "webpack-merge": "^4.1.4"
