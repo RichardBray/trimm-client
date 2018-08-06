@@ -15,12 +15,12 @@ const ROOT = document.querySelector(".react-root");
 const store = createStore(reducers, middleware);
 
 ReactDOM.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <Switch>
-                <Route path="/login" component={Login} />
-            </Switch>
-        </BrowserRouter>
-    </Provider>, 
-    ROOT
+	<Provider store={store}>
+		<BrowserRouter>
+			<Switch>
+				<Route path="/" component={Login} />
+			</Switch>
+		</BrowserRouter>
+	</Provider>,
+	ROOT
 );

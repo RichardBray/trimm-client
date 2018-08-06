@@ -4,11 +4,11 @@ const merge = require("../Library/Caches/typescript/2.9/node_modules/@types/webp
 const common = require("./webpack.common");
 
 module.exports = merge(common, {
-    mode: "production",
-    plugins: [
-        // new UglifyJSPlugin(),
-        new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("production")
-        })
-    ]
+	mode: "production",
+	plugins: [
+		// new UglifyJSPlugin(),
+		new webpack.DefinePlugin({
+			"process.env.NODE_ENV": JSON.stringify("production")
+		})
+	]
 });
