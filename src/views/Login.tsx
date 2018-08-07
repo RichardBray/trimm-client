@@ -2,23 +2,24 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { ILogin } from "../uitls/interfaces";
+import { ILogin, ILoginComp } from "../uitls/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
 
 
-class Login extends Component<{}, {}> {
+class Login extends Component<ILoginComp, ILogin> {
 
-	static state: ILogin = {
+	state: ILogin = {
 		email: "",
 		password: ""
 	}
 
 	handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
-		// checkLoginDetails(this.state);
+		e.preventDefault();
+		this.props.checkLoginDetails(this.state);
 	}
 
-	handleChange(): void {
-		// pass
+	handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+		this.setState({ [e.target.name] : e.target.value });
 	}
 
 	render(): JSX.Element {
@@ -28,13 +29,17 @@ class Login extends Component<{}, {}> {
 				<form onSubmit={e => this.handleSubmit(e)}>
 					<input
 						type="text"
+						name="email"
+						value={this.state.email}
 						placeholder="Email Address"
-						onChange={() => this.handleChange()}
+						onChange={e => this.handleChange(e)}
 					/>
 					<input
 						type="Password"
+						name="password"
+						value={this.state.password}
 						placeholder="Password"
-						onChange={() => this.handleChange()}
+						onChange={e => this.handleChange(e)}
 					/>
 					<button type="submit" value="Login" />
 				</form>
