@@ -9,7 +9,6 @@ import { postHeader } from "../uitls";
 
 export function checkLoginDetails(loginDetails: ILogin): ThunkAction<Promise<void>, {}, null, null> {
 	return (dispatch: Dispatch<IAction>) => {
-		debugger;
 		return fetch(LOGIN_API, postHeader(loginDetails))
 			.then(response => response.json())
 			.then(payload => {

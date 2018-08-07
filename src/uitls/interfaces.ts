@@ -1,5 +1,5 @@
 export interface ILogin {
-	email: string;
+	[email: string]: string;
 	password: string;
 }
 

@@ -33,6 +33,7 @@ class Login extends Component<ILoginComp, ILogin> {
 						value={this.state.email}
 						placeholder="Email Address"
 						onChange={e => this.handleChange(e)}
+						required
 					/>
 					<input
 						type="Password"
@@ -40,6 +41,7 @@ class Login extends Component<ILoginComp, ILogin> {
 						value={this.state.password}
 						placeholder="Password"
 						onChange={e => this.handleChange(e)}
+						required
 					/>
 					<button type="submit" value="Login" />
 				</form>
