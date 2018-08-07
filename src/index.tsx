@@ -10,6 +10,9 @@ import reducers from "./reducers";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 
+import "../assets/styles/global.css";
+
+
 const middleware = composeWithDevTools(applyMiddleware(thunk));
 const ROOT = document.querySelector(".react-root");
 const store = createStore(reducers, middleware);

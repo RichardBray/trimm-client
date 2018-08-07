@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from "redux";
 import { ILogin, ILoginComp, IAction, IReducers } from "../uitls/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
 
+import styles from "~/assets/styles/components/Inputs.css";
 
 class Login extends Component<ILoginComp, ILogin> {
 
@@ -43,6 +44,7 @@ class Login extends Component<ILoginComp, ILogin> {
 						type="text"
 						name="email"
 						value={this.state.email}
+						className={styles.input}
 						placeholder="Email Address"
 						onChange={e => this.handleChange(e)}
 						required
