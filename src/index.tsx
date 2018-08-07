@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 
 import reducers from "./reducers";
 import Login from "./views/Login";
-
+import Dashboard from "./views/Dashboard";
 
 const middleware = composeWithDevTools(applyMiddleware(thunk));
 const ROOT = document.querySelector(".react-root");
@@ -18,7 +18,8 @@ ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
 			<Switch>
-				<Route path="/" component={Login} />
+				<Route path="/dashboard" component={Dashboard} />
+				<Route path="/login" component={Login} />
 			</Switch>
 		</BrowserRouter>
 	</Provider>,

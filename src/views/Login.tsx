@@ -1,14 +1,15 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { Redirect } from "react-router";
+import { bindActionCreators, Dispatch } from "redux";
 
-import { ILogin, ILoginComp } from "../uitls/interfaces";
+import { ILogin, ILoginComp, IAction, IReducers } from "../uitls/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
 
 
 class Login extends Component<ILoginComp, ILogin> {
 
-	state: ILogin = {
+	public state: ILogin = {
 		email: "",
 		password: ""
 	}
@@ -22,10 +23,21 @@ class Login extends Component<ILoginComp, ILogin> {
 		this.setState({ [e.target.name] : e.target.value });
 	}
 
+	renderError(): JSX.Element | void {
+		const { code, message } = this.props.login;
+		let value: JSX.Element | string = "Fill in your username and password";
+
+		if (code === 200) {
+			value = <Redirect to="/dashboard" />
+		} else if (code === 400) {
+			value = message;
+		}	
+		return <div>{value}</div>;	
+	}
+
 	render(): JSX.Element {
 		return (
-			<Fragment>
-				<h1>Login</h1>
+			<section className="dis-f jc-sb">
 				<form onSubmit={e => this.handleSubmit(e)}>
 					<input
 						type="text"
@@ -43,15 +55,20 @@ class Login extends Component<ILoginComp, ILogin> {
 						onChange={e => this.handleChange(e)}
 						required
 					/>
-					<button type="submit" value="Login" />
+					<button type="submit" value="Login">Login</button>
 				</form>
-			</Fragment>
+				{this.renderError()}
+			</section>
 		)
 	}
 }
 
-function mapDispatchToProps(dispatch: any) {
+function mapStateToProps(state: IReducers) {
+	return { login: state.login };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<IAction>) {
 	return bindActionCreators({ checkLoginDetails }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
