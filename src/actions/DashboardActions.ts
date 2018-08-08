@@ -8,10 +8,10 @@ import { getHeader, postHeader } from '../uitls';
 
 export function getSepdningItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;
-  const currentDate: string = `${year}-${month}-01`;
+  const currentDate: string = `${year}-${_modifyMonth(month)}-01`;
 
   const newDate: Date = _oneMonthToDate(currentDate);
-  const newMonth = ("0" + (newDate.getMonth() + 1)).slice(-2);
+  const newMonth = _modifyMonth(newDate.getMonth() + 1)
 
   const dateInfo: ISpendingDate = {
     start_date: currentDate,
@@ -43,4 +43,13 @@ function _oneMonthToDate(currentDate: string): Date {
   newDate.setMonth(newDate.getMonth() + 1);
 
   return newDate;
+}
+
+/**
+ * Adds `0` to month if it has single number
+ * @example _modifyMonth(8) // 08
+ * @example _modifyMonth(11) // 11
+ */
+function _modifyMonth(month: number): string {
+  return (`0${month}`).slice(-2);
 }

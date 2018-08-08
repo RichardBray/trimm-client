@@ -18,7 +18,7 @@ export function getHeader(): RequestInit {
 
 function _standardHeader(): RequestInit {
   return {
-    credentials: "same-origin",
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"

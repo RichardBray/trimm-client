@@ -11,7 +11,7 @@ import styles from "~/assets/styles/components/Inputs";
 
 class Login extends Component<ILoginView, ILogin> {
 
-	public state: ILogin = {
+	state: ILogin = {
 		email: "",
 		password: ""
 	}

@@ -20,6 +20,8 @@ export interface ILoginResponse {
 
 export interface IDashvoardView {
 	login: ILogin;
+	getCategories: any;
+	getSepdningItems: any;
 }
 
 export interface ISpendingDate {

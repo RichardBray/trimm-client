@@ -5,11 +5,13 @@ export default function (state = {}, action: IAction) {
   switch (action.type) {
     case GET_SPENDING_ITEMS:
       return {
-        ...action.payload
+        ...state,
+        spending_items: action.payload
       };
     case GET_CATEGORIES:
       return {
-        ...action.payload
+        ...state,
+        categories: action.payload
       };
     default:
       return state;

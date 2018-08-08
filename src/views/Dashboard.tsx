@@ -1,14 +1,21 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import { getCategories, getSepdningItems } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction } from "../uitls/interfaces";
 
 
 class Dashboard extends Component<IDashvoardView, {}> {
 
+  state = {
+    month: 7,
+    year: 2018
+  }
+
   componentDidMount(): void {
-    // get spending info
-    // get categories
+    this.props.getCategories();
+    this.props.getSepdningItems(this.state)
   }
 
   renderCategories(): void {
@@ -36,4 +43,9 @@ class Dashboard extends Component<IDashvoardView, {}> {
 function mapStateToProps(state: IReducers) {
   return { login: state.login };
 }
-export default connect(mapStateToProps)(Dashboard);
+
+function mapDispatchToProps(dispatch: Dispatch<IAction>) {
+  return bindActionCreators({ getCategories, getSepdningItems }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
