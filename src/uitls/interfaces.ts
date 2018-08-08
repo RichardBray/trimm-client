@@ -5,9 +5,26 @@ export interface ILogin {
 	password: string;
 }
 
-export interface ILoginComp {
-	login: ILogin;
+export interface ILoginView {
+	login: ILoginResponse;
 	checkLoginDetails: (state: ILogin) => {};
+}
+
+export interface ILoginResponse {
+	user_name: string;
+	user_email: string;
+	user_currency: string;
+	code: number;
+	message?: string;
+}
+
+export interface IDashvoardView {
+	login: ILogin;
+}
+
+export interface ISpendingDate {
+	start_date: string;
+	end_date: string;
 }
 
 export interface IAction {
@@ -16,5 +33,6 @@ export interface IAction {
 }
 
 export interface IReducers {
-	login: ILogin
+	login: ILoginResponse
+	dashboard: any
 }

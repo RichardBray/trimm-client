@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { ILogin, ILoginComp, IAction, IReducers } from "../uitls/interfaces";
+import { ILogin, ILoginView, IAction, IReducers } from "../uitls/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
 
-import styles from "~/assets/styles/components/Inputs.css";
+import styles from "~/assets/styles/components/Inputs";
 
-class Login extends Component<ILoginComp, ILogin> {
+
+class Login extends Component<ILoginView, ILogin> {
 
 	public state: ILogin = {
 		email: "",

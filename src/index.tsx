@@ -10,7 +10,7 @@ import reducers from "./reducers";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 
-import "../assets/styles/global.css";
+import "~/assets/styles/global";
 
 
 const middleware = composeWithDevTools(applyMiddleware(thunk));

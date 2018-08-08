@@ -119,6 +119,9 @@
 			"check-separator",
 			"check-type",
 			"check-typecast"
-		]
+		],
+		"ignoreDefinitions": [
+			"styles"
+		]		
 	}
 }
