@@ -1,10 +1,18 @@
 /* global fetch */
 import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 import { IAction, ISpendingDate } from '../uitls/interfaces';
-import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API } from '../uitls/constants';
+import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER, DASH_DATA_LOADED } from '../uitls/constants';
 import { getHeader, postHeader } from '../uitls';
 
+/**
+ * Tells the dashboard that the redux data has been loaded
+ */
+export function checkDataLoaded(): IAction {
+  return {
+    type: DASH_DATA_LOADED,
+    payload: null
+  }
+}
 
 export function getSepdningItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;
@@ -26,13 +34,22 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
       });
 }
 
-export function getCategories(): ThunkAction<Promise<void>, {}, null, null> {
+export function getCategories() {
   return (dispatch: Dispatch<IAction>) =>
     fetch(GET_CATEGORIES_API, getHeader())
       .then(response => response.json())
       .then(payload => {
         dispatch({ type: GET_CATEGORIES, payload })
       });  
+}
+
+export function getUserInfo() {
+  return (dispatch: Dispatch<IAction>) =>
+    fetch(GET_USER_API, getHeader())
+      .then(response => response.json())
+      .then(payload => {
+        dispatch({ type: GET_USER, payload })
+      });   
 }
 
 /**

@@ -19,9 +19,12 @@ export interface ILoginResponse {
 }
 
 export interface IDashvoardView {
-	login: ILogin;
-	getCategories: any;
+	dashboard: any;
+
+	checkDataLoaded: () => {};
+	getCategories: () => {};
 	getSepdningItems: any;
+	getUserInfo: () => {};
 }
 
 export interface ISpendingDate {
