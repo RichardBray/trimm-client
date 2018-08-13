@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getCategories, getSepdningItems, getUserInfo, checkDataLoaded } from "../actions/DashboardActions";
+import { getCategories, getSepdningItems, getUserInfo } from "../actions/DashboardActions";
 
 import { IDashvoardView, IReducers, IAction, IDashboardState } from "../uitls/interfaces";
 import Layout from "../components/Layout";
@@ -21,21 +21,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    * Get all the data needed for
    * this page.
    */
-  componentDidMount(): void {
-    this.props.checkDataLoaded();
-    this.props.getUserInfo();
-    this.props.getCategories();
-    this.props.getSepdningItems(this.state.date);        
-  }
-
-  /**
-   * Checks if data from redux is loaded then
-   * hides loading spinner if it is.
-   */
-  componentDidUpdate(): void {
-    if (!this.state.data_loaded) {
-      this.setState({ data_loaded: this.props.dashboard.data_loaded });
-    }
+  async componentDidMount() {
+    await this.props.getCategories();
+    await this.props.getSepdningItems(this.state.date);   
+    await this.props.getUserInfo(); 
+    this.setState({ data_loaded: true });
   }
 
   renderCategories(): void {
@@ -46,18 +36,23 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     // pass
   }
 
-  renderSpendingItems(): JSX.Element[] {
-    const spending_items  =  this.props.dashboard.spending_items.data;
-    return spending_items.map((item: any) => {
-      return (
-        <div key={item.item_uuid}>
-          {item.item_name}
-          {item.item_price}
-          {item.create_dttm}
-          {item.cat_name}
-        </div>
-      )
-    });
+  renderSpendingItems(): JSX.Element[] | JSX.Element {
+    const { spending_items } =  this.props.dashboard;
+    // TODO change to object
+    if (spending_items.code === 200) {
+      return spending_items.data.map((item: any) => (
+          <div key={item.item_uuid}>
+            {item.item_name}
+            {item.item_price}
+            {item.create_dttm}
+            {item.cat_name}
+          </div>
+        )
+      );
+    } else if (spending_items.code === 404) {
+      return <div>You have no items</div>
+    } // 401 you're not authorised
+    return <div>Loadnig...</div>
   }
 
   render(): JSX.Element {
@@ -79,7 +74,7 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo, checkDataLoaded }, dispatch);
+  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

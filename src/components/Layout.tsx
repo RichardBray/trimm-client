@@ -22,6 +22,7 @@ class Layout extends Component<ILayout, {}> {
   }
 
   render(): JSX.Element {
+    console.log(this.state);
     return (
       <main>
         <header>
@@ -34,7 +35,7 @@ class Layout extends Component<ILayout, {}> {
         <footer>
           Trimm &copy; 2019
         </footer>
-        {this.state.logged_out && <Redirect to="/login" />}
+        {this.state.logged_out && <Redirect to="/" />}
       </main>
     )
   }

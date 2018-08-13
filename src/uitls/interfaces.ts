@@ -20,8 +20,6 @@ export interface ILoginResponse {
 
 export interface IDashvoardView {
 	dashboard: any;  // TODO
-
-	checkDataLoaded: () => {};
 	getCategories: () => {};
 	getSepdningItems: (date: IDashboardDate) => {};
 	getUserInfo: () => {};

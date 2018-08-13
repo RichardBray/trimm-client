@@ -1,28 +1,25 @@
 import { IAction } from "../uitls/interfaces";
-import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, DASH_DATA_LOADED } from "../uitls/constants";
+import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER } from "../uitls/constants";
 
 
 export default function (state = _initialiseState(), action: IAction) {
-  switch (action.type) {
+  const {type, payload} = action;
+
+  switch (type) {
     case GET_SPENDING_ITEMS:
       return {
         ...state,
-        spending_items: action.payload
+        spending_items: payload
       };
     case GET_CATEGORIES:
       return {
         ...state,
-        categories: action.payload
+        categories: payload
       };
     case GET_USER:
       return {
         ...state,
-        user_info: action.payload
-      }; 
-    case DASH_DATA_LOADED:
-      return {
-        ...state,
-        data_loaded: true
+        user_info: payload
       };             
     default:
       return state;
@@ -41,7 +38,8 @@ function _initialiseState() {
             cat_id: 1,
             cat_name: "Nothing" 
           }         
-        ]
+        ],
+      code: 0
     },
     categories: {},
     user_info: {},

@@ -1,18 +1,9 @@
 /* global fetch */
 import { Dispatch } from 'redux';
 import { IAction, ISpendingDate } from '../uitls/interfaces';
-import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER, DASH_DATA_LOADED } from '../uitls/constants';
+import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER } from '../uitls/constants';
 import { getHeader, postHeader } from '../uitls';
 
-/**
- * Tells the dashboard that the redux data has been loaded
- */
-export function checkDataLoaded(): IAction {
-  return {
-    type: DASH_DATA_LOADED,
-    payload: null
-  }
-}
 
 export function getSepdningItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;

@@ -2,8 +2,6 @@
 export const LOGIN_STATUS: string = "LOGIN_STATUS";
 export const GET_LOGOUT: string = "GET_LOGOUT";
 
-
-export const DASH_DATA_LOADED: string = "DASH_DATA_LOADED";
 export const GET_SPENDING_ITEMS: string = "GET_SPENDING_ITEMS";
 export const GET_CATEGORIES: string = "GET_CATEGORIES";
 export const GET_USER: string = "GET_USER";
