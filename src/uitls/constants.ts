@@ -17,3 +17,4 @@ export const GET_LOGOUT_API: string = `${API}/logout`;
 export const GET_CATEGORIES_API: string = `${API}/categories`;
 export const GET_ITEMS_API: string = `${API}/items`;
 export const GET_USER_API: string = `${API}/auth`;
+export const ITEM_API: string = "ITEM_API";

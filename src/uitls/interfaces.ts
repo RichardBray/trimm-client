@@ -54,3 +54,7 @@ export interface ILayout {
 	children: JSX.Element[];
 	getLogout: () => {};
 }
+
+export interface IServerResponses {
+	[key: number]: JSX.Element[] | JSX.Element;
+}

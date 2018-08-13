@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
@@ -15,14 +14,15 @@ class Layout extends Component<ILayout, {}> {
 
   /**
    * Removed `auth` cookie with the API
+   * Uses window.location to get rid of all the
+   * redux stuff
    */
   handleLogout(): void {
     this.props.getLogout();
-    this.setState({logged_out: true});
+    window.location.replace('/');
   }
 
   render(): JSX.Element {
-    console.log(this.state);
     return (
       <main>
         <header>
@@ -35,7 +35,6 @@ class Layout extends Component<ILayout, {}> {
         <footer>
           Trimm &copy; 2019
         </footer>
-        {this.state.logged_out && <Redirect to="/" />}
       </main>
     )
   }

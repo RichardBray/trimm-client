@@ -3,16 +3,26 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { getCategories, getSepdningItems, getUserInfo } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers, IAction, IDashboardState } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
+  default_spending_item = {
+    item_name: "",
+    item_price: 0,
+    create_dttm: "",
+    cat_id: 0    
+  };
+
   state = {
     date: {
       month: 7,
       year: 2018
+    },
+    spending_item: {
+      ...this.default_spending_item
     },
     data_loaded: false
   }
@@ -28,31 +38,94 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     this.setState({ data_loaded: true });
   }
 
-  renderCategories(): void {
-    // pass
+  renderCategories(): JSX.Element[] | JSX.Element {
+    const { data, code } = this.props.dashboard.categories;
+    const rendeer_categories = data.map((cat: any) => (
+        <div key={cat.cat_uuid}>
+          {cat.cat_name}
+          {cat.cat_total}
+          {cat.cat_budget}
+        </div>
+      )
+    );
+    const responses: IServerResponses = {
+      200: rendeer_categories,
+      401: <div>Looks like you are somewhere you shouldn't be.</div>
+    }
+
+    return responses[code];
   }
 
-  renderSpendingForm(): void {
-    // pass
+  renderSpendingForm(): JSX.Element {
+    const categories = this.props.dashboard.categories.data;
+    const { item_name, create_dttm, item_price } = this.state.spending_item;
+    const category_list = categories.map((cat: any) => (
+        <option 
+          key={cat.cat_id} 
+          value={cat.cat_id}>
+            {cat.cat_name}
+        </option>
+      )
+    );
+    return (
+      <form className="dis-f" onSubmit={(e: any) => this.addSpendingItem(e)}>
+        <div>
+          <label htmlFor="category">Category</label>
+          <select name="category">{category_list}</select>
+          <input 
+            type="text" 
+            name="item_name" 
+            placeholder="Description" 
+            value={item_name}
+            onChange={e => this.handleChange(e)}
+            required 
+          />
+          <input 
+            type="date" 
+            name="create_dttm" 
+            placeholder="Date" 
+            onChange={e => this.handleChange(e)}
+            value={create_dttm}
+          />
+        </div>
+        <div>
+          <input 
+            type="number" 
+            name="item_price" 
+            placeholder="Price" 
+            value={item_price}
+            onChange={e => this.handleChange(e)}
+            required
+          />
+          <button type="submit">Add Trimm</button>
+        </div>
+      </form>
+    )
   }
 
   renderSpendingItems(): JSX.Element[] | JSX.Element {
-    const { spending_items } =  this.props.dashboard;
-    // TODO change to object
-    if (spending_items.code === 200) {
-      return spending_items.data.map((item: any) => (
-          <div key={item.item_uuid}>
-            {item.item_name}
-            {item.item_price}
-            {item.create_dttm}
+    const { data, code } = this.props.dashboard.spending_items;
+    const render_items = data.map((item: any) => (
+        <section key={item.item_uuid} id={item.item_uuid}>
+          <div>
             {item.cat_name}
+            {item.item_name}
           </div>
+          <div>
+            {item.create_dttm}
+            {item.item_price}
+          </div>
+        </section>
         )
       );
-    } else if (spending_items.code === 404) {
-      return <div>You have no items</div>
-    } // 401 you're not authorised
-    return <div>Loadnig...</div>
+    const render_no_items = <div>You have no items</div>;
+    const responses: IServerResponses = {
+      200: render_items,
+      404: render_no_items,
+      401: <div>Looks like you are somewhere you shouldn't be.</div>
+    }      
+
+    return responses[code];
   }
 
   render(): JSX.Element {
@@ -61,11 +134,26 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <Layout>
           <h1>Hi {this.props.dashboard.user_info.user_name}</h1>
           <span>Here is this months data.</span>
+          {this.renderSpendingForm()}
           {this.renderSpendingItems()}
+          {this.renderCategories()}
         </Layout>
       )      
     }
     return <h1>Loading...</h1>
+  }
+
+  private addSpendingItem(e: any): void {
+    e.preventDefault();
+    this.setState({ spending_item: this.default_spending_item });
+  }
+
+  private handleChange(e: any): void {
+    this.setState({ spending_item: {
+        ...this.state.spending_item,
+        [e.target.name]: e.target.value 
+      }
+    })
   }
 }
 

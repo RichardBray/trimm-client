@@ -1,7 +1,7 @@
 /* global fetch */
 import { Dispatch } from 'redux';
 import { IAction, ISpendingDate } from '../uitls/interfaces';
-import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER } from '../uitls/constants';
+import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER, ITEM_API, POST_SPENDING_ITEM } from '../uitls/constants';
 import { getHeader, postHeader } from '../uitls';
 
 
@@ -23,6 +23,15 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
       .then(payload => {
         dispatch({type: GET_SPENDING_ITEMS, payload})
       });
+}
+
+export function postSpendingItem(itemInfo) {
+  return (dispatch: Dispatch<IAction>) =>
+    fetch(ITEM_API, postHeader(itemInfo))
+      .then(response => response.json())
+      .then(payload => {
+        dispatch({ type: POST_SPENDING_ITEM, payload })
+      });  
 }
 
 export function getCategories() {
