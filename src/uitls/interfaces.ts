@@ -19,12 +19,22 @@ export interface ILoginResponse {
 }
 
 export interface IDashvoardView {
-	dashboard: any;
+	dashboard: any;  // TODO
 
 	checkDataLoaded: () => {};
 	getCategories: () => {};
-	getSepdningItems: any;
+	getSepdningItems: (date: IDashboardDate) => {};
 	getUserInfo: () => {};
+}
+
+export interface IDashboardState {
+	date: IDashboardDate;
+	data_loaded: boolean;
+}
+
+export interface IDashboardDate {
+	month: number;
+	year: number;
 }
 
 export interface ISpendingDate {
@@ -40,4 +50,9 @@ export interface IAction {
 export interface IReducers {
 	login: ILoginResponse
 	dashboard: any
+}
+
+export interface ILayout {
+	children: JSX.Element[];
+	getLogout: () => {};
 }

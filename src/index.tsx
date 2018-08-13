@@ -23,6 +23,7 @@ ReactDOM.render(
 			<Switch>
 				<Route path="/dashboard" component={Dashboard} />
 				<Route path="/login" component={Login} />
+				<Route path="/" component={Login} />
 			</Switch>
 		</BrowserRouter>
 	</Provider>,

@@ -1,5 +1,5 @@
 import { IAction } from "../uitls/interfaces";
-import { LOGIN_STATUS } from "../uitls/constants";
+import { LOGIN_STATUS, GET_LOGOUT } from "../uitls/constants";
 
 
 export default function (state = {}, action: IAction) {
@@ -8,6 +8,11 @@ export default function (state = {}, action: IAction) {
 			return {
 				...action.payload
 			};
+		case GET_LOGOUT:
+			return {
+				...state,
+				logout: action.payload
+			}
 		default:
 			return state;
 	}

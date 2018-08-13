@@ -31,7 +31,18 @@ export default function (state = _initialiseState(), action: IAction) {
 
 function _initialiseState() {
   return {
-    spending_items: {},
+    spending_items: {
+      data: [
+          {
+            item_uuid: "b2",
+            item_name: "Loading...",
+            item_price: 0.00,
+            create_dttm: "1979-01-01 00:00:00",
+            cat_id: 1,
+            cat_name: "Nothing" 
+          }         
+        ]
+    },
     categories: {},
     user_info: {},
     data_loaded: false

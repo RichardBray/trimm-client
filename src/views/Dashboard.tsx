@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { getCategories, getSepdningItems, getUserInfo, checkDataLoaded } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers, IAction } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction, IDashboardState } from "../uitls/interfaces";
+import Layout from "../components/Layout";
 
 
-class Dashboard extends Component<IDashvoardView, {}> {
+class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   state = {
     date: {
@@ -45,17 +46,28 @@ class Dashboard extends Component<IDashvoardView, {}> {
     // pass
   }
 
-  renderSpendingItems(): void {
-    // pass
+  renderSpendingItems(): JSX.Element[] {
+    const spending_items  =  this.props.dashboard.spending_items.data;
+    return spending_items.map((item: any) => {
+      return (
+        <div key={item.item_uuid}>
+          {item.item_name}
+          {item.item_price}
+          {item.create_dttm}
+          {item.cat_name}
+        </div>
+      )
+    });
   }
 
   render(): JSX.Element {
     if (this.state.data_loaded) {
       return (
-        <Fragment>
+        <Layout>
           <h1>Hi {this.props.dashboard.user_info.user_name}</h1>
           <span>Here is this months data.</span>
-        </Fragment>
+          {this.renderSpendingItems()}
+        </Layout>
       )      
     }
     return <h1>Loading...</h1>
