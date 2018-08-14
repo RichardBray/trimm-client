@@ -23,11 +23,20 @@ export interface IDashvoardView {
 	getCategories: () => {};
 	getSepdningItems: (date: IDashboardDate) => {};
 	getUserInfo: () => {};
+	postSpendingItem: (data: any) => {};
 }
 
 export interface IDashboardState {
 	date: IDashboardDate;
 	data_loaded: boolean;
+	spending_item: any;
+}
+
+export interface ISpendingItem {
+	item_name: string;
+	item_price: number;
+	create_dttm: string;
+	cat_id: number;
 }
 
 export interface IDashboardDate {

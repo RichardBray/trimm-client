@@ -1,7 +1,7 @@
-import { ILogin, ISpendingDate } from "./interfaces";
+import { ILogin, ISpendingDate, ISpendingItem } from "./interfaces";
 
 
-export function postHeader(data: ILogin | ISpendingDate): RequestInit {
+export function postHeader(data: ILogin | ISpendingDate | ISpendingItem): RequestInit {
   return {
     method: "POST",
     body: JSON.stringify(data),

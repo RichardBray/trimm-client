@@ -1,25 +1,26 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getCategories, getSepdningItems, getUserInfo } from "../actions/DashboardActions";
+import { getCategories, getSepdningItems, getUserInfo, postSpendingItem } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
-  default_spending_item = {
+  default_spending_item: ISpendingItem = {
     item_name: "",
     item_price: 0,
     create_dttm: "",
     cat_id: 0    
   };
 
+  date = new Date();
   state = {
     date: {
-      month: 7,
-      year: 2018
+      month: this.date.getMonth() + 1,
+      year: this.date.getFullYear()
     },
     spending_item: {
       ...this.default_spending_item
@@ -31,7 +32,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    * Get all the data needed for
    * this page.
    */
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     await this.props.getCategories();
     await this.props.getSepdningItems(this.state.date);   
     await this.props.getUserInfo(); 
@@ -68,23 +69,26 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       )
     );
     return (
-      <form className="dis-f" onSubmit={(e: any) => this.addSpendingItem(e)}>
+      <form className="dis-f" onSubmit={(e: any) => this._addSpendingItem(e)}>
         <div>
           <label htmlFor="category">Category</label>
-          <select name="category">{category_list}</select>
+          <select name="cat_id" onChange={e => this._handleChange(e)}>
+          <option value="--">--</option>
+            {category_list}
+          </select>
           <input 
             type="text" 
             name="item_name" 
             placeholder="Description" 
             value={item_name}
-            onChange={e => this.handleChange(e)}
+            onChange={e => this._handleChange(e)}
             required 
           />
           <input 
             type="date" 
             name="create_dttm" 
             placeholder="Date" 
-            onChange={e => this.handleChange(e)}
+            onChange={e => this._handleChange(e)}
             value={create_dttm}
           />
         </div>
@@ -94,7 +98,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             name="item_price" 
             placeholder="Price" 
             value={item_price}
-            onChange={e => this.handleChange(e)}
+            onChange={e => this._handleChange(e)}
             required
           />
           <button type="submit">Add Trimm</button>
@@ -124,7 +128,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       404: render_no_items,
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }      
-
+    debugger;
     return responses[code];
   }
 
@@ -134,6 +138,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <Layout>
           <h1>Hi {this.props.dashboard.user_info.user_name}</h1>
           <span>Here is this months data.</span>
+          <section>
+            <span onClick={() => this._changeMonth()}>Prev month</span>
+            <span onClick={() => this._changeMonth(true)}>Next month</span>
+          </section>
+          <h2>{this.state.date.month} {this.state.date.year}</h2>
           {this.renderSpendingForm()}
           {this.renderSpendingItems()}
           {this.renderCategories()}
@@ -143,17 +152,39 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return <h1>Loading...</h1>
   }
 
-  private addSpendingItem(e: any): void {
+  private async _addSpendingItem(e: any): Promise<void> {
     e.preventDefault();
+    await this.props.postSpendingItem(this.state.spending_item);
+    if (this.props.dashboard.new_spending_item.code === 201) {
+      await this.props.getSepdningItems(this.state.date); 
+    } else {
+      console.error('something has gone wrong'); // TODO change this at some point
+    }
+
     this.setState({ spending_item: this.default_spending_item });
   }
 
-  private handleChange(e: any): void {
+  private _handleChange(e: any): void {
     this.setState({ spending_item: {
         ...this.state.spending_item,
         [e.target.name]: e.target.value 
       }
-    })
+    });
+  };
+
+  private _changeMonth(next: boolean = false): void {
+    const {month, year} = this.state.date;
+    const chosenDate = new Date(`${year}-${month}-01`);
+    const monthChange = next ? chosenDate.getMonth() +1 : chosenDate.getMonth() -1;
+    chosenDate.setMonth(monthChange);
+
+    const newStateDate = {
+      month: chosenDate.getMonth() +1,
+      year: chosenDate.getFullYear()
+    };
+
+    this.props.getSepdningItems(newStateDate);
+    this.setState({ date: newStateDate });
   }
 }
 
@@ -162,7 +193,7 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo }, dispatch);
+  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo, postSpendingItem }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

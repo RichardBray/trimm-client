@@ -1,6 +1,6 @@
 /* global fetch */
 import { Dispatch } from 'redux';
-import { IAction, ISpendingDate } from '../uitls/interfaces';
+import { IAction, ISpendingDate, ISpendingItem } from '../uitls/interfaces';
 import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER, ITEM_API, POST_SPENDING_ITEM } from '../uitls/constants';
 import { getHeader, postHeader } from '../uitls';
 
@@ -25,7 +25,7 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
       });
 }
 
-export function postSpendingItem(itemInfo) {
+export function postSpendingItem(itemInfo: ISpendingItem) {
   return (dispatch: Dispatch<IAction>) =>
     fetch(ITEM_API, postHeader(itemInfo))
       .then(response => response.json())
@@ -58,7 +58,6 @@ export function getUserInfo() {
 function _oneMonthToDate(currentDate: string): Date {
   const newDate: Date = new Date(currentDate);
   newDate.setMonth(newDate.getMonth() + 1);
-
   return newDate;
 }
 
