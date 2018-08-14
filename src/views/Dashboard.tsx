@@ -26,6 +26,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     spending_item: {
       ...this.default_spending_item
     },
+    new_category: "",
     data_loaded: false
   }
 
@@ -44,15 +45,25 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data, code } = this.props.dashboard.categories;
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any) => (
         <div key={cat.cat_uuid}>
-          {cat.cat_name}
-          {cat.cat_total}
-          {cat.cat_budget}
+          <div>
+            {cat.cat_name}
+            {cat.cat_total}
+            {cat.cat_budget}
+          </div>
+          <span>delete category</span>
         </div>
       )
     );
+    const add_category = (
+      <form onSubmit={e => this._addCategory(e)}>
+        You have no categories. 
+        <input type="text"/>
+        <button> add a category</button>
+      </form>
+    );
     const responses: IServerResponses = {
       200: render_categories,
-      404: <div>You have no categories</div>,
+      404: add_category,
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }
     return responses[code];
@@ -157,7 +168,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     });
   };
 
-  private _changeMonth(next: boolean = false) {
+  private _changeMonth(next: boolean = false): void {
     const {month, year} = this.state.date;
     const chosenDate = new Date(`${year}-${month}-01`);
     const monthChange = next ? chosenDate.getMonth() +1 : chosenDate.getMonth() -1;
@@ -170,6 +181,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     this.props.getSepdningItems(newStateDate);
     this.setState({ date: newStateDate });
+  }
+
+  private _addCategory(e: any): void {
+    e.preventDefault();
+    this.props.postNewCategory(this.state.new_category);
   }
  
 }
