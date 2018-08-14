@@ -1,8 +1,19 @@
 import React, {Component} from "react";
-import { IServerResponses } from "../uitls/interfaces";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+
+import { deleteSpendingItem } from "../actions/DashboardActions";
+import { IServerResponses, IAction } from "../uitls/interfaces";
 
 
 class SpendingItems extends Component<any, {}> {
+
+  /**
+   * Editing will come later
+   */
+  deleteItem(item_uuid: string): any {
+    this.props.deleteSpendingItem(item_uuid);
+  }
 
   render(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props;
@@ -15,10 +26,10 @@ class SpendingItems extends Component<any, {}> {
     return responses[code];
   }
 
-  private _renderItems(data: any) {
+  private _renderItems(data: any): JSX.Element {
     if (typeof (data) !== "undefined") {
       return data.map((item: any) => (
-        <section key={item.item_uuid} id={item.item_uuid}>
+        <section key={item.item_uuid}>
           <div>
             {item.cat_name}
             {item.item_name}
@@ -27,10 +38,17 @@ class SpendingItems extends Component<any, {}> {
             {item.create_dttm}
             {item.item_price}
           </div>
+          <div>
+            <a href="#" onClick={() => this.deleteItem(item.item_uuid)}>delete</a>
+          </div>
         </section>)
       );
     }
   }   
 }
 
-export default SpendingItems;
+function mapDispatchToProps(dispatch: Dispatch<IAction>) {
+  return bindActionCreators({ deleteSpendingItem }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(SpendingItems);

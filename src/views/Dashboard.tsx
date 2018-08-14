@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { getCategories, getSepdningItems, getUserInfo, postSpendingItem } from "../actions/DashboardActions";
@@ -14,7 +14,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     item_name: "",
     item_price: 0,
     create_dttm: "",
-    cat_id: 0    
+    cat_id: "0"    
   };
 
   date = new Date();
@@ -42,7 +42,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
-    const rendeer_categories = data.map((cat: any) => (
+    const render_categories = (typeof (data) !== "undefined") && data.map((cat: any) => (
         <div key={cat.cat_uuid}>
           {cat.cat_name}
           {cat.cat_total}
@@ -51,17 +51,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       )
     );
     const responses: IServerResponses = {
-      200: rendeer_categories,
+      200: render_categories,
+      404: <div>You have no categories</div>,
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }
-
     return responses[code];
   }
 
   renderSpendingForm(): JSX.Element {
-    const categories = this.props.dashboard.categories.data;
+    const { categories } = this.props.dashboard;
     const { item_name, create_dttm, item_price } = this.state.spending_item;
-    const category_list = categories.map((cat: any) => (
+    const category_list = categories.code === 200 && categories.data.map((cat: any) => (
         <option 
           key={cat.cat_id} 
           value={cat.cat_id}>
@@ -69,12 +69,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         </option>
       )
     );
+
     return (
       <form className="dis-f" onSubmit={(e: any) => this._addSpendingItem(e)}>
         <div>
           <label htmlFor="category">Category</label>
-          <select name="cat_id" onChange={e => this._handleChange(e)}>
-          <option value="--">--</option>
+          <select 
+            name="cat_id" 
+            value={this.state.spending_item.cat_id} 
+            onChange={e => this._handleChange(e)}
+            required>
+            <option value="0" disabled>--</option>
             {category_list}
           </select>
           <input 
@@ -131,14 +136,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   private async _addSpendingItem(e: any): Promise<void> {
     e.preventDefault();
-    await this.props.postSpendingItem(this.state.spending_item);
-    if (this.props.dashboard.new_spending_item.code === 201) {
-      await this.props.getSepdningItems(this.state.date); 
+    if (this.state.spending_item.cat_id !== "0") {
+      await this.props.postSpendingItem(this.state.spending_item);
+      if (this.props.dashboard.new_spending_item.code === 201) {
+        await this.props.getSepdningItems(this.state.date); 
+      } else {
+        console.error('something has gone wrong'); // TODO change this at some point
+      }
+      this.setState({ spending_item: this.default_spending_item });
     } else {
-      console.error('something has gone wrong'); // TODO change this at some point
+      console.error("Please select a category");
     }
-
-    this.setState({ spending_item: this.default_spending_item });
   }
 
   private _handleChange(e: any): void {

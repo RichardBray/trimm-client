@@ -1,5 +1,5 @@
 import { IAction } from "../uitls/interfaces";
-import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM } from "../uitls/constants";
+import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM, DELETE_ITEM } from "../uitls/constants";
 
 
 export default function (state = _initialiseState(), action: IAction) {
@@ -25,7 +25,12 @@ export default function (state = _initialiseState(), action: IAction) {
       return {
         ...state,
         new_spending_item: payload
-      }            
+      };   
+    case DELETE_ITEM:
+      return {
+        ...state,
+        delete_item: payload
+      };         
     default:
       return state;
   }
@@ -33,19 +38,7 @@ export default function (state = _initialiseState(), action: IAction) {
 
 function _initialiseState() {
   return {
-    spending_items: {
-      data: [
-          {
-            item_uuid: "b2",
-            item_name: "Loading...",
-            item_price: 0.00,
-            create_dttm: "1979-01-01 00:00:00",
-            cat_id: 1,
-            cat_name: "Nothing" 
-          }         
-        ],
-      code: 0
-    },
+    spending_items: {},
     categories: {},
     user_info: {},
     new_spending_item: {}

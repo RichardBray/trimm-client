@@ -7,7 +7,9 @@ export const GET_CATEGORIES: string = "GET_CATEGORIES";
 export const GET_USER: string = "GET_USER";
 
 export const POST_SPENDING_ITEM: string = "POST_SPENDING_ITEM";
-export const POST_CATEGORIE: string = "POST_CATEGORIE";
+export const POST_CATEGORIES: string = "POST_CATEGORIES";
+
+export const DELETE_ITEM: string = "DELETE_ITEM";
 
 // API
 export const API: string = "http://localhost:3000"; // http://localhost:3000 http://209.97.183.249

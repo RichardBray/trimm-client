@@ -36,7 +36,7 @@ export interface ISpendingItem {
 	item_name: string;
 	item_price: number;
 	create_dttm: string;
-	cat_id: number;
+	cat_id: string;
 }
 
 export interface IDashboardDate {

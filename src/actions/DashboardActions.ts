@@ -1,8 +1,17 @@
 /* global fetch */
 import { Dispatch } from 'redux';
 import { IAction, ISpendingDate, ISpendingItem } from '../uitls/interfaces';
-import { GET_CATEGORIES_API, GET_CATEGORIES, GET_SPENDING_ITEMS, GET_ITEMS_API, GET_USER_API, GET_USER, ITEM_API, POST_SPENDING_ITEM } from '../uitls/constants';
-import { getHeader, postHeader } from '../uitls';
+import { 
+  GET_CATEGORIES_API, 
+  GET_CATEGORIES, 
+  GET_SPENDING_ITEMS, 
+  GET_ITEMS_API, 
+  GET_USER_API, 
+  GET_USER, 
+  ITEM_API, 
+  POST_SPENDING_ITEM, 
+  DELETE_ITEM } from '../uitls/constants';
+import { getHeader, postHeader, deleteHeader } from '../uitls';
 
 
 export function getSepdningItems(monthYear: { month: number, year: number }) {
@@ -21,17 +30,28 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
     fetch(GET_ITEMS_API, postHeader(dateInfo))
       .then(response => response.json())
       .then(payload => {
-        dispatch({type: GET_SPENDING_ITEMS, payload})
+        dispatch({ type: GET_SPENDING_ITEMS, payload })
       });
 }
 
 export function postSpendingItem(itemInfo: ISpendingItem) {
+  debugger;
   return (dispatch: Dispatch<IAction>) =>
     fetch(ITEM_API, postHeader(itemInfo))
       .then(response => response.json())
       .then(payload => {
         dispatch({ type: POST_SPENDING_ITEM, payload })
-      });  
+      });
+}
+
+export function deleteSpendingItem(item_uuid: string) {
+  const itemInfo = { item_uuid };
+  return (dispatch: Dispatch<IAction>) =>
+    fetch(ITEM_API, deleteHeader(itemInfo))
+      .then(response => response.json())
+      .then(payload => {
+        dispatch({ type: DELETE_ITEM, payload })
+      });
 }
 
 export function getCategories() {
@@ -40,7 +60,7 @@ export function getCategories() {
       .then(response => response.json())
       .then(payload => {
         dispatch({ type: GET_CATEGORIES, payload })
-      });  
+      });
 }
 
 export function getUserInfo() {
@@ -49,7 +69,7 @@ export function getUserInfo() {
       .then(response => response.json())
       .then(payload => {
         dispatch({ type: GET_USER, payload })
-      });   
+      });
 }
 
 /**

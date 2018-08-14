@@ -9,6 +9,14 @@ export function postHeader(data: ILogin | ISpendingDate | ISpendingItem): Reques
   };
 }
 
+export function deleteHeader(data: any): RequestInit {
+  return {
+    method: "DELETE",
+    body: JSON.stringify(data),
+    ..._standardHeader()
+  }
+}
+
 export function getHeader(): RequestInit {
   return {
     method: "GET",
