@@ -65,5 +65,5 @@ export interface ILayout {
 }
 
 export interface IServerResponses {
-	[key: number]: JSX.Element[] | JSX.Element;
+	[key: number]: JSX.Element[] | JSX.Element | any;
 }

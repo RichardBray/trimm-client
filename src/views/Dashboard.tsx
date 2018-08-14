@@ -5,6 +5,7 @@ import { getCategories, getSepdningItems, getUserInfo, postSpendingItem } from "
 
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem } from "../uitls/interfaces";
 import Layout from "../components/Layout";
+import SpendingItems from "../components/SpendingItems";
 
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
@@ -107,32 +108,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     )
   }
 
-  renderSpendingItems(): JSX.Element[] | JSX.Element {
-    const { data, code } = this.props.dashboard.spending_items;
-    const render_items = data.map((item: any) => (
-        <section key={item.item_uuid} id={item.item_uuid}>
-          <div>
-            {item.cat_name}
-            {item.item_name}
-          </div>
-          <div>
-            {item.create_dttm}
-            {item.item_price}
-          </div>
-        </section>
-        )
-      );
-    const render_no_items = <div>You have no items</div>;
-    const responses: IServerResponses = {
-      200: render_items,
-      404: render_no_items,
-      401: <div>Looks like you are somewhere you shouldn't be.</div>
-    }      
-    debugger;
-    return responses[code];
-  }
-
   render(): JSX.Element {
+    const spendingItems = this.props.dashboard.spending_items;
     if (this.state.data_loaded) {
       return (
         <Layout>
@@ -144,7 +121,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           </section>
           <h2>{this.state.date.month} {this.state.date.year}</h2>
           {this.renderSpendingForm()}
-          {this.renderSpendingItems()}
+          <SpendingItems code={spendingItems.code} data={spendingItems.data} />
           {this.renderCategories()}
         </Layout>
       )      
@@ -172,7 +149,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     });
   };
 
-  private _changeMonth(next: boolean = false): void {
+  private _changeMonth(next: boolean = false) {
     const {month, year} = this.state.date;
     const chosenDate = new Date(`${year}-${month}-01`);
     const monthChange = next ? chosenDate.getMonth() +1 : chosenDate.getMonth() -1;
@@ -186,6 +163,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     this.props.getSepdningItems(newStateDate);
     this.setState({ date: newStateDate });
   }
+ 
 }
 
 function mapStateToProps(state: IReducers) {
