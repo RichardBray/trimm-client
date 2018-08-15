@@ -11,7 +11,7 @@ import {
   ITEM_API, 
   POST_SPENDING_ITEM, 
   DELETE_ITEM } from '../uitls/constants';
-import { getHeader, postHeader, deleteHeader } from '../uitls';
+import { getHeader, postHeader, deleteHeader, fetchFunc } from '../uitls';
 
 
 export function getSepdningItems(monthYear: { month: number, year: number }) {
@@ -35,7 +35,6 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
 }
 
 export function postSpendingItem(itemInfo: ISpendingItem) {
-  debugger;
   return (dispatch: Dispatch<IAction>) =>
     fetch(ITEM_API, postHeader(itemInfo))
       .then(response => response.json())
@@ -55,21 +54,11 @@ export function deleteSpendingItem(item_uuid: string) {
 }
 
 export function getCategories() {
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(GET_CATEGORIES_API, getHeader())
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: GET_CATEGORIES, payload })
-      });
+  return fetchFunc(GET_CATEGORIES_API, GET_CATEGORIES, getHeader);
 }
 
 export function getUserInfo() {
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(GET_USER_API, getHeader())
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: GET_USER, payload })
-      });
+  return fetchFunc(GET_USER_API, GET_USER, getHeader);
 }
 
 /**

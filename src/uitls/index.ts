@@ -1,4 +1,6 @@
-import { ILogin, ISpendingDate, ISpendingItem } from "./interfaces";
+import { Dispatch } from 'redux';
+
+import { ILogin, ISpendingDate, ISpendingItem, IAction } from "./interfaces";
 
 
 export function postHeader(data: ILogin | ISpendingDate | ISpendingItem): RequestInit {
@@ -22,6 +24,15 @@ export function getHeader(): RequestInit {
     method: "GET",
     ..._standardHeader()
   };
+}
+
+export function fetchFunc(url: string, action: string, func: (data?: any) => {}) {
+  return (dispatch: Dispatch<IAction>) =>
+    fetch(url, func())
+      .then(response => response.json())
+      .then(payload => {
+        dispatch({ type: action, payload })
+      });
 }
 
 function _standardHeader(): RequestInit {
