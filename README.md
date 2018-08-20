@@ -19,6 +19,4 @@ $ yarn start
 ```
 
 ## Things todo
-- Delete categories
-- Add category
-- Total categories
+- Fix bug with duplicate category

@@ -59,7 +59,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             {cat.cat_name}
             {this._renderCatTotal(cat.cat_id)}
           </div>
-          <span onClick={() => this._handleDeleteCategory(cat.cat_uuid)}>delete category</span>
+          <span onClick={() => this._handleDeleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
         </div>
       )}
     );
@@ -230,14 +230,19 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     this.props.getCategories();
   };
 
-  private _handleDeleteCategory(cat_uuid: string): void {
+  private _handleDeleteCategory(cat_uuid: string, cat_id: number): void {
     /** 
      * TODO: If category on backend has value of more
      * than ), do not delete and show and error
      * message instead.
      */
-    this.props.deleteCategory(cat_uuid);
-    this.props.getCategories();
+    debugger;
+    if (this.props.dashboard.cat_totals.includes(cat_id)) {
+      alert('we cant delete this');
+    } else {
+      this.props.deleteCategory(cat_uuid);
+      this.props.getCategories();
+    }
   };  
 
   private _renderCatTotal(cat_id: number): number {
