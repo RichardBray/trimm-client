@@ -21,11 +21,12 @@ export interface ILoginResponse {
 export interface IDashvoardView {
 	dashboard: any;  // TODO
 	getCategories: () => {};
-	getSepdningItems: (date: IDashboardDate) => {};
+	getSpendingItems: (date: IDashboardDate) => {};
 	getUserInfo: () => {};
 	postSpendingItem: (data: any) => {};
 	deleteCategory: (data: string) => {};
 	postNewCategory: (data: string) => {};
+	updateCategoriesTotal: any;
 }
 
 export interface IDashboardState {

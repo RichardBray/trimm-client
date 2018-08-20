@@ -14,6 +14,8 @@ export const DELETE_ITEM: string = "DELETE_ITEM";
 export const DELETE_CATEGORY: string = "DELETE_CATEGORY";
 export const POST_CATEGORY: string = "POST_CATEGORY";
 
+export const UPDATE_CATEGORY_TOTALS: string = "UPDATE_CATEGORY_TOTALS";
+
 // API
 export const API: string = "http://localhost:3000"; // http://localhost:3000 http://209.97.183.249
 export const LOGIN_API:string = `${API}/login`;

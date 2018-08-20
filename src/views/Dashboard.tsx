@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getCategories, getSepdningItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory } from "../actions/DashboardActions";
+import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
 
@@ -27,7 +27,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       ...this.default_spending_item
     },
     new_category: "",
-    data_loaded: false
+    data_loaded: false,
+    categories: {}
   }
 
   /**
@@ -36,26 +37,34 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    */
   async componentDidMount(): Promise<void> {
     await this.props.getCategories();
-    await this.props.getSepdningItems(this.state.date);   
+    await this.updateSpendingSection();
     await this.props.getUserInfo(); 
     this.setState({ data_loaded: true });
   }
 
+  async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
+    await this.props.getSpendingItems(dateRange ? dateRange: this.state.date); 
+    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data, this.props.dashboard.cat_totals);  
+  }
+
+  /**
+   * I've taken out the budget functionality for this version
+   */
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
-    const render_categories =  (typeof (data) !== "undefined") && data.map((cat: any) => (
+    const render_categories = (typeof (data) !== "undefined") && data.map((cat: any) => {
+      return (
         <div key={cat.cat_uuid}>
           <div>
             {cat.cat_name}
-            {cat.cat_total}
-            {cat.cat_budget}
+            {this._renderCatTotal(cat.cat_id)}
           </div>
           <span onClick={() => this._handleDeleteCategory(cat.cat_uuid)}>delete category</span>
         </div>
-      )
+      )}
     );
 
-    const add_category = (no_categories = true) => { 
+    const add_category = (no_categories: boolean = true) => { 
       return (
         <form onSubmit={(e) => this._handleAddCategory(e)}>
           {no_categories && "You have no categories."} 
@@ -71,7 +80,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       );
     }
 
-    function test() {
+    function categoriesAndNewForm() {
       return (
         <div>
           {add_category(false)}
@@ -81,7 +90,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
 
     const responses: IServerResponses = {
-      200: test(),
+      200: categoriesAndNewForm(),
       404: add_category(),
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }
@@ -156,7 +165,10 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           </section>
           <h2>{this.state.date.month} {this.state.date.year}</h2>
           {this.renderSpendingForm()}
-          <SpendingItems code={spendingItems.code} data={spendingItems.data} />
+          <SpendingItems 
+            code={spendingItems.code} 
+            data={spendingItems.data}
+          />
           {this.renderCategories()}
         </Layout>
       )      
@@ -172,7 +184,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     if (this.state.spending_item.cat_id !== "0") {
       await this.props.postSpendingItem(this.state.spending_item);
       if (this.props.dashboard.new_spending_item.code === 201) {
-        await this.props.getSepdningItems(this.state.date); 
+        await this.updateSpendingSection() 
       } else {
         console.error('something has gone wrong'); // TODO change this at some point
       }
@@ -204,7 +216,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       year: chosenDate.getFullYear()
     };
 
-    this.props.getSepdningItems(newStateDate);
+    this.updateSpendingSection(newStateDate); // SORT THIS OUT
     this.setState({ date: newStateDate });
   };
 
@@ -227,6 +239,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     this.props.deleteCategory(cat_uuid);
     this.props.getCategories();
   };  
+
+  private _renderCatTotal(cat_id: number): number {
+    const { cat_totals } = this.props.dashboard;
+    return cat_totals.map((cat: [number, number], index: number) => {
+      if (cat_id === cat[0]) {
+        return cat_totals[index][1];
+      } else {
+        return 0;
+      }
+    });
+  }
  
 }
 
@@ -235,7 +258,7 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory }, dispatch);
+  return bindActionCreators({ getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -27,24 +27,26 @@ class SpendingItems extends Component<any, {}> {
   }
 
   private _renderItems(data: any): JSX.Element {
-    if (typeof (data) !== "undefined") {
-      return data.map((item: any) => (
-        <section key={item.item_uuid}>
-          <div>
-            {item.cat_name}
-            {item.item_name}
-          </div>
-          <div>
-            {item.create_dttm}
-            {item.item_price}
-          </div>
-          <div>
-            <a href="#" onClick={() => this.deleteItem(item.item_uuid)}>delete</a>
-          </div>
-        </section>)
-      );
-    }
-  }   
+    return (typeof (data) !== "undefined") && data.map((item: any) => {
+        return (
+          <section key={item.item_uuid}>
+            <div>
+              {item.cat_name}
+              {item.item_name}
+            </div>
+            <div>
+              {item.create_dttm}
+              {item.item_price}
+            </div>
+            <div>
+              <a href="#" onClick={() => this.deleteItem(item.item_uuid)}>delete</a>
+            </div>
+          </section>
+        );
+      }
+    );
+  };
+
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {

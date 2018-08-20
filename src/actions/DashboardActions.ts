@@ -12,11 +12,12 @@ import {
   DELETE_ITEM, 
   POST_CATEGORY,
   GET_CATEGORY_API,
-  DELETE_CATEGORY} from '../uitls/constants';
+  DELETE_CATEGORY,
+  UPDATE_CATEGORY_TOTALS} from '../uitls/constants';
 import { getHeader, postHeader, deleteHeader, fetchFunc } from '../uitls';
 
 
-export function getSepdningItems(monthYear: { month: number, year: number }) {
+export function getSpendingItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;
   const currentDate: string = `${year}-${_modifyMonth(month)}-01`;
 
@@ -58,6 +59,35 @@ export function deleteCategory(cat_uuid: string) {
 
 export function getUserInfo() {
   return fetchFunc(GET_USER_API, GET_USER, getHeader);
+}
+
+/**
+ * There's probably a better way this could be written
+ */
+export function updateCategoriesTotal(spendingData: any, categoryTotals: any) {
+  let updatedState: any = [];
+  // debugger;
+  (typeof (spendingData) !== "undefined") && spendingData.map((item: any) => {
+    let nothingAdded = 0;
+    updatedState.map((category: [number, number], index: number) => {
+      if (category[0] === item.cat_id) {
+        const newPrice = category[1] + item.item_price;
+        updatedState.splice(index, 1);
+        updatedState.push([item.cat_id, newPrice]);
+      } else {
+        nothingAdded +1;
+      }
+    });
+
+    if (nothingAdded === updatedState.length) {
+      updatedState.push([item.cat_id, item.item_price]);
+    }    
+  });
+
+  return {
+    type: UPDATE_CATEGORY_TOTALS,
+    payload: updatedState
+  }
 }
 
 /**
