@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getCategories, getSepdningItems, getUserInfo, postSpendingItem } from "../actions/DashboardActions";
+import { getCategories, getSepdningItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory } from "../actions/DashboardActions";
 
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem } from "../uitls/interfaces";
 import Layout from "../components/Layout";
@@ -43,27 +43,46 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
-    const render_categories = (typeof (data) !== "undefined") && data.map((cat: any) => (
+    const render_categories =  (typeof (data) !== "undefined") && data.map((cat: any) => (
         <div key={cat.cat_uuid}>
           <div>
             {cat.cat_name}
             {cat.cat_total}
             {cat.cat_budget}
           </div>
-          <span>delete category</span>
+          <span onClick={() => this._handleDeleteCategory(cat.cat_uuid)}>delete category</span>
         </div>
       )
     );
-    const add_category = (
-      <form onSubmit={e => this._addCategory(e)}>
-        You have no categories. 
-        <input type="text"/>
-        <button> add a category</button>
-      </form>
-    );
+
+    const add_category = (no_categories = true) => { 
+      return (
+        <form onSubmit={(e) => this._handleAddCategory(e)}>
+          {no_categories && "You have no categories."} 
+          <input 
+            type="text" 
+            name="new_category"
+            value={this.state.new_category} 
+            onChange={e => this._handleChange(e, false)} 
+            required
+          />
+          <button type="submit"> add a category</button>
+        </form>
+      );
+    }
+
+    function test() {
+      return (
+        <div>
+          {add_category(false)}
+          {render_categories}
+        </div>
+      )
+    }
+
     const responses: IServerResponses = {
-      200: render_categories,
-      404: add_category,
+      200: test(),
+      404: add_category(),
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }
     return responses[code];
@@ -144,8 +163,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
     return <h1>Loading...</h1>
   }
-
+    
   private async _addSpendingItem(e: any): Promise<void> {
+    /** 
+     * TODO: Add a message for if no category is selected
+     */
     e.preventDefault();
     if (this.state.spending_item.cat_id !== "0") {
       await this.props.postSpendingItem(this.state.spending_item);
@@ -158,14 +180,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     } else {
       console.error("Please select a category");
     }
-  }
+  };
 
-  private _handleChange(e: any): void {
-    this.setState({ spending_item: {
+  private _handleChange(e: any, spending_item: boolean = true): void {
+    const spendingState: any = {
+      spending_item: {
         ...this.state.spending_item,
-        [e.target.name]: e.target.value 
+        [e.target.name]: e.target.value
       }
-    });
+    };
+
+    this.setState(spending_item ? spendingState : {[e.target.name]: e.target.value});
   };
 
   private _changeMonth(next: boolean = false): void {
@@ -181,12 +206,27 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     this.props.getSepdningItems(newStateDate);
     this.setState({ date: newStateDate });
-  }
+  };
 
-  private _addCategory(e: any): void {
+  private _handleAddCategory(e: any): void {
+    /**
+     * TODO: Add a message for if category already exists
+     */
     e.preventDefault();
     this.props.postNewCategory(this.state.new_category);
-  }
+    this.setState({new_category: ""});
+    this.props.getCategories();
+  };
+
+  private _handleDeleteCategory(cat_uuid: string): void {
+    /** 
+     * TODO: If category on backend has value of more
+     * than ), do not delete and show and error
+     * message instead.
+     */
+    this.props.deleteCategory(cat_uuid);
+    this.props.getCategories();
+  };  
  
 }
 
@@ -195,7 +235,7 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo, postSpendingItem }, dispatch);
+  return bindActionCreators({ getCategories, getSepdningItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -24,12 +24,15 @@ export interface IDashvoardView {
 	getSepdningItems: (date: IDashboardDate) => {};
 	getUserInfo: () => {};
 	postSpendingItem: (data: any) => {};
+	deleteCategory: (data: string) => {};
+	postNewCategory: (data: string) => {};
 }
 
 export interface IDashboardState {
+	data_loaded: boolean | any;
 	date: IDashboardDate;
-	data_loaded: boolean;
 	spending_item: any;
+	new_category: string;
 }
 
 export interface ISpendingItem {

@@ -26,9 +26,9 @@ export function getHeader(): RequestInit {
   };
 }
 
-export function fetchFunc(url: string, action: string, func: (data?: any) => {}) {
+export function fetchFunc(url: string, action: string, func: (data?: any) => {}, data?: any) {
   return (dispatch: Dispatch<IAction>) =>
-    fetch(url, func())
+    fetch(url, func(data))
       .then(response => response.json())
       .then(payload => {
         dispatch({ type: action, payload })

@@ -17,3 +17,8 @@ or
 ```
 $ yarn start
 ```
+
+## Things todo
+- Delete categories
+- Add category
+- Total categories

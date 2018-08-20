@@ -1,6 +1,5 @@
 /* global fetch */
-import { Dispatch } from 'redux';
-import { IAction, ISpendingDate, ISpendingItem } from '../uitls/interfaces';
+import {  ISpendingDate, ISpendingItem } from '../uitls/interfaces';
 import { 
   GET_CATEGORIES_API, 
   GET_CATEGORIES, 
@@ -10,7 +9,10 @@ import {
   GET_USER, 
   ITEM_API, 
   POST_SPENDING_ITEM, 
-  DELETE_ITEM } from '../uitls/constants';
+  DELETE_ITEM, 
+  POST_CATEGORY,
+  GET_CATEGORY_API,
+  DELETE_CATEGORY} from '../uitls/constants';
 import { getHeader, postHeader, deleteHeader, fetchFunc } from '../uitls';
 
 
@@ -26,35 +28,32 @@ export function getSepdningItems(monthYear: { month: number, year: number }) {
     end_date: `${newDate.getFullYear()}-${newMonth}-01`
   }
 
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(GET_ITEMS_API, postHeader(dateInfo))
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: GET_SPENDING_ITEMS, payload })
-      });
+  return fetchFunc(GET_ITEMS_API, GET_SPENDING_ITEMS, postHeader, dateInfo); 
 }
 
 export function postSpendingItem(itemInfo: ISpendingItem) {
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(ITEM_API, postHeader(itemInfo))
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: POST_SPENDING_ITEM, payload })
-      });
+  return fetchFunc(ITEM_API, POST_SPENDING_ITEM, postHeader, itemInfo); 
 }
 
 export function deleteSpendingItem(item_uuid: string) {
   const itemInfo = { item_uuid };
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(ITEM_API, deleteHeader(itemInfo))
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: DELETE_ITEM, payload })
-      });
+  return fetchFunc(ITEM_API, DELETE_ITEM, deleteHeader, itemInfo);
 }
 
 export function getCategories() {
   return fetchFunc(GET_CATEGORIES_API, GET_CATEGORIES, getHeader);
+}
+
+export function postNewCategory(cat_name: string) {
+  const data = {
+    cat_name,
+    cat_budget: 0
+  };
+  return fetchFunc(GET_CATEGORY_API, POST_CATEGORY, postHeader, data);  
+}
+
+export function deleteCategory(cat_uuid: string) {
+  return fetchFunc(GET_CATEGORY_API, DELETE_CATEGORY, deleteHeader, {cat_uuid});
 }
 
 export function getUserInfo() {
