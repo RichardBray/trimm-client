@@ -217,18 +217,21 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       year: chosenDate.getFullYear()
     };
 
-    this.updateSpendingSection(newStateDate); // SORT THIS OUT
+    this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });
   };
 
-  private _handleAddCategory(e: any): void {
-    /**
-     * TODO: Add a message for if category already exists
-     */
+  private async _handleAddCategory(e: any): Promise<void> {
     e.preventDefault();
-    this.props.postNewCategory(this.state.new_category);
-    this.setState({new_category: ""});
-    this.props.getCategories();
+    await this.props.postNewCategory(this.state.new_category);
+
+    const { code, message } = this.props.dashboard.new_category;
+    if (code === 400) {
+      alert(`${message}`);
+    } else {
+      this.setState({new_category: ""});
+      this.props.getCategories();
+    }
   };
 
   private _handleDeleteCategory(cat_uuid: string, cat_id: number): void {
@@ -238,7 +241,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
      * message instead.
      */
     if (this.props.dashboard.cat_totals.includes(cat_id)) { // needs to loop
-      alert('we cant delete this');
+      alert('This category is in use');
     } else {
       this.props.deleteCategory(cat_uuid);
       this.props.getCategories();

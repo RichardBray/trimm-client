@@ -1,5 +1,5 @@
 import { IAction } from "../uitls/interfaces";
-import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM, DELETE_ITEM, UPDATE_CATEGORY_TOTALS } from "../uitls/constants";
+import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM, DELETE_ITEM, UPDATE_CATEGORY_TOTALS, POST_CATEGORY } from "../uitls/constants";
 
 
 export default function (state = _initialiseState(), action: IAction) {
@@ -25,7 +25,12 @@ export default function (state = _initialiseState(), action: IAction) {
       return {
         ...state,
         new_spending_item: payload
-      };   
+      }; 
+    case POST_CATEGORY:
+      return {
+        ...state,
+        new_category: payload
+      }
     case DELETE_ITEM:
       return {
         ...state,
@@ -47,6 +52,7 @@ function _initialiseState(): any {
     categories: {},
     user_info: {},
     new_spending_item: {},
+    new_category: {},
     cat_totals: []
   }
 }
