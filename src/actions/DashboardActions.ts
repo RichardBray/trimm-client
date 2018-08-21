@@ -64,24 +64,21 @@ export function getUserInfo() {
 /**
  * There's probably a better way this could be written
  */
-export function updateCategoriesTotal(spendingData: any, categoryTotals: any) {
+export function updateCategoriesTotal(spendingData: any) {
   let updatedState: any = [];
-  // debugger;
   (typeof (spendingData) !== "undefined") && spendingData.map((item: any) => {
     let nothingAdded = 0;
     updatedState.map((category: [number, number], index: number) => {
       if (category[0] === item.cat_id) {
         const newPrice = category[1] + item.item_price;
-        updatedState.splice(index, 1);
-        updatedState.push([item.cat_id, newPrice]);
+        updatedState.splice(index, 1, [item.cat_id, newPrice]);
       } else {
-        nothingAdded +1;
+        nothingAdded +=1;
       }
     });
-
-    if (nothingAdded === updatedState.length) {
+    if (updatedState.length === 0 || nothingAdded === updatedState.length) {
       updatedState.push([item.cat_id, item.item_price]);
-    }    
+    };    
   });
 
   return {

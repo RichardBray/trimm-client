@@ -44,7 +44,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
     await this.props.getSpendingItems(dateRange ? dateRange: this.state.date); 
-    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data, this.props.dashboard.cat_totals);  
+    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);  
   }
 
   /**
@@ -168,6 +168,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           <SpendingItems 
             code={spendingItems.code} 
             data={spendingItems.data}
+            dateRange={this.state.date}
           />
           {this.renderCategories()}
         </Layout>
@@ -236,8 +237,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
      * than ), do not delete and show and error
      * message instead.
      */
-    debugger;
-    if (this.props.dashboard.cat_totals.includes(cat_id)) {
+    if (this.props.dashboard.cat_totals.includes(cat_id)) { // needs to loop
       alert('we cant delete this');
     } else {
       this.props.deleteCategory(cat_uuid);
@@ -247,11 +247,15 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   private _renderCatTotal(cat_id: number): number {
     const { cat_totals } = this.props.dashboard;
+    let nothingAdded = 0;
     return cat_totals.map((cat: [number, number], index: number) => {
       if (cat_id === cat[0]) {
         return cat_totals[index][1];
       } else {
-        return 0;
+        nothingAdded +=1;
+        if (nothingAdded === cat_totals.length) {
+          return 0;
+        }
       }
     });
   }

@@ -19,4 +19,8 @@ $ yarn start
 ```
 
 ## Things todo
-- Fix bug with duplicate category
+- Show error duplicate category name
+- Show error no category selected
+- Show error no date selected
+- Default date based on month selected (maybe)
+- Add registration section
