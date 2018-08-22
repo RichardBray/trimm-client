@@ -1,0 +1,10 @@
+/* Buttons */
+
+
+.primary_btn {
+  composes: fz-1-4em cur-p w-100 bgc-primary from "../helpers.css";
+  border-radius: 2rem;
+  border: none;
+  color: white;
+  height: 2.5rem;
+}

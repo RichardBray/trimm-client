@@ -12,8 +12,19 @@ module.exports = {
 		rules: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]"
-      },			
+        loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]"
+			},
+			{
+				test: /\.(jpg|png|gif|svg)$/,
+				use: [
+					{
+						loader: "file-loader",
+						options: {
+							name: "[name].[ext]"
+						}
+					}
+				]				
+			},			
 			{
 				test: /\.tsx?/,
 				exclude: /node_modules/,

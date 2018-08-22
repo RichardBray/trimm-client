@@ -1,0 +1,12 @@
+
+.left_column {
+  composes: bgc-primary from "../helpers.css";
+  height: 100vh;
+  width: 50%;
+}
+
+.left_text {
+  composes: c-white from "../helpers.css";
+  font-size: 4rem;
+  margin-top: 40vh;
+}

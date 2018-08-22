@@ -1,0 +1,21 @@
+/* Helper classes */
+
+.cur-p {
+  cursor: pointer;
+}
+
+.fz-1-4em {
+  font-size: 1.4rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.c-white {
+  color: white;
+}
+
+.bgc-primary {
+  background-color: var(--brandPrimary);
+}

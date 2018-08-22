@@ -1,5 +1,10 @@
-@import "../global.css";
+/* Inputs */
+
 
 .input {
-  border: 1px solid black;
+  composes: fz-1-4em from "../helpers.css";
+  border-radius: .6rem;
+  border: 1px solid var(--brandPrimary);
+  color: var(--brandPrimary);
+  padding: .5rem 1rem;
 }
