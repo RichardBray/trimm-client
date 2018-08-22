@@ -18,5 +18,4 @@ or
 $ yarn start
 ```
 
-## Things todo
-- Add registration section
+- Refactor Fetch section

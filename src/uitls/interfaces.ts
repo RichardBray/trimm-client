@@ -5,6 +5,10 @@ export interface ILogin {
 	password: string;
 }
 
+export interface IRegister extends ILogin {
+	username: string;
+}
+
 export interface ILoginView {
 	login: ILoginResponse;
 	checkLoginDetails: (state: ILogin) => {};
@@ -59,8 +63,9 @@ export interface IAction {
 }
 
 export interface IReducers {
-	login: ILoginResponse
-	dashboard: any
+	login: ILoginResponse;
+	dashboard: any;
+	register: any;
 }
 
 export interface ILayout {

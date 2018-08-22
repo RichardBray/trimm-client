@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
@@ -39,7 +39,7 @@ class Login extends PageHandler<ILoginView, ILogin> {
 			<section className="dis-f jc-sb">
 				<form onSubmit={e => this.handleSubmit(e)}>
 					<input
-						type="text"
+						type="email"
 						name="email"
 						value={this.state.email}
 						className={styles.input}

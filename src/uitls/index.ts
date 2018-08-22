@@ -1,3 +1,4 @@
+/* global fetch */
 import { Dispatch } from 'redux';
 
 import { ILogin, ISpendingDate, ISpendingItem, IAction } from "./interfaces";
