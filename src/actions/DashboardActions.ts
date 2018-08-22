@@ -14,7 +14,8 @@ import {
   GET_CATEGORY_API,
   DELETE_CATEGORY,
   UPDATE_CATEGORY_TOTALS} from '../uitls/constants';
-import { getHeader, postHeader, deleteHeader, fetchFunc, modifyMonth } from '../uitls';
+import { Http, modifyMonth } from '../uitls';
+const http = new Http();
 
 
 export function getSpendingItems(monthYear: { month: number, year: number }) {
@@ -28,21 +29,19 @@ export function getSpendingItems(monthYear: { month: number, year: number }) {
     start_date: currentDate,
     end_date: `${newDate.getFullYear()}-${newMonth}-01`
   }
-
-  return fetchFunc(GET_ITEMS_API, GET_SPENDING_ITEMS, postHeader, dateInfo); 
+  return http.post(GET_ITEMS_API, GET_SPENDING_ITEMS, dateInfo);
 }
 
 export function postSpendingItem(itemInfo: ISpendingItem) {
-  return fetchFunc(ITEM_API, POST_SPENDING_ITEM, postHeader, itemInfo); 
+  return http.post(ITEM_API, POST_SPENDING_ITEM, itemInfo); 
 }
 
 export function deleteSpendingItem(item_uuid: string) {
-  const itemInfo = { item_uuid };
-  return fetchFunc(ITEM_API, DELETE_ITEM, deleteHeader, itemInfo);
+  return http.delete(ITEM_API, DELETE_ITEM, { item_uuid }); 
 }
 
 export function getCategories() {
-  return fetchFunc(GET_CATEGORIES_API, GET_CATEGORIES, getHeader);
+  return http.get(GET_CATEGORIES_API, GET_CATEGORIES);
 }
 
 export function postNewCategory(cat_name: string) {
@@ -50,15 +49,15 @@ export function postNewCategory(cat_name: string) {
     cat_name,
     cat_budget: 0
   };
-  return fetchFunc(GET_CATEGORY_API, POST_CATEGORY, postHeader, data);  
+  return http.post(GET_CATEGORY_API, POST_CATEGORY, data); 
 }
 
 export function deleteCategory(cat_uuid: string) {
-  return fetchFunc(GET_CATEGORY_API, DELETE_CATEGORY, deleteHeader, {cat_uuid});
+  return http.delete(GET_CATEGORY_API, DELETE_CATEGORY, { cat_uuid }); 
 }
 
 export function getUserInfo() {
-  return fetchFunc(GET_USER_API, GET_USER, getHeader);
+  return http.get(GET_USER_API, GET_USER);
 }
 
 /**

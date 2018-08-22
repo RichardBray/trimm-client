@@ -1,48 +1,65 @@
 /* global fetch */
 import { Dispatch } from 'redux';
 
-import { ILogin, ISpendingDate, ISpendingItem, IAction } from "./interfaces";
+import { IAction } from "./interfaces";
 import { Component } from 'react';
 
 
-export function postHeader(data: ILogin | ISpendingDate | ISpendingItem): RequestInit {
-  return {
-    method: "POST",
-    body: JSON.stringify(data),
-    ..._standardHeader()
+export class PageHandler extends Component<{}, {}> {
+  constructor(props: {}) {
+    super(props)
   };
-}
 
-export function deleteHeader(data: any): RequestInit {
-  return {
-    method: "DELETE",
-    body: JSON.stringify(data),
-    ..._standardHeader()
+  handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    this.setState({ [e.target.name]: e.target.value });
   }
 }
 
-export function getHeader(): RequestInit {
-  return {
-    method: "GET",
-    ..._standardHeader()
-  };
-}
+export class Http {
+  data: any = {};
+  url: string = "";
+  action: string ="";
 
-export function fetchFunc(url: string, action: string, func: (data?: any) => {}, data?: any) {
-  return (dispatch: Dispatch<IAction>) =>
-    fetch(url, func(data))
-      .then(response => response.json())
-      .then(payload => {
-        dispatch({ type: action, payload })
-      });
-}
+  get(url: string, action: string) {
+    this.url = url;
+    this.action = action;
+    this.data = {}
+    return this._fetchMethod("GET");
+  }
 
-function _standardHeader(): RequestInit {
-  return {
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+  post(url: string, action: string, data: any) {
+    this.url = url;
+    this.action = action;  
+    this.data = data;    
+    return this._fetchMethod("POST");
+  }
+
+  delete(url: string, action: string, data: any) {
+    this.url = url;
+    this.action = action;
+    this.data = data;      
+    return this._fetchMethod("DELETE");
+  }
+
+  private _fetchMethod(method: string) {
+    return (dispatch: Dispatch<IAction>) =>
+      fetch(this.url, this._fetchHeader(method))
+        .then(response => response.json())
+        .then(payload => {
+          dispatch({ type: this.action, payload })
+        });    
+  }
+
+  private _fetchHeader(method: string): RequestInit {
+    const fetchBody = this.data === {} && { body: JSON.stringify(this.data) };
+    return {
+      method,
+      credentials: "include",
+      ...fetchBody,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
     }    
   }
 }
@@ -54,14 +71,4 @@ function _standardHeader(): RequestInit {
  */
 export function modifyMonth(month: number): string {
   return (`0${month}`).slice(-2);
-}
-
-export class PageHandler extends Component<{}, {}> {
-  constructor(props: {}) {
-    super(props)
-  };
-
-  handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    this.setState({ [e.target.name]: e.target.value });
-  }
 }
