@@ -6,22 +6,27 @@ import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNew
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
+import { modifyMonth } from "../uitls";
 
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
+  date = new Date();
+  date_year = this.date.getFullYear();
+  date_month = this.date.getMonth() + 1;
+  date_day = this.date.getDate();
+
   default_spending_item: ISpendingItem = {
     item_name: "",
     item_price: 0,
-    create_dttm: "",
+    create_dttm: `${this.date_year}-${modifyMonth(this.date_month)}-${modifyMonth(this.date_day)}`,
     cat_id: "0"    
   };
 
-  date = new Date();
   state = {
     date: {
-      month: this.date.getMonth() + 1,
-      year: this.date.getFullYear()
+      month: this.date_month,
+      year: this.date_year
     },
     spending_item: {
       ...this.default_spending_item
@@ -32,8 +37,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   }
 
   /**
-   * Get all the data needed for
-   * this page.
+   * Get all the data needed for this page.
    */
   async componentDidMount(): Promise<void> {
     await this.props.getCategories();
@@ -59,7 +63,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             {cat.cat_name}
             {this._renderCatTotal(cat.cat_id)}
           </div>
-          <span onClick={() => this._handleDeleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
+          <span onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
         </div>
       )}
     );
@@ -176,11 +180,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
     return <h1>Loading...</h1>
   }
-    
+  
+  /**
+   * If a category hasn't been selected don't
+   * send an api request, and if the return code is not
+   * 201 then tell the user something went wrong.
+   */
   private async _addSpendingItem(e: any): Promise<void> {
-    /** 
-     * TODO: Add a message for if no category is selected
-     */
     e.preventDefault();
     if (this.state.spending_item.cat_id !== "0") {
       await this.props.postSpendingItem(this.state.spending_item);
@@ -191,7 +197,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       }
       this.setState({ spending_item: this.default_spending_item });
     } else {
-      console.error("Please select a category");
+      alert("Please select a category");
     }
   };
 
@@ -234,18 +240,21 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
   };
 
-  private _handleDeleteCategory(cat_uuid: string, cat_id: number): void {
-    /** 
-     * TODO: If category on backend has value of more
-     * than ), do not delete and show and error
-     * message instead.
-     */
-    if (this.props.dashboard.cat_totals.includes(cat_id)) { // needs to loop
-      alert('This category is in use');
-    } else {
+  private _deleteCategory(cat_uuid: string, cat_id: number): void {
+    let cat_has_total = false;
+    this.props.dashboard.cat_totals.map((cat_total:[number, number]) => {
+      if (cat_total[0] === cat_id && cat_total[1] !== 0) {
+        cat_has_total = true;
+      }
+    });
+
+    if (!cat_has_total) {
       this.props.deleteCategory(cat_uuid);
-      this.props.getCategories();
+      this.props.getCategories();      
+    } else {
+      alert('This category is in use');
     }
+  
   };  
 
   private _renderCatTotal(cat_id: number): number {

@@ -14,15 +14,15 @@ import {
   GET_CATEGORY_API,
   DELETE_CATEGORY,
   UPDATE_CATEGORY_TOTALS} from '../uitls/constants';
-import { getHeader, postHeader, deleteHeader, fetchFunc } from '../uitls';
+import { getHeader, postHeader, deleteHeader, fetchFunc, modifyMonth } from '../uitls';
 
 
 export function getSpendingItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;
-  const currentDate: string = `${year}-${_modifyMonth(month)}-01`;
+  const currentDate: string = `${year}-${modifyMonth(month)}-01`;
 
   const newDate: Date = _oneMonthToDate(currentDate);
-  const newMonth = _modifyMonth(newDate.getMonth() + 1)
+  const newMonth = modifyMonth(newDate.getMonth() + 1)
 
   const dateInfo: ISpendingDate = {
     start_date: currentDate,
@@ -94,13 +94,4 @@ function _oneMonthToDate(currentDate: string): Date {
   const newDate: Date = new Date(currentDate);
   newDate.setMonth(newDate.getMonth() + 1);
   return newDate;
-}
-
-/**
- * Adds `0` to month if it has single number
- * @example _modifyMonth(8) // 08
- * @example _modifyMonth(11) // 11
- */
-function _modifyMonth(month: number): string {
-  return (`0${month}`).slice(-2);
 }

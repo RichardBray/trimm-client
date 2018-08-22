@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { ILogin, ISpendingDate, ISpendingItem, IAction } from "./interfaces";
+import { Component } from 'react';
 
 
 export function postHeader(data: ILogin | ISpendingDate | ISpendingItem): RequestInit {
@@ -42,5 +43,24 @@ function _standardHeader(): RequestInit {
       Accept: "application/json",
       "Content-Type": "application/json"
     }    
+  }
+}
+
+/**
+ * Adds `0` to month if it has single number
+ * @example _modifyMonth(8) // 08
+ * @example _modifyMonth(11) // 11
+ */
+export function modifyMonth(month: number): string {
+  return (`0${month}`).slice(-2);
+}
+
+export class PageHandler extends Component<{}, {}> {
+  constructor(props: {}) {
+    super(props)
+  };
+
+  handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    this.setState({ [e.target.name]: e.target.value });
   }
 }

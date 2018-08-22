@@ -7,9 +7,10 @@ import { ILogin, ILoginView, IAction, IReducers } from "../uitls/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
 
 import styles from "~/assets/styles/components/Inputs";
+import { PageHandler } from "../uitls";
 
 
-class Login extends Component<ILoginView, ILogin> {
+class Login extends PageHandler<ILoginView, ILogin> {
 
 	state: ILogin = {
 		email: "",
@@ -19,10 +20,6 @@ class Login extends Component<ILoginView, ILogin> {
 	handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
 		e.preventDefault();
 		this.props.checkLoginDetails(this.state);
-	}
-
-	handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-		this.setState({ [e.target.name] : e.target.value });
 	}
 
 	renderError(): JSX.Element | void {

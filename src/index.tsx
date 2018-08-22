@@ -9,6 +9,7 @@ import thunk from "redux-thunk";
 import reducers from "./reducers";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
+import Register from "./views/Register";
 
 import "~/assets/styles/global";
 
@@ -23,6 +24,7 @@ ReactDOM.render(
 			<Switch>
 				<Route path="/dashboard" component={Dashboard} />
 				<Route path="/login" component={Login} />
+				<Route path="/register" component={Register} />
 				<Route path="/" component={Login} />
 			</Switch>
 		</BrowserRouter>
