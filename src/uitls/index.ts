@@ -16,14 +16,15 @@ export class PageHandler extends Component<{}, {}> {
 }
 
 export class Http {
-  data: any = {};
+  data: any = false;
   url: string = "";
-  action: string ="";
+  action: string = "";
 
   get(url: string, action: string) {
     this.url = url;
     this.action = action;
-    this.data = {}
+    this.data = false;
+
     return this._fetchMethod("GET");
   }
 
@@ -51,7 +52,8 @@ export class Http {
   }
 
   private _fetchHeader(method: string): RequestInit {
-    const fetchBody = this.data === {} && { body: JSON.stringify(this.data) };
+    const body = JSON.stringify(this.data);
+    const fetchBody = this.data && { body };
     return {
       method,
       credentials: "include",
