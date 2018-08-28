@@ -2,9 +2,13 @@
 
 
 .input {
-  composes: fz-1-4em from "../helpers.css";
+  composes: fz-1-4em mb-2rem from "../helpers.css";
   border-radius: .6rem;
   border: 1px solid var(--brandPrimary);
   color: var(--brandPrimary);
-  padding: .5rem 1rem;
+  padding: 1rem;
+}
+
+.input:focus {
+  outline: none;
 }

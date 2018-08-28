@@ -1,21 +1,58 @@
 /* Helper classes */
 
-.cur-p {
-  cursor: pointer;
+.bgc-primary {
+  background-color: var(--brandPrimary);
 }
 
-.fz-1-4em {
-  font-size: 1.4rem;
-}
-
-.w-100 {
-  width: 100%;
+.bgc-secondary {
+  background-color: var(--brandSecondary);
 }
 
 .c-white {
   color: white;
 }
 
-.bgc-primary {
-  background-color: var(--brandPrimary);
+.cur-p {
+  cursor: pointer;
+}
+
+.dis-f {
+  display: flex;
+}
+
+.fz-1-4em {
+  font-size: 1.4rem;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
+.jc-sb {
+  justify-content: space-between;
+}
+
+.mb-2rem {
+  margin-bottom: 2rem;  
+}
+
+.mx-a {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ta-c {
+  text-align: center;
+}
+
+.tr-0-5s {
+  transition: .5s;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-50 {
+  width: 50%;
 }

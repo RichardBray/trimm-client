@@ -5,6 +5,11 @@ import { bindActionCreators, Dispatch } from "redux";
 import { ILayout, IAction } from "../uitls/interfaces";
 import { getLogout } from "../actions/LoginActions";
 
+// Styles
+import LayoutCss from "~/assets/styles/components/Layout";
+
+// Images
+import logo from "~/assets/img/logo-white.svg";
 
 class Layout extends Component<ILayout, {}> {
 
@@ -25,14 +30,19 @@ class Layout extends Component<ILayout, {}> {
   render(): JSX.Element {
     return (
       <main>
-        <header>
-          <div>Logo</div>
-          <a onClick={() => this.handleLogout()}>Logout</a>
+        <header className={LayoutCss['main-header']}>
+          <div className={LayoutCss['header-container']}>
+            <img 
+              src={logo} 
+              alt="Trimm Logo"
+              className={LayoutCss['main-header__logo']} />
+            <a onClick={() => this.handleLogout()}>Logout</a>
+          </div>
         </header>
-        <section>
+        <section className={LayoutCss.container}>
           {this.props.children}
         </section>
-        <footer>
+        <footer className={LayoutCss.container}>
           Trimm &copy; 2019
         </footer>
       </main>

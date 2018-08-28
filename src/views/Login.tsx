@@ -31,45 +31,59 @@ class Login extends PageHandler<ILoginView, ILogin> {
 	renderError(): JSX.Element | void {
 		const { code, message } = this.props.login;
 		let value: JSX.Element | string = "Fill in your username and password";
+		let formError: boolean = false;
 
 		if (code === 200) {
 			value = <Redirect to="/dashboard" />
 		} else if (code === 400) {
 			value = message;
+			formError = true;
 		}	
-		return <div className={LoginCss.left_column}><p className={LoginCss.left_text}>{value}</p></div>;	
+		return (
+			<div className={formError ? LoginCss['right-column-error'] : LoginCss['right-column']}>
+				<p className={LoginCss['right-text']}>
+					{value}
+				</p>
+			</div>);	
 	}
 
 	render(): JSX.Element {
 		return (
 			<section className="dis-f jc-sb">
-				<form onSubmit={e => this.handleSubmit(e)} className="dis-f fd-c">
-					<img src={logo} alt="Trimm logo"/>
-					<input
-						type="email"
-						name="email"
-						value={this.state.email}
-						className={Inputs.input}
-						placeholder="Email Address"
-						onChange={e => this.handleChange(e)}
-						required
-					/>
-					<input
-						type="Password"
-						name="password"
-						value={this.state.password}
-						className={Inputs.input}
-						placeholder="Password"
-						onChange={e => this.handleChange(e)}
-						required
-					/>
-					<button 
-						type="submit" 
-						className={Buttons.primary_btn} 
-						value="Login">
-							Login
-					</button>
-				</form>
+				<div className={LoginCss['left-column']}>
+					<form 
+						onSubmit={e => this.handleSubmit(e)} 
+						className={`dis-f fd-c ${LoginCss['left-column-form']}`}>
+						<div className={LoginCss['logo-pos']}>
+							<img src={logo} className={LoginCss['logo-width']} alt="Trimm logo"/>
+						</div>
+						<input
+							type="email"
+							name="email"
+							value={this.state.email}
+							className={Inputs.input}
+							placeholder="Email Address"
+							onChange={e => this.handleChange(e)}
+							required
+						/>
+						<input
+							type="Password"
+							name="password"
+							value={this.state.password}
+							className={Inputs.input}
+							placeholder="Password"
+							onChange={e => this.handleChange(e)}
+							required
+						/>
+						<button 
+							type="submit" 
+							className={Buttons['primary-btn']} 
+							value="Login">
+								Login
+						</button>
+					</form>
+					<a href="/register">Register</a>
+				</div>
 				{this.renderError()}
 			</section>
 		)

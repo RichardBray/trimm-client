@@ -1,12 +1,32 @@
 
-.left_column {
-  composes: bgc-primary from "../helpers.css";
-  height: 100vh;
-  width: 50%;
+.right-column {
+  composes: bgc-primary w-50 h-100vh from "../helpers.css";
 }
 
-.left_text {
+.right-column-error {
+  composes: bgc-secondary w-50 h-100vh from "../helpers.css";
+}
+
+.right-text {
   composes: c-white from "../helpers.css";
   font-size: 4rem;
   margin-top: 40vh;
+  padding: 0 2rem;
+}
+
+.left-column {
+  composes: mx-a from "../helpers.css";
+}
+
+.left-column-form {
+  margin-top: 27vh;
+  width: 20rem;
+}
+
+.logo-pos {
+  composes: ta-c mb-2rem from "../helpers.css";
+}
+
+.logo-width {
+  width: 15rem;
 }

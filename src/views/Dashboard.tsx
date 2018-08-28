@@ -161,11 +161,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     if (this.state.data_loaded) {
       return (
         <Layout>
-          <h1>Hi {this.props.dashboard.user_info.user_name}</h1>
-          <span>Here is this months data.</span>
           <section>
-            <span onClick={() => this._changeMonth()}>Prev month</span>
-            <span onClick={() => this._changeMonth(true)}>Next month</span>
+            <h2>Hi {this.props.dashboard.user_info.user_name}</h2>
+            <span>Here is this months data.</span>
+          </section>
+          <section className="dis-f jc-sb">
+            <div onClick={() => this._changeMonth()}>Prev month</div>
+            <div onClick={() => this._changeMonth(true)}>Next month</div>
           </section>
           <h2>{this.state.date.month} {this.state.date.year}</h2>
           {this.renderSpendingForm()}

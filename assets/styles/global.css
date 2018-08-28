@@ -1,7 +1,8 @@
 :root {
   --brandPrimary: #33D8BB;
   --brandSecondary: #A964F1;
-  font-family : 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --desktopWidth: 86rem;
+  /* font-family : 'Helvetica Neue', Helvetica, Arial, sans-serif; */
   font-size: 14px;    
 }
 
