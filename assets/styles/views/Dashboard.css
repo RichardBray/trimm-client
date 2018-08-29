@@ -11,7 +11,21 @@
 }
 
 .spending-form {
-  composes: bgc-white from "../helpers.css";
-  padding: 1rem;
-  border: 1px solid var(--brandPrimary);
+  composes: bgc-white dis-f jc-sb c-primary p-1rem mb-1rem from "../helpers.css";
+  border: 2px dashed var(--brandPrimary);
+  box-shadow: 0 1px 9px 0 #dcdbdb;
+}
+
+.spending-form__text {
+  composes: dis-f fd-c ta-r from "../helpers.css";
+}
+
+.spending-form__text_box {
+  height: 40px;
+  line-height: 33px;
+}
+
+.spending-form__inputs {
+  margin-left: 1rem;
+  margin-right: 1rem;  
 }

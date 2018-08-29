@@ -2,8 +2,7 @@
 
 
 .main-header {
-  composes: bgc-primary from "../helpers.css";
-  height: 6rem;
+  composes: bgc-primary h-6rem from "../helpers.css";
 }
 
 .main-header__logo {
@@ -17,7 +16,5 @@
 
 .header-container {
   composes: container;
-  composes: dis-f jc-sb c-white from "../helpers.css";
-  align-items: center;
-  height: 6rem;
+  composes: dis-f jc-sb c-white h-6rem ai-c from "../helpers.css";
 }

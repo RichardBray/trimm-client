@@ -1,0 +1,35 @@
+
+.container {
+  composes: bgc-white dis-f jc-sb mb-1rem from "../helpers.css";
+  padding: 1.2rem;
+}
+
+.price-text {
+  composes: c-primary from "../helpers.css";
+  font-size: 2rem;
+}
+
+.first-column {
+  composes: fz-1-4rem w-60 from "../helpers.css";
+}
+
+.second-column {
+  composes: ta-r w-30 from "../helpers.css";
+}
+
+.third-column {
+  composes: ta-r w-10 from "../helpers.css";
+}
+
+.cat-title {
+  composes: mb-1rem from "../helpers.css";
+  color: var(--mediumGrey);
+}
+
+.delete-icon {
+  composes: cur-p tr-0-5s from "../helpers.css";
+}
+
+.delete-icon:hover {
+  opacity: .7;
+}

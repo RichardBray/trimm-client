@@ -2,8 +2,15 @@ import React, {Component} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
+import { monthToText } from "../uitls";
 import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../actions/DashboardActions";
 import { IServerResponses, IAction } from "../uitls/interfaces";
+
+import SpendingItemCss from "~/assets/styles/components/SpendingItems";
+import HelpersCss from "~/assets/styles/helpers";
+
+// Images
+import deleteIcon from "~/assets/img/delete-icon.svg";
 
 
 class SpendingItems extends Component<any, {}> {
@@ -11,18 +18,22 @@ class SpendingItems extends Component<any, {}> {
   renderItems(data: any): JSX.Element {
     return (typeof (data) !== "undefined") && data.map((item: any) => {
       return (
-        <section key={item.item_uuid}>
-          <div>
-            {item.cat_name}
-            {item.item_name}
+        <section key={item.item_uuid} className={SpendingItemCss.container}>
+          <div className={SpendingItemCss['first-column']}>
+            <div className={SpendingItemCss['cat-title']}>{item.cat_name}</div>
+            <div>{item.item_name}</div>
           </div>
-          <div>
-            {item.create_dttm}
-            {item.item_price}
+          <div className={SpendingItemCss['second-column']}>
+            <div className={HelpersCss['mb-1rem']}>{this._formatDate(item.create_dttm)}</div>
+            <div className={SpendingItemCss['price-text']}>{item.item_price}</div>
           </div>
-          <div>
-            <a href="#" onClick={() => this._deleteItem(item.item_uuid)}>delete</a>
-          </div>
+          <div className={SpendingItemCss['third-column']}>
+            <img 
+              src={deleteIcon}
+              alt="Delete Icon"
+              className={SpendingItemCss['delete-icon']}
+              onClick={() => this._deleteItem(item.item_uuid)} />
+          </div>          
         </section>
       );
     }
@@ -39,6 +50,16 @@ class SpendingItems extends Component<any, {}> {
     }
     return responses[code];
   };
+
+  private _formatDate(date: string): string {
+    const splitTime = date.split(" ");
+    const splitDates = splitTime[0].split("-");
+    const year = splitDates[0];
+    const month = monthToText(splitDates[1]);
+    const day = splitDates[2];
+
+    return `${day} ${month} ${year}`;
+  }
 
   /**
    * Editing will come later

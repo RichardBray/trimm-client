@@ -2,6 +2,7 @@
 
 ._input {
   border-radius: .6rem;
+  box-sizing: border-box;
   border: 1px solid var(--brandPrimary);
   color: var(--brandPrimary);
 }
@@ -11,23 +12,24 @@
 }
 
 .input {
-  composes: fz-1-4em mb-2rem from "../helpers.css";
+  composes: fz-1-4rem mb-2rem p-1rem from "../helpers.css";
   composes: _input;
-  padding: 1rem;
 }
 
 .input-small {
   composes: _input;
-  font-size: 1rem;
-  padding: .5rem 1rem;
+  composes: w-100 fz-1rem from "../helpers.css";
+  height: 33px;
+  padding: .4rem 1rem;
 }
 
-.spending-desc {
+.input-spending-form {
   composes: input-small;
-  composes: w-75 from "../helpers.css";
+  composes: mb-05rem bgc-white from "../helpers.css";
 }
 
-.spending-price {
-  composes: input-small;
-  composes: w-10 from "../helpers.css" ; 
+.input-spending-form-price {
+  composes: _input;
+  composes: mb-1rem fz-1-4rem bgc-white w-100 p-1rem from "../helpers.css";
+  height: 3.2rem;
 }

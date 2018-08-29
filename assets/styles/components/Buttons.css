@@ -15,7 +15,7 @@
 }
 
 .primary-btn {
-  composes: fz-1-4em cur-p w-100 bgc-primary from "../helpers.css";
+  composes: fz-1-4rem cur-p w-100 bgc-primary from "../helpers.css";
   composes: _button;
 }
 

@@ -6,12 +6,13 @@ import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNew
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
-import { modifyMonth } from "../uitls";
+import { modifyMonth, monthToText } from "../uitls";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
 import Buttons from "~/assets/styles/components/Buttons";
 import DashboardCss from "~/assets/styles/views/Dashboard";
+import HelpersCss from "~/assets/styles/helpers";
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -83,7 +84,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             onChange={e => this._handleChange(e, false)} 
             required
           />
-          <button type="submit"> add a category</button>
+          <button type="submit"> Add category</button>
         </form>
       );
     }
@@ -119,45 +120,62 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     return (
       <form className={DashboardCss['spending-form']} onSubmit={(e: any) => this._addSpendingItem(e)}>
-        <div className="dis-f jc-sb">
-          <input 
-            type="text" 
-            name="item_name" 
-            placeholder="Description" 
-            className={Inputs['spending-desc']}
-            value={item_name}
-            onChange={e => this._handleChange(e)}
-            required 
-          />
+        <section className={`${HelpersCss['w-70']} dis-f`}>
+          <div className={DashboardCss['spending-form__text']}>
+            <label 
+              htmlFor="cat_id"
+              className={DashboardCss['spending-form__text_box']}
+            >Category:</label>
+            <label 
+              htmlFor="item_name"
+              className={DashboardCss['spending-form__text_box']}
+            >Description:</label>  
+            <label 
+              htmlFor="create_dttm"
+              className={DashboardCss['spending-form__text_box']}
+            >Date:</label>  
+          </div>
+          <div className={DashboardCss['spending-form__inputs']}>
+            <select
+              name="cat_id"
+              value={this.state.spending_item.cat_id}
+              className={Inputs['input-spending-form']}
+              onChange={e => this._handleChange(e)}
+              required>
+              <option value="0" disabled>--</option>
+              {category_list}
+            </select> 
+            <input
+              type="text"
+              name="item_name"
+              placeholder="Description"
+              className={Inputs['input-spending-form']}
+              value={item_name}
+              onChange={e => this._handleChange(e)}
+              required
+            />   
+            <input
+              type="date"
+              name="create_dttm"
+              placeholder="Date"
+              className={Inputs['input-spending-form']}
+              onChange={e => this._handleChange(e)}
+              value={create_dttm}
+            />                      
+          </div>               
+        </section>
+        <section className={HelpersCss['w-30']}>
           <input
             type="number"
             name="item_price"
             placeholder="Price"
-            className={Inputs['spending-price']}
+            className={Inputs['input-spending-form-price']}
             value={item_price}
             onChange={e => this._handleChange(e)}
             required
-          />          
-        </div>
-        <div className="dis-f">
-          <label htmlFor="category">Category</label>
-          <select
-            name="cat_id"
-            value={this.state.spending_item.cat_id}
-            onChange={e => this._handleChange(e)}
-            required>
-            <option value="0" disabled>--</option>
-            {category_list}
-          </select>
-          <input
-            type="date"
-            name="create_dttm"
-            placeholder="Date"
-            onChange={e => this._handleChange(e)}
-            value={create_dttm}
-          />                    
-          <button type="submit" className={Buttons['primary-btn']} >Add Trimm</button>
-        </div>
+          />                          
+          <button type="submit" className={Buttons['primary-btn']}>Add Trimm</button>
+        </section>
       </form>
     )
   }
@@ -181,7 +199,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               />
             </div>
             <div>
-              <h2>{this.state.date.month} {this.state.date.year}</h2>
+              <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
               {this.renderCategories()}
             </div>            
           </section>

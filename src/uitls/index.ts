@@ -74,3 +74,11 @@ export class Http {
 export function modifyMonth(month: number): string {
   return (`0${month}`).slice(-2);
 }
+
+export function monthToText(month: string | number): string {
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  return monthNames[+month -1];
+}
