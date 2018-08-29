@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { Doughnut } from 'react-chartjs-2';
 import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal } from "../actions/DashboardActions";
 
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
@@ -13,6 +14,22 @@ import Inputs from "~/assets/styles/components/Inputs";
 import Buttons from "~/assets/styles/components/Buttons";
 import DashboardCss from "~/assets/styles/views/Dashboard";
 import HelpersCss from "~/assets/styles/helpers";
+
+const data = {
+  labels: [
+    'Red',
+    'Green',
+    'Yellow'
+  ],
+  datasets: [{
+    data: [300, 50, 100],
+    backgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56'
+    ]
+  }]
+};
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -199,6 +216,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               />
             </div>
             <div>
+              <Doughnut data={data} />
               <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
               {this.renderCategories()}
             </div>            
