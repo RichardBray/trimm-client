@@ -1,14 +1,33 @@
 /* Inputs */
 
-
-.input {
-  composes: fz-1-4em mb-2rem from "../helpers.css";
+._input {
   border-radius: .6rem;
   border: 1px solid var(--brandPrimary);
   color: var(--brandPrimary);
+}
+
+._input:focus {
+  outline: none;
+}
+
+.input {
+  composes: fz-1-4em mb-2rem from "../helpers.css";
+  composes: _input;
   padding: 1rem;
 }
 
-.input:focus {
-  outline: none;
+.input-small {
+  composes: _input;
+  font-size: 1rem;
+  padding: .5rem 1rem;
+}
+
+.spending-desc {
+  composes: input-small;
+  composes: w-75 from "../helpers.css";
+}
+
+.spending-price {
+  composes: input-small;
+  composes: w-10 from "../helpers.css" ; 
 }

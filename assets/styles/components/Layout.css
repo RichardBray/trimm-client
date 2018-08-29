@@ -1,3 +1,6 @@
+/* Layout */
+
+
 .main-header {
   composes: bgc-primary from "../helpers.css";
   height: 6rem;

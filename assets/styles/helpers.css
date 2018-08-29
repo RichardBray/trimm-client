@@ -8,6 +8,10 @@
   background-color: var(--brandSecondary);
 }
 
+.bgc-white {
+  background-color: white;
+}
+
 .c-white {
   color: white;
 }
@@ -53,6 +57,14 @@
   width: 100%;
 }
 
+.w-75 {
+  width: 75%;
+}
+
 .w-50 {
   width: 50%;
+}
+
+.w-10 {
+  width: 10%;
 }

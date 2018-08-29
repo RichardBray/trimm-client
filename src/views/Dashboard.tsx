@@ -8,6 +8,10 @@ import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
 import { modifyMonth } from "../uitls";
 
+// Styles
+import Inputs from "~/assets/styles/components/Inputs";
+import Buttons from "~/assets/styles/components/Buttons";
+import DashboardCss from "~/assets/styles/views/Dashboard";
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -114,43 +118,45 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     );
 
     return (
-      <form className="dis-f" onSubmit={(e: any) => this._addSpendingItem(e)}>
-        <div>
+      <form className={DashboardCss['spending-form']} onSubmit={(e: any) => this._addSpendingItem(e)}>
+        <div className="dis-f jc-sb">
+          <input 
+            type="text" 
+            name="item_name" 
+            placeholder="Description" 
+            className={Inputs['spending-desc']}
+            value={item_name}
+            onChange={e => this._handleChange(e)}
+            required 
+          />
+          <input
+            type="number"
+            name="item_price"
+            placeholder="Price"
+            className={Inputs['spending-price']}
+            value={item_price}
+            onChange={e => this._handleChange(e)}
+            required
+          />          
+        </div>
+        <div className="dis-f">
           <label htmlFor="category">Category</label>
-          <select 
-            name="cat_id" 
-            value={this.state.spending_item.cat_id} 
+          <select
+            name="cat_id"
+            value={this.state.spending_item.cat_id}
             onChange={e => this._handleChange(e)}
             required>
             <option value="0" disabled>--</option>
             {category_list}
           </select>
-          <input 
-            type="text" 
-            name="item_name" 
-            placeholder="Description" 
-            value={item_name}
-            onChange={e => this._handleChange(e)}
-            required 
-          />
-          <input 
-            type="date" 
-            name="create_dttm" 
-            placeholder="Date" 
+          <input
+            type="date"
+            name="create_dttm"
+            placeholder="Date"
             onChange={e => this._handleChange(e)}
             value={create_dttm}
-          />
-        </div>
-        <div>
-          <input 
-            type="number" 
-            name="item_price" 
-            placeholder="Price" 
-            value={item_price}
-            onChange={e => this._handleChange(e)}
-            required
-          />
-          <button type="submit">Add Trimm</button>
+          />                    
+          <button type="submit" className={Buttons['primary-btn']} >Add Trimm</button>
         </div>
       </form>
     )
@@ -161,22 +167,24 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     if (this.state.data_loaded) {
       return (
         <Layout>
-          <section>
-            <h2>Hi {this.props.dashboard.user_info.user_name}</h2>
-            <span>Here is this months data.</span>
-          </section>
-          <section className="dis-f jc-sb">
+          <section className={DashboardCss['month-change']}>
             <div onClick={() => this._changeMonth()}>Prev month</div>
             <div onClick={() => this._changeMonth(true)}>Next month</div>
           </section>
-          <h2>{this.state.date.month} {this.state.date.year}</h2>
-          {this.renderSpendingForm()}
-          <SpendingItems 
-            code={spendingItems.code} 
-            data={spendingItems.data}
-            dateRange={this.state.date}
-          />
-          {this.renderCategories()}
+          <section className={DashboardCss['dash-container']}>
+            <div className="w-50">
+              {this.renderSpendingForm()}
+              <SpendingItems 
+                code={spendingItems.code} 
+                data={spendingItems.data}
+                dateRange={this.state.date}
+              />
+            </div>
+            <div>
+              <h2>{this.state.date.month} {this.state.date.year}</h2>
+              {this.renderCategories()}
+            </div>            
+          </section>
         </Layout>
       )      
     }
