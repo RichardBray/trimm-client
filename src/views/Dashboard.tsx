@@ -29,8 +29,6 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     cat_id: "0"    
   };
 
-  graph_labels: Array<string> = [];
-  graph_totals: Array<number> = [];
   graph_options = {
     legend: {
       display: false
@@ -57,8 +55,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     },
     new_category: "",
     data_loaded: false,
-    categories: {},
-    show_graph: false
+    categories: {}
   }
 
   /**
@@ -76,25 +73,15 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);  
   }
 
-  componentDidUpdate(): void {
-    if (this.props.dashboard.categories.code !== 0 && this.state.show_graph === false) {
-      setTimeout(() => { this.setState({ show_graph: true }) }, 100);
-    }
-  }
-
   /**
    * I've taken out the budget functionality for this version
    */
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
 
-    this.graph_labels = [];
-    this.graph_totals = [];
-
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
       const catTotal = this._renderCatTotal(cat.cat_id)[index];
-      this.graph_labels.push(cat.cat_name);
-      this.graph_totals.push(catTotal);
+
       return (
         <div key={cat.cat_uuid}>
           <div>
@@ -221,7 +208,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           height={500}
           width={400}
           data={this._graph_data()} options={this.graph_options} />
-        <h2>Total</h2>
+        <h2 className={DashboardCss['spending-total']}>Total</h2>
       </section>      
     );
   }
@@ -246,7 +233,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               />
             </div>
             <div className={DashboardCss['category-section']}>
-              {this.state.show_graph && this.renderCategoryGraph()}
+              {this.renderCategoryGraph()}
               {this.renderCategories()}
             </div>            
           </section>
@@ -260,10 +247,21 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    * Generates data for the Doughnut graph
    */
   private _graph_data(): any {
+    let graph_labels: Array<string> = [];
+    let graph_totals: Array<number> = [];
+
+    const { data, code } = this.props.dashboard.categories;
+
+    (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
+      const catTotal = this._renderCatTotal(cat.cat_id)[index];
+      graph_labels.push(cat.cat_name);
+      graph_totals.push(catTotal);
+    })
+
     return {
-      labels: this.graph_labels,
+      labels: graph_labels,
       datasets: [{
-        data: this.graph_totals,
+        data: graph_totals,
         backgroundColor: this.cat_colours
       }]
     }

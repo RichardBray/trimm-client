@@ -25,6 +25,13 @@
   line-height: 33px;
 }
 
+.spending-total {
+  composes: ta-c from "../helpers.css";
+  margin-top: -18rem;
+  margin-bottom: 15rem;
+  position: relative;
+}
+
 .spending-form__inputs {
   margin-left: 1rem;
   margin-right: 1rem;  
@@ -35,5 +42,5 @@
 }
 
 .category-section canvas {
-  margin: auto;
+  margin: -4rem auto 0;
 }
