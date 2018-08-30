@@ -7,29 +7,13 @@ import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNew
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
-import { modifyMonth, monthToText } from "../uitls";
+import { modifyMonth, monthToText, delay } from "../uitls";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
 import Buttons from "~/assets/styles/components/Buttons";
 import DashboardCss from "~/assets/styles/views/Dashboard";
 import HelpersCss from "~/assets/styles/helpers";
-
-const data = {
-  labels: [
-    'Red',
-    'Green',
-    'Yellow'
-  ],
-  datasets: [{
-    data: [300, 50, 100],
-    backgroundColor: [
-      '#FF6384',
-      '#36A2EB',
-      '#FFCE56'
-    ]
-  }]
-};
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -44,6 +28,24 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     create_dttm: `${this.date_year}-${modifyMonth(this.date_month)}-${modifyMonth(this.date_day)}`,
     cat_id: "0"    
   };
+
+  graph_labels: Array<string> = [];
+  graph_totals: Array<number> = [];
+  graph_options = {
+    legend: {
+      display: false
+    },
+    maintainAspectRatio: true,
+    cutoutPercentage: 70,
+    responsive: false,
+  }
+
+  readonly cat_colours: Array<string> = [
+    '#8DE1FE',
+    '#897ACC',
+    '#F9BB82',
+    '#F3A2B9'
+  ];
 
   state = {
     date: {
@@ -78,12 +80,19 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    */
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
-    const render_categories = (typeof (data) !== "undefined") && data.map((cat: any) => {
+
+    this.graph_labels = [];
+    this.graph_totals = [];
+
+    const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
+      const catTotal = this._renderCatTotal(cat.cat_id)[index];
+      this.graph_labels.push(cat.cat_name);
+      this.graph_totals.push(catTotal);
       return (
         <div key={cat.cat_uuid}>
           <div>
             {cat.cat_name}
-            {this._renderCatTotal(cat.cat_id)}
+            {catTotal}
           </div>
           <span onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
         </div>
@@ -191,7 +200,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             onChange={e => this._handleChange(e)}
             required
           />                          
-          <button type="submit" className={Buttons['primary-btn']}>Add Trimm</button>
+          <button type="submit" className={Buttons['primary-btn']}>Add Item</button>
         </section>
       </form>
     )
@@ -204,6 +213,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <Layout>
           <section className={DashboardCss['month-change']}>
             <div onClick={() => this._changeMonth()}>Prev month</div>
+            <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
             <div onClick={() => this._changeMonth(true)}>Next month</div>
           </section>
           <section className={DashboardCss['dash-container']}>
@@ -215,10 +225,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 dateRange={this.state.date}
               />
             </div>
-            <div>
-              <Doughnut data={data} />
-              <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
+            <div className={HelpersCss['w-50']}>
               {this.renderCategories()}
+              <Doughnut height={500} width={400} data={this._graph_data()} options={this.graph_options} />
             </div>            
           </section>
         </Layout>
@@ -227,6 +236,19 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return <h1>Loading...</h1>
   }
   
+  /**
+   * Generates data for the Doughnut graph
+   */
+  private _graph_data(): any {
+    return {
+      labels: this.graph_labels,
+      datasets: [{
+        data: this.graph_totals,
+        backgroundColor: this.cat_colours
+      }]
+    }
+  }
+
   /**
    * If a category hasn't been selected don't
    * send an api request, and if the return code is not
@@ -258,6 +280,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     this.setState(spending_item ? spendingState : {[e.target.name]: e.target.value});
   };
 
+  /**
+   * Gets the spending items
+   * for the following month.
+   * @param next If it's next or prev
+   */
   private _changeMonth(next: boolean = false): void {
     const {month, year} = this.state.date;
     const chosenDate = new Date(`${year}-${month}-01`);
@@ -303,7 +330,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   
   };  
 
-  private _renderCatTotal(cat_id: number): number {
+  private _renderCatTotal(cat_id: number): Array<number> {
     const { cat_totals } = this.props.dashboard;
     let nothingAdded = 0;
     return cat_totals.map((cat: [number, number], index: number) => {

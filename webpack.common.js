@@ -12,10 +12,7 @@ module.exports = {
 		rules: [
       {
         test: /\.css$/,
-				loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]",
-				options: {
-					minimize: true
-				}
+				loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]"
 			},
 			{
 				test: /\.(jpg|png|gif|svg)$/,

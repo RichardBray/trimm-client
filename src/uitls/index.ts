@@ -82,3 +82,7 @@ export function monthToText(month: string | number): string {
 
   return monthNames[+month -1];
 }
+
+export function delay(func: () => {}, time: number): void {
+  setTimeout( () => { func() }, time);
+}
