@@ -38,6 +38,7 @@ export interface IDashboardState {
 	date: IDashboardDate;
 	spending_item: any;
 	new_category: string;
+	show_graph: boolean;
 }
 
 export interface ISpendingItem {

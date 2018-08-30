@@ -36,7 +36,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       display: false
     },
     maintainAspectRatio: true,
-    cutoutPercentage: 70,
+    cutoutPercentage: 65,
     responsive: false,
   }
 
@@ -57,7 +57,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     },
     new_category: "",
     data_loaded: false,
-    categories: {}
+    categories: {},
+    show_graph: false
   }
 
   /**
@@ -73,6 +74,12 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
     await this.props.getSpendingItems(dateRange ? dateRange: this.state.date); 
     await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);  
+  }
+
+  componentDidUpdate(): void {
+    if (this.props.dashboard.categories.code !== 0 && this.state.show_graph === false) {
+      setTimeout(() => { this.setState({ show_graph: true }) }, 100);
+    }
   }
 
   /**
@@ -129,6 +136,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       404: add_category(),
       401: <div>Looks like you are somewhere you shouldn't be.</div>
     }
+    
     return responses[code];
   }
 
@@ -206,6 +214,18 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     )
   }
 
+  renderCategoryGraph() {
+    return (
+      <section>
+        <Doughnut
+          height={500}
+          width={400}
+          data={this._graph_data()} options={this.graph_options} />
+        <h2>Total</h2>
+      </section>      
+    );
+  }
+
   render(): JSX.Element {
     const spendingItems = this.props.dashboard.spending_items;
     if (this.state.data_loaded) {
@@ -216,7 +236,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
             <div onClick={() => this._changeMonth(true)}>Next month</div>
           </section>
-          <section className={DashboardCss['dash-container']}>
+          <section className={DashboardCss.container}>
             <div className="w-50">
               {this.renderSpendingForm()}
               <SpendingItems 
@@ -225,9 +245,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 dateRange={this.state.date}
               />
             </div>
-            <div className={HelpersCss['w-50']}>
+            <div className={DashboardCss['category-section']}>
+              {this.state.show_graph && this.renderCategoryGraph()}
               {this.renderCategories()}
-              <Doughnut height={500} width={400} data={this._graph_data()} options={this.graph_options} />
             </div>            
           </section>
         </Layout>
