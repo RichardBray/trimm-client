@@ -15,6 +15,7 @@ import Buttons from "~/assets/styles/components/Buttons";
 import DashboardCss from "~/assets/styles/views/Dashboard";
 import HelpersCss from "~/assets/styles/helpers";
 
+
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   date = new Date();
@@ -29,14 +30,20 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     cat_id: "0"    
   };
 
-  graph_options = {
+  readonly graph_options = {
     legend: {
       display: false
+    },
+    tooltips: {
+      enabled: false
+    },
+    hover: { 
+      mode: null 
     },
     maintainAspectRatio: true,
     cutoutPercentage: 65,
     responsive: false,
-  }
+  };
 
   readonly cat_colours: Array<string> = [
     '#8DE1FE',
@@ -55,6 +62,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     },
     new_category: "",
     data_loaded: false,
+    user_currency: "",
     categories: {}
   }
 
@@ -66,6 +74,10 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     await this.updateSpendingSection();
     await this.props.getUserInfo(); 
     this.setState({ data_loaded: true });
+    this.setState({ 
+      user_currency: 
+      Dashboard._getCurrencySymbol(this.props.dashboard.user_info.user_currency)
+    });
   }
 
   async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
@@ -80,13 +92,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data, code } = this.props.dashboard.categories;
 
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-      const catTotal = this._renderCatTotal(cat.cat_id)[index];
+      const catTotal = this._calculateCatTotal(cat.cat_id)[index];
 
       return (
         <div key={cat.cat_uuid}>
           <div>
             {cat.cat_name}
-            {catTotal}
+            {this.state.user_currency}{catTotal}
           </div>
           <span onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
         </div>
@@ -208,13 +220,18 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           height={500}
           width={400}
           data={this._graph_data()} options={this.graph_options} />
-        <h2 className={DashboardCss['spending-total']}>Total</h2>
+        <h2 
+          className={DashboardCss['spending-total']}>
+          {this.state.user_currency}
+          {Dashboard._calculateSpendingTotal(this.props.dashboard.spending_items.data)}
+        </h2>
       </section>      
     );
   }
 
   render(): JSX.Element {
     const spendingItems = this.props.dashboard.spending_items;
+  
     if (this.state.data_loaded) {
       return (
         <Layout>
@@ -230,6 +247,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 code={spendingItems.code} 
                 data={spendingItems.data}
                 dateRange={this.state.date}
+                currency={this.state.user_currency}
               />
             </div>
             <div className={DashboardCss['category-section']}>
@@ -243,17 +261,29 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return <h1>Loading...</h1>
   }
   
+  private static _calculateSpendingTotal(data: any): number {
+    let total = 0;
+    (typeof (data) !== "undefined") && data.map((item: any) => {
+      total += item.item_price;
+    });
+    return total;
+  }
+
+  private static _getCurrencySymbol(currency: string): string {
+    const split_text = currency.split(" ");
+    return split_text[0];
+  }
+
   /**
    * Generates data for the Doughnut graph
    */
   private _graph_data(): any {
     let graph_labels: Array<string> = [];
     let graph_totals: Array<number> = [];
-
-    const { data, code } = this.props.dashboard.categories;
+    const { data } = this.props.dashboard.categories;
 
     (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-      const catTotal = this._renderCatTotal(cat.cat_id)[index];
+      const catTotal = this._calculateCatTotal(cat.cat_id)[index];
       graph_labels.push(cat.cat_name);
       graph_totals.push(catTotal);
     })
@@ -348,9 +378,10 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   
   };  
 
-  private _renderCatTotal(cat_id: number): Array<number> {
+  private _calculateCatTotal(cat_id: number): Array<number> {
     const { cat_totals } = this.props.dashboard;
     let nothingAdded = 0;
+
     return cat_totals.map((cat: [number, number], index: number) => {
       if (cat_id === cat[0]) {
         return cat_totals[index][1];

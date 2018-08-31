@@ -25,7 +25,7 @@ class SpendingItems extends Component<any, {}> {
           </div>
           <div className={SpendingItemCss['second-column']}>
             <div className={HelpersCss['mb-1rem']}>{this._formatDate(item.create_dttm)}</div>
-            <div className={SpendingItemCss['price-text']}>{item.item_price}</div>
+            <div className={SpendingItemCss['price-text']}>{this.props.currency}{item.item_price}</div>
           </div>
           <div className={SpendingItemCss['third-column']}>
             <img 
@@ -69,7 +69,6 @@ class SpendingItems extends Component<any, {}> {
     await this.props.getSpendingItems(this.props.dateRange);
     await this.props.updateCategoriesTotal(this.props.data);     
   }  
-
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {

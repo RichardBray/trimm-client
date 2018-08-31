@@ -27,7 +27,8 @@
 
 .spending-total {
   composes: ta-c from "../helpers.css";
-  margin-top: -18rem;
+  font-size: 3rem;
+  margin-top: -19rem;
   margin-bottom: 15rem;
   position: relative;
 }
