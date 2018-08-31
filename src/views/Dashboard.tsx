@@ -219,7 +219,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <Doughnut
           height={500}
           width={400}
-          data={this._graph_data()} options={this.graph_options} />
+          data={this._graph_data()} options={Dashboard.graph_options} />
         <h2 
           className={DashboardCss['spending-total']}>
           {this.state.user_currency}
@@ -292,7 +292,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       labels: graph_labels,
       datasets: [{
         data: graph_totals,
-        backgroundColor: this.cat_colours
+        backgroundColor: Dashboard.cat_colours
       }]
     }
   }
