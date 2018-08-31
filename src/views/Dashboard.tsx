@@ -30,7 +30,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     cat_id: "0"    
   };
 
-  readonly graph_options = {
+  static graph_options = {
     legend: {
       display: false
     },
@@ -45,7 +45,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     responsive: false,
   };
 
-  readonly cat_colours: Array<string> = [
+  static cat_colours: Array<string> = [
     '#8DE1FE',
     '#897ACC',
     '#F9BB82',
