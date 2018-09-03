@@ -98,6 +98,10 @@
   text-align: right;
 }
 
+.trsf-180deg {
+  transform: rotate(180deg);
+}
+
 .tr-0-5s {
   transition: .5s;
 }

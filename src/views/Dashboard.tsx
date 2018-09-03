@@ -18,6 +18,7 @@ import GlobalCss from "~/assets/styles/global";
 
 // Images
 import deleteIcon from "~/assets/img/delete-icon.svg";
+import chevron from "~/assets/img/chevron.svg";
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -264,9 +265,28 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       return (
         <Layout>
           <section className={DashboardCss['month-change']}>
-            <div onClick={() => this._changeMonth()}>Prev month</div>
+            <div 
+              className={DashboardCss['month-change__btn']} 
+              onClick={() => this._changeMonth()}
+            >
+              <img
+                className={HelpersCss['trsf-180deg']}
+                src={chevron}
+                alt="Next month"
+              />             
+              Prev month              
+            </div>
             <h2 className={DashboardCss['month-header']}>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
-            <div onClick={() => this._changeMonth(true)}>Next month</div>
+            <div 
+              className={DashboardCss['month-change__btn']} 
+              onClick={() => this._changeMonth(true)}
+            >
+              Next month
+              <img
+                src={chevron}
+                alt="Next month"
+              />              
+            </div>
           </section>
           <section className={DashboardCss.container}>
             <div className="w-50">
