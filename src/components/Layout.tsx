@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
@@ -28,8 +28,10 @@ class Layout extends Component<ILayout, {}> {
   }
 
   render(): JSX.Element {
+    const date = new Date();
+    const currentYear = date.getFullYear();
     return (
-      <main>
+      <Fragment>
         <header className={LayoutCss['main-header']}>
           <div className={LayoutCss['header-container']}>
             <img 
@@ -39,13 +41,15 @@ class Layout extends Component<ILayout, {}> {
             <a onClick={() => this.handleLogout()}>Logout</a>
           </div>
         </header>
-        <section className={LayoutCss.container}>
+        <section className={LayoutCss['sticky-footer']}>
           {this.props.children}
         </section>
-        <footer className={LayoutCss.container}>
-          Trimm &copy; 2019
+        <footer className={LayoutCss.footer}>
+          <section className={LayoutCss.container}>
+            Trimm &copy; {currentYear}
+          </section>
         </footer>
-      </main>
+      </Fragment>
     )
   }
 }

@@ -18,3 +18,13 @@
   composes: container;
   composes: dis-f jc-sb c-white h-6rem ai-c from "../helpers.css";
 }
+
+.sticky-footer {
+  composes: container;
+  composes: flx-1 from "../helpers.css";
+}
+
+.footer {
+  background-color: var(--shadowGrey);
+  padding: .7rem;
+}

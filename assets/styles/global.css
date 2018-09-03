@@ -44,6 +44,11 @@ body {
   width: 50%;
 }
 
+:global .react-root {
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 /* Shared */
 
 .delete-icon {

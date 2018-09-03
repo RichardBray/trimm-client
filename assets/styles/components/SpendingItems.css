@@ -25,3 +25,7 @@
   composes: mb-1rem from "../helpers.css";
   color: var(--mediumGrey);
 }
+
+.no-items {
+  composes: bgc-white fz-1-2rem p-1rem from "../helpers.css";
+}

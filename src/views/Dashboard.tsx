@@ -131,7 +131,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <form 
           className={HelpersCss['dis-f']}
           onSubmit={(e) => this._handleAddCategory(e)}>
-          {no_categories && "You have no categories."} 
+          {no_categories && "You have no categories 😢"} 
           <input 
             type="text" 
             name="new_category"
@@ -274,14 +274,14 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 src={chevron}
                 alt="Next month"
               />             
-              Prev month              
+              {monthToText(this.state.date.month - 1)}             
             </div>
             <h2 className={DashboardCss['month-header']}>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
             <div 
               className={DashboardCss['month-change__btn']} 
               onClick={() => this._changeMonth(true)}
             >
-              Next month
+              {monthToText(this.state.date.month + 1)}
               <img
                 src={chevron}
                 alt="Next month"
