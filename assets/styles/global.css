@@ -5,6 +5,7 @@
   --mediumGrey: #a6a6a6;
   --shadowGrey: #dcdbdb;
   --desktopWidth: 73rem;
+  --defaultBorderRadius: .6rem;
   font-size: 14px;    
 }
 

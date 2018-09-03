@@ -17,6 +17,10 @@
   background-color: white;
 }
 
+.br-default {
+  border-radius: var(--defaultBorderRadius);
+}
+
 .c-white {
   color: white;
 }

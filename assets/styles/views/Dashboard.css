@@ -74,3 +74,22 @@
   composes: flx-1 ta-r from "../helpers.css";
   margin-right: 1rem;
 }
+
+.cat-form__input {
+  composes: base-input from "../components/Inputs.css";
+  height: 33px;
+  padding: .4rem 1rem;  
+  border-top-left-radius: .6rem;
+  border-bottom-left-radius: .6rem;
+  flex: 4;
+}
+
+.cat-form__submit {
+  composes: base-button from "../components/Buttons.css";
+  composes: bgc-primary from "../helpers.css";
+  border-top-right-radius: .6rem;
+  border-bottom-right-radius: .6rem;
+  height: 2.4rem;
+  font-size: 1.1rem;
+  flex: 2;
+}

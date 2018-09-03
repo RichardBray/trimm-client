@@ -134,7 +134,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           <input 
             type="text" 
             name="new_category"
-            className={Inputs['input-spending-form']}
+            className={DashboardCss['cat-form__input']}
             placeholder="e.g. Chocolate fund"
             value={this.state.new_category} 
             onChange={e => this._handleChange(e, false)} 
@@ -142,7 +142,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           />
           <button 
             type="submit"
-            className={Buttons['primary-btn']}> 
+            className={DashboardCss['cat-form__submit']}> 
             Add category
           </button>
         </form>

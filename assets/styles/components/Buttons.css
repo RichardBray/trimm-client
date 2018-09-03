@@ -1,21 +1,21 @@
 /* Buttons */
 
-._button {
+.base-button {
   composes: tr-0-5s from "../helpers.css";
-  border-radius: 2rem;
   border: none;
   color: white;
-  height: 4rem;
 }
-._button:focus {
+.base-button:focus {
   outline: none;
 }
-._button:hover {
+.base-button:hover {
   opacity: .5;
 }
 
 .primary-btn {
   composes: fz-1-4rem cur-p w-100 bgc-primary from "../helpers.css";
-  composes: _button;
+  composes: base-button;
+  border-radius: 2rem;
+  height: 4rem;
 }
 
