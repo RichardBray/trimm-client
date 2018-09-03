@@ -4,10 +4,10 @@ import { Dispatch } from 'redux';
 import { IAction } from "./interfaces";
 import { Component } from 'react';
 
-
 export class PageHandler extends Component<{}, {}> {
   constructor(props: {}) {
-    super(props)
+    super(props);  
+    window.Intercom("update");
   };
 
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
