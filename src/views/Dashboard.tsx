@@ -101,28 +101,28 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data, code } = this.props.dashboard.categories;
 
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-    const catTotal = this._calculateCatTotal(cat.cat_id)[index];
-
-      return (
-        <section 
-          key={cat.cat_uuid}
-          className={DashboardCss['cat-row']} 
-        >
-          <div 
-            className={DashboardCss['cat-color-circle']}
-            style={ { backgroundColor: Dashboard.cat_colours[index]} } 
-          />
-          <section className={DashboardCss['cat-row__text']}>
-            <div>{cat.cat_name}</div>
-            <div className={DashboardCss['cat-row__price']}>{this.state.user_currency}{catTotal}</div>
-            <img
-              src={deleteIcon}
-              className={GlobalCss['delete-icon']}
-              alt="Delete Icon"
-              onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)} />
-          </section>
+    let catTotal = this._calculateCatTotal(cat.cat_id);
+    return (
+      <section 
+        key={cat.cat_uuid}
+        className={DashboardCss['cat-row']} 
+      >
+        <div 
+          className={DashboardCss['cat-color-circle']}
+          style={ { backgroundColor: Dashboard.cat_colours[index]} } 
+        />
+        <section className={DashboardCss['cat-row__text']}>
+          <div>{cat.cat_name}</div>
+          <div className={DashboardCss['cat-row__price']}>
+            {this.state.user_currency}{catTotal}</div>
+          <img
+            src={deleteIcon}
+            className={GlobalCss['delete-icon']}
+            alt="Delete Icon"
+            onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)} />
         </section>
-      )}
+      </section>
+    )}
     );
 
     const add_category = (no_categories: boolean = true) => { 
@@ -311,7 +311,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data } = this.props.dashboard.categories;
 
     (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-      const catTotal = this._calculateCatTotal(cat.cat_id)[index];
+      const catTotal = this._calculateCatTotal(cat.cat_id);
       graph_labels.push(cat.cat_name);
       graph_totals.push(catTotal);
     })
@@ -389,7 +389,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
   };
 
-  private _deleteCategory(cat_uuid: string, cat_id: number): void {
+  private async _deleteCategory(cat_uuid: string, cat_id: number): Promise<void> {
     let cat_has_total = false;
     this.props.dashboard.cat_totals.map((cat_total:[number, number]) => {
       if (cat_total[0] === cat_id && cat_total[1] !== 0) {
@@ -398,28 +398,24 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     });
 
     if (!cat_has_total) {
-      this.props.deleteCategory(cat_uuid);
-      this.props.getCategories();      
+      await this.props.deleteCategory(cat_uuid);
+      await this.props.getCategories();      
     } else {
       alert('This category is in use');
     }
   
   };  
 
-  private _calculateCatTotal(cat_id: number): Array<number> {
+  private _calculateCatTotal(cat_id: number): number {
     const { cat_totals } = this.props.dashboard;
-    let nothingAdded = 0;
-
-    return cat_totals.map((cat: [number, number], index: number) => {
+    let total = 0;
+    cat_totals.map((cat: [number, number], index: number) => {
       if (cat_id === cat[0]) {
-        return cat_totals[index][1];
-      } else {
-        nothingAdded +=1;
-        if (nothingAdded === cat_totals.length) {
-          return 0;
-        }
+        total = cat_totals[index][1];
       }
     });
+
+    return total;
   }
  
 }
