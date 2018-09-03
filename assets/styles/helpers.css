@@ -33,6 +33,10 @@
   display: flex;
 }
 
+.flx-1 {
+  flex: 1;
+}
+
 .fd-c {
   flex-direction: column;
 }

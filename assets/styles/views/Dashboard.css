@@ -13,7 +13,7 @@
 .spending-form {
   composes: bgc-white dis-f jc-sb c-primary p-1rem mb-1rem from "../helpers.css";
   border: 2px dashed var(--brandPrimary);
-  box-shadow: 0 1px 9px 0 #dcdbdb;
+  box-shadow: 0 1px 9px 0 var(--shadowGrey);
 }
 
 .spending-form__text {
@@ -28,6 +28,7 @@
 .spending-total {
   composes: ta-c from "../helpers.css";
   font-size: 3rem;
+  font-weight: normal;
   margin-top: -19rem;
   margin-bottom: 15rem;
   position: relative;
@@ -38,10 +39,38 @@
   margin-right: 1rem;  
 }
 
-.category-section {
+.cat-color-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  margin-right: .5rem;
+}
+
+.cat-section {
   composes: w-50 from "../helpers.css";
 }
 
-.category-section canvas {
+.cat-section canvas {
   margin: -4rem auto 0;
+}
+
+.cat-container {
+  composes: bgc-white from "../helpers.css";
+  margin: 0 5rem;
+}
+
+.cat-row {
+  composes: dis-f ai-c from "../helpers.css";
+  padding: .5rem;
+  border-bottom: 3px solid var(--lightGrey);    
+}
+
+.cat-row__text {
+  composes: flx-1 jc-sb dis-f from "../helpers.css";
+  font-size: 1.2rem;
+}
+
+.cat-row__price {
+  composes: flx-1 ta-r from "../helpers.css";
+  margin-right: 1rem;
 }

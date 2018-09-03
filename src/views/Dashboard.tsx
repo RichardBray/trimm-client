@@ -14,7 +14,10 @@ import Inputs from "~/assets/styles/components/Inputs";
 import Buttons from "~/assets/styles/components/Buttons";
 import DashboardCss from "~/assets/styles/views/Dashboard";
 import HelpersCss from "~/assets/styles/helpers";
+import GlobalCss from "~/assets/styles/global";
 
+// Images
+import deleteIcon from "~/assets/img/delete-icon.svg";
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
@@ -49,7 +52,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     '#8DE1FE',
     '#897ACC',
     '#F9BB82',
-    '#F3A2B9'
+    '#F3A2B9',
+    '#B9E185',
+    '#EDEF78',
+    '#DFA2F3',
+    '#A2BEF3',
+    '#F3A2A2',
+    '#C2C2C2'
   ];
 
   state = {
@@ -92,38 +101,57 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data, code } = this.props.dashboard.categories;
 
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-      const catTotal = this._calculateCatTotal(cat.cat_id)[index];
+    const catTotal = this._calculateCatTotal(cat.cat_id)[index];
 
       return (
-        <div key={cat.cat_uuid}>
-          <div>
-            {cat.cat_name}
-            {this.state.user_currency}{catTotal}
-          </div>
-          <span onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)}>delete category</span>
-        </div>
+        <section 
+          key={cat.cat_uuid}
+          className={DashboardCss['cat-row']} 
+        >
+          <div 
+            className={DashboardCss['cat-color-circle']}
+            style={ { backgroundColor: Dashboard.cat_colours[index]} } 
+          />
+          <section className={DashboardCss['cat-row__text']}>
+            <div>{cat.cat_name}</div>
+            <div className={DashboardCss['cat-row__price']}>{this.state.user_currency}{catTotal}</div>
+            <img
+              src={deleteIcon}
+              className={GlobalCss['delete-icon']}
+              alt="Delete Icon"
+              onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)} />
+          </section>
+        </section>
       )}
     );
 
     const add_category = (no_categories: boolean = true) => { 
       return (
-        <form onSubmit={(e) => this._handleAddCategory(e)}>
+        <form 
+          className={HelpersCss['dis-f']}
+          onSubmit={(e) => this._handleAddCategory(e)}>
           {no_categories && "You have no categories."} 
           <input 
             type="text" 
             name="new_category"
+            className={Inputs['input-spending-form']}
+            placeholder="e.g. Chocolate fund"
             value={this.state.new_category} 
             onChange={e => this._handleChange(e, false)} 
             required
           />
-          <button type="submit"> Add category</button>
+          <button 
+            type="submit"
+            className={Buttons['primary-btn']}> 
+            Add category
+          </button>
         </form>
       );
     }
 
     function categoriesAndNewForm() {
       return (
-        <div>
+        <div className={DashboardCss['cat-container']}>
           {add_category(false)}
           {render_categories}
         </div>
@@ -250,7 +278,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 currency={this.state.user_currency}
               />
             </div>
-            <div className={DashboardCss['category-section']}>
+            <div className={DashboardCss['cat-section']}>
               {this.renderCategoryGraph()}
               {this.renderCategories()}
             </div>            

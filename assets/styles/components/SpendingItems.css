@@ -25,11 +25,3 @@
   composes: mb-1rem from "../helpers.css";
   color: var(--mediumGrey);
 }
-
-.delete-icon {
-  composes: cur-p tr-0-5s from "../helpers.css";
-}
-
-.delete-icon:hover {
-  opacity: .7;
-}

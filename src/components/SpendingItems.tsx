@@ -6,8 +6,10 @@ import { monthToText } from "../uitls";
 import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../actions/DashboardActions";
 import { IServerResponses, IAction } from "../uitls/interfaces";
 
+// Styles
 import SpendingItemCss from "~/assets/styles/components/SpendingItems";
 import HelpersCss from "~/assets/styles/helpers";
+import GlobalCss from "~/assets/styles/global";
 
 // Images
 import deleteIcon from "~/assets/img/delete-icon.svg";
@@ -31,7 +33,7 @@ class SpendingItems extends Component<any, {}> {
             <img 
               src={deleteIcon}
               alt="Delete Icon"
-              className={SpendingItemCss['delete-icon']}
+              className={GlobalCss['delete-icon']}
               onClick={() => this._deleteItem(item.item_uuid)} />
           </div>          
         </section>
