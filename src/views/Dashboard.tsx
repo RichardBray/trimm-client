@@ -7,7 +7,7 @@ import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNew
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
-import { modifyMonth, monthToText, delay } from "../uitls";
+import { modifyMonth, monthToText } from "../uitls";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
@@ -26,13 +26,6 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   date_month = this.date.getMonth() + 1;
   date_day = this.date.getDate();
 
-  default_spending_item: ISpendingItem = {
-    item_name: "",
-    item_price: 0,
-    create_dttm: `${this.date_year}-${modifyMonth(this.date_month)}-${modifyMonth(this.date_day)}`,
-    cat_id: "0"    
-  };
-
   static graph_options = {
     legend: {
       display: false
@@ -48,7 +41,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     responsive: false,
   };
 
-  static cat_colours: Array<string> = [
+  static cat_colours: Array<string> = [ // 10 Colours
     '#8DE1FE',
     '#897ACC',
     '#F9BB82',
@@ -60,6 +53,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     '#F3A2A2',
     '#C2C2C2'
   ];
+
+  default_spending_item: ISpendingItem = {
+    item_name: "",
+    item_price: 0,
+    create_dttm: `${this.date_year}-${modifyMonth(this.date_month)}-${modifyMonth(this.date_day)}`,
+    cat_id: "0"
+  };
 
   state = {
     date: {
@@ -99,9 +99,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    */
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
-
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
     let catTotal = this._calculateCatTotal(cat.cat_id);
+  
     return (
       <section 
         key={cat.cat_uuid}
@@ -265,7 +265,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <Layout>
           <section className={DashboardCss['month-change']}>
             <div onClick={() => this._changeMonth()}>Prev month</div>
-            <h2>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
+            <h2 className={DashboardCss['month-header']}>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
             <div onClick={() => this._changeMonth(true)}>Next month</div>
           </section>
           <section className={DashboardCss.container}>
@@ -372,8 +372,12 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       year: chosenDate.getFullYear()
     };
 
+    const stateDay = this.state.spending_item.create_dttm.split('-')[2]
+    const newDate: string = `${newStateDate.year}-${modifyMonth(newStateDate.month)}-${stateDay}`;
+
     this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });
+    this.setState({ spending_item: { ...this.state.spending_item, create_dttm: newDate}})
   };
 
   private async _handleAddCategory(e: any): Promise<void> {
@@ -381,11 +385,15 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     await this.props.postNewCategory(this.state.new_category);
 
     const { code, message } = this.props.dashboard.new_category;
-    if (code === 400) {
-      alert(`${message}`);
+    if (this.props.dashboard.categories.data.length <= 10) {
+      if (code === 400) {
+        alert(`${message}`);
+      } else {
+        this.setState({new_category: ""});
+        this.props.getCategories();
+      }
     } else {
-      this.setState({new_category: ""});
-      this.props.getCategories();
+      alert('Sorry you have hit the catgory limit');
     }
   };
 

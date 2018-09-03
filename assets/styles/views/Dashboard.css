@@ -10,6 +10,12 @@
   margin-top: 4rem;
 }
 
+.month-header {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: normal;
+}
+
 .spending-form {
   composes: bgc-white dis-f jc-sb c-primary p-1rem mb-1rem from "../helpers.css";
   border: 2px dashed var(--brandPrimary);
@@ -66,8 +72,7 @@
 }
 
 .cat-row__text {
-  composes: flx-1 jc-sb dis-f from "../helpers.css";
-  font-size: 1.2rem;
+  composes: flx-1 fz-1-2rem jc-sb dis-f from "../helpers.css";
 }
 
 .cat-row__price {
@@ -77,6 +82,7 @@
 
 .cat-form__input {
   composes: base-input from "../components/Inputs.css";
+  composes: fz-1-2rem from "../helpers.css";
   height: 33px;
   padding: .4rem 1rem;  
   border-top-left-radius: .6rem;
@@ -86,7 +92,7 @@
 
 .cat-form__submit {
   composes: base-button from "../components/Buttons.css";
-  composes: bgc-primary from "../helpers.css";
+  composes: bgc-primary cur-p from "../helpers.css";
   border-top-right-radius: .6rem;
   border-bottom-right-radius: .6rem;
   height: 2.4rem;
