@@ -7,6 +7,7 @@ import { getLogout } from "../actions/LoginActions";
 
 // Styles
 import LayoutCss from "~/assets/styles/components/Layout";
+import HelpersCss from "~/assets/styles/helpers";
 
 // Images
 import logo from "~/assets/img/logo-white.svg";
@@ -38,7 +39,7 @@ class Layout extends Component<ILayout, {}> {
               src={logo} 
               alt="Trimm Logo"
               className={LayoutCss['main-header__logo']} />
-            <a onClick={() => this.handleLogout()}>Logout</a>
+            <a className={HelpersCss['cur-p']} onClick={() => this.handleLogout()}>Logout</a>
           </div>
         </header>
         <section className={LayoutCss['sticky-footer']}>

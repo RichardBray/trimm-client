@@ -49,7 +49,7 @@ class Register extends PageHandler<{}, IRegister> {
 
   render(): JSX.Element {
     return (
-      <section className="dis-f jc-sb">
+      <section className={LoginCss.container}>
         <div className={LoginCss['left-column']}>
           <form 
             onSubmit={e => this.handleSubmit(e)}
@@ -94,6 +94,9 @@ class Register extends PageHandler<{}, IRegister> {
                 Register
               </button>
           </form>
+          <div className={LoginCss['register-link']}>
+            <a href="/login">Login</a>
+          </div>          
         </div>
         {this.renderErrors()}
       </section>

@@ -48,7 +48,7 @@ class SpendingItems extends Component<any, {}> {
     const responses: IServerResponses = {
       200: this.renderItems(data),
       404: render_no_items,
-      401: <div>Looks like you are somewhere you shouldn't be.</div>
+      401: <div className={SpendingItemCss['no-items']}>Looks like you are somewhere you shouldn't be ✋</div>
     }
     return responses[code];
   };

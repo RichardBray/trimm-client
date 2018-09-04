@@ -1,3 +1,6 @@
+.container {
+  composes: dis-f jc-sb bgc-white from "../helpers.css";
+}
 
 .right-column {
   composes: bgc-primary w-50 h-100vh from "../helpers.css";
@@ -29,4 +32,13 @@
 
 .logo-width {
   width: 15rem;
+}
+
+.register-link {
+  composes: ta-c c-primary from "../helpers.css";
+  margin: 1rem;
+}
+
+.register-link a {
+  color: var(--brandPrimary);
 }

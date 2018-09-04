@@ -162,7 +162,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const responses: IServerResponses = {
       200: categoriesAndNewForm(),
       404: add_category(),
-      401: <div>Looks like you are somewhere you shouldn't be.</div>
+      401: <div>Looks like you are somewhere you shouldn't be 🚫</div>
     }
     
     return responses[code];
