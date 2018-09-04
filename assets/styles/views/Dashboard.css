@@ -11,7 +11,7 @@
 }
 
 .month-change__btn {
-  composes: dis-f ai-c cur-p from "../helpers.css";
+  composes: dis-f ai-c cur-p fz-1-2rem from "../helpers.css";
 }
 
 .month-header {

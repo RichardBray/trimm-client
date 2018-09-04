@@ -80,6 +80,13 @@ export function monthToText(month: string | number): string {
     "July", "August", "September", "October", "November", "December"
   ];
 
+  if (month === 13) {
+    return monthNames[0]
+  }
+
+  if (month === 0) {
+    return monthNames[11]
+  }
   return monthNames[+month -1];
 }
 

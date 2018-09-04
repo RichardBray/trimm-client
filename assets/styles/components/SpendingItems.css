@@ -27,5 +27,5 @@
 }
 
 .no-items {
-  composes: bgc-white fz-1-2rem p-1rem from "../helpers.css";
+  composes: bgc-white fz-1-4rem p-1rem from "../helpers.css";
 }

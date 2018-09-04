@@ -306,7 +306,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         </Layout>
       )      
     }
-    return <h1>Loading...</h1>
+    return Dashboard._loadingSVG()
   }
   
   private static _calculateSpendingTotal(data: any): number {
@@ -320,6 +320,20 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   private static _getCurrencySymbol(currency: string): string {
     const split_text = currency.split(" ");
     return split_text[0];
+  }
+
+  private static _loadingSVG() {
+    return (
+      <div title="1">
+        <svg id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+          width="40" height="40" viewBox="0 0 50 50">
+          <path d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+            <animateTransform attributeType="xml" attributeName="transform" type="rotate"
+              from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite" />
+          </path>
+        </svg>
+      </div>
+    )
   }
 
   /**
