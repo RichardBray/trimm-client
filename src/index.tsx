@@ -14,7 +14,8 @@ import Register from "./views/Register";
 import "~/assets/styles/global";
 
 
-const middleware = composeWithDevTools(applyMiddleware(thunk));
+const useDevTools = composeWithDevTools(applyMiddleware(thunk));
+const middleware = process.env.NODE_ENV === "production" ? applyMiddleware(thunk) : useDevTools;
 const ROOT = document.querySelector(".react-root");
 const store = createStore(reducers, middleware);
 

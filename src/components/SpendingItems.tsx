@@ -44,7 +44,7 @@ class SpendingItems extends Component<any, {}> {
 
   render(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props;
-    const render_no_items = <div className={SpendingItemCss['no-items']}>You have no items 😢</div>;
+    const render_no_items = <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
     const responses: IServerResponses = {
       200: this.renderItems(data),
       404: render_no_items,

@@ -2,7 +2,7 @@ const path = require("path");
 const BUILD_DIR = path.resolve(__dirname, "build");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== 'production';
-const cssModules = devMode ? "[local]_[hash:base64:3]" : "[hash: base64: 3]";
+const cssModules = devMode && "[local]_";
 
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 				test: /\.css$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					`css-loader?modules&importLoaders=1&localIdentName=${cssModules}`
+					`css-loader?modules&importLoaders=1&localIdentName=${cssModules}[hash:base64:3]`
 				]
 			},			
 			{
