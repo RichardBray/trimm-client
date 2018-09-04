@@ -1,5 +1,9 @@
 const path = require("path");
 const BUILD_DIR = path.resolve(__dirname, "build");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const devMode = process.env.NODE_ENV !== 'production';
+const cssModules = devMode ? "[local]_[hash:base64:3]" : "[hash: base64: 3]";
+
 
 module.exports = {
 	target: "web",
@@ -10,10 +14,13 @@ module.exports = {
 	},
 	module: {
 		rules: [
-      {
-        test: /\.css$/,
-				loader: "style-loader!css-loader?modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]"
-			},
+			{
+				test: /\.css$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					`css-loader?modules&importLoaders=1&localIdentName=${cssModules}`
+				]
+			},			
 			{
 				test: /\.(jpg|png|gif|svg)$/,
 				use: [
@@ -48,5 +55,11 @@ module.exports = {
 		contentBase: "./",
 		port: 5000,
 		historyApiFallback: true
-	}	
+	},
+	plugins: [
+		new MiniCssExtractPlugin({
+			filename: "[name].css",
+			chunkFilename: "[id].css"
+		})		
+	]	
 };

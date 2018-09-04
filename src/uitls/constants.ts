@@ -17,7 +17,7 @@ export const DELETE_CATEGORY: string = "DELETE_CATEGORY";
 export const UPDATE_CATEGORY_TOTALS: string = "UPDATE_CATEGORY_TOTALS";
 
 // API
-export const API: string = "http://localhost:3000"; // http://localhost:3000 http://209.97.183.249
+export const API: string = process.env.NODE_ENV === "production" ? "http://209.97.183.249" : "http://localhost:3000";
 export const LOGIN_API:string = `${API}/login`;
 export const REGISTER_API: string = `${API}/register`;
 export const GET_LOGOUT_API: string = `${API}/logout`;
