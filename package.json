@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "type-check": "tsc",
-    "start": "webpack-dev-server --config webpack.dev.js",
+    "start": "NODE_ENV=dev webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
   "keywords": [],
