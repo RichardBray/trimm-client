@@ -18,4 +18,5 @@ or
 $ yarn start
 ```
 
-- Refactor Fetch section
+- Add welcome message
+- Babel env remove object assign

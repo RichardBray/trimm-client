@@ -3,6 +3,7 @@
 .container {
   composes: dis-f jc-sb from "../helpers.css";
   margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
 .month-change {
