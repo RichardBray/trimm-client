@@ -258,12 +258,22 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     );
   }
 
+  renderWelcomeMessage() {
+    return (!document.cookie.includes('welcome_message=')) && (
+      <div>
+        <h1>Hello {name},</h1>
+        Welcome to Trimm,
+      </div>
+    );
+  }
+
   render(): JSX.Element {
     const spendingItems = this.props.dashboard.spending_items;
   
     if (this.state.data_loaded) {
       return (
         <Layout>
+          {this.renderWelcomeMessage()}
           <section className={DashboardCss['month-change']}>
             <div 
               className={DashboardCss['month-change__btn']} 

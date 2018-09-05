@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
 function _cssModulesRule(env = "") {
-	const prefix = env === "dev" ? "[local]_" : "";
+	const prefix = env === "dev" ? "[name]_[local]_" : "";
 	return {
 		test: /\.css$/,
 		use: [
@@ -40,7 +40,14 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: "babel-loader",
 				query: {
-					presets: ["@babel/react", "@babel/env", "@babel/typescript"],
+					presets: [ 
+						[
+							"@babel/env", {
+							"targets": {
+								"chrome": "60"
+							}						
+						}
+					], "@babel/react", "@babel/typescript"],
 					plugins: [
 						"@babel/proposal-class-properties", 
 						"@babel/transform-runtime"]
@@ -66,4 +73,3 @@ module.exports = {
 		}),		
 	]
 };
-

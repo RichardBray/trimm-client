@@ -20,14 +20,14 @@ const http = new Http();
 
 export function getSpendingItems(monthYear: { month: number, year: number }) {
   const { month, year } = monthYear;
-  const currentDate: string = `${year}-${modifyMonth(month)}-01`;
+  const monthYearStr = `${year}-${modifyMonth(month)}`;
+  const currentDate: string = `${monthYearStr}-01`;
 
-  const newDate: Date = _oneMonthToDate(currentDate);
-  const newMonth = modifyMonth(newDate.getMonth() + 1)
+  const lastDayDate: Date = new Date(year, +modifyMonth(month), 0);
 
   const dateInfo: ISpendingDate = {
     start_date: currentDate,
-    end_date: `${newDate.getFullYear()}-${newMonth}-01`
+    end_date: `${monthYearStr}-${lastDayDate.getDate()}`
   }
   return http.post(GET_ITEMS_API, GET_SPENDING_ITEMS, dateInfo);
 }
@@ -84,13 +84,4 @@ export function updateCategoriesTotal(spendingData: any) {
     type: UPDATE_CATEGORY_TOTALS,
     payload: updatedState
   }
-}
-
-/**
- * Adds one month to the date passed into it
- */
-function _oneMonthToDate(currentDate: string): Date {
-  const newDate: Date = new Date(currentDate);
-  newDate.setMonth(newDate.getMonth() + 1);
-  return newDate;
 }

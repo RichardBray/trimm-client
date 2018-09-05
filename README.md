@@ -19,4 +19,4 @@ $ yarn start
 ```
 
 - Add welcome message
-- Babel env remove object assign
+- static page
