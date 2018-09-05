@@ -19,7 +19,14 @@ module.exports = merge(common, {
 			"process.env.NODE_ENV": JSON.stringify("production")
 		}),
 		new CopyWebpackPlugin([
-			{ from: `${ROOT}/index.html`, to: `${ROOT}/build/index.html` }
+			{ 
+				from: `${ROOT}/index.html`, 
+				to: `${ROOT}/build/index.html` 
+			},
+			{ 
+				from: `${ROOT}/assets/img/favicon.png`, 
+				to: `${ROOT}/build/favicon.png` 
+			}
 		])		
 	]
 });

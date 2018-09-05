@@ -10,6 +10,7 @@ import reducers from "./reducers";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import Register from "./views/Register";
+import RedirectPage from "./views/RedirectPage";
 
 import "~/assets/styles/global";
 
@@ -26,7 +27,7 @@ ReactDOM.render(
 				<Route path="/dashboard" component={Dashboard} />
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
-				<Route path="/" component={Login} />
+				<Route path="/" component={RedirectPage} />
 			</Switch>
 		</BrowserRouter>
 	</Provider>,

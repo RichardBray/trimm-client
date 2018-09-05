@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
+import { Link } from "react-router-dom";
 
 import { PageHandler } from "../uitls";
 import { IRegister, IReducers, IAction } from "../uitls/interfaces";
@@ -95,7 +96,7 @@ class Register extends PageHandler<{}, IRegister> {
               </button>
           </form>
           <div className={LoginCss['register-link']}>
-            <a href="/login">Login</a>
+            <Link to="/login">Login</Link>
           </div>          
         </div>
         {this.renderErrors()}

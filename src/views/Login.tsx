@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
 
 import { ILogin, ILoginView, IAction, IReducers } from "../uitls/interfaces";
@@ -83,7 +84,7 @@ class Login extends PageHandler<ILoginView, ILogin> {
 						</button>
 					</form>
 					<div className={LoginCss['register-link']}>
-						<a href="/register">Register</a>
+						<Link to="/register">Register</Link>
 					</div>
 				</div>
 				{this.renderError()}
