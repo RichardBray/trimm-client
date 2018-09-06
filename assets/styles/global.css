@@ -1,5 +1,6 @@
 :root {
   --brandPrimary: #33D8BB;
+  --messageGreen: #cdf9ed;
   --brandSecondary: #A964F1;
   --lightGrey: #f8f8f8;
   --mediumGrey: #a6a6a6;
@@ -30,6 +31,10 @@ body {
 
 :global .dis-f {
   display: flex;
+}
+
+:global .dis-n {
+  display: none;
 }
 
 :global .jc-sb {

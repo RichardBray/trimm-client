@@ -16,9 +16,9 @@
 }
 
 .month-header {
+  composes: fw-n from "../helpers.css";
   margin: 0;
   font-size: 1.6rem;
-  font-weight: normal;
 }
 
 .spending-form {
@@ -37,9 +37,8 @@
 }
 
 .spending-total {
-  composes: ta-c from "../helpers.css";
+  composes: ta-c fw-n from "../helpers.css";
   font-size: 3rem;
-  font-weight: normal;
   margin-top: -19rem;
   margin-bottom: 15rem;
   position: relative;
@@ -103,4 +102,23 @@
   height: 2.4rem;
   font-size: 1.1rem;
   flex: 2;
+}
+
+.welcome-message {
+  composes: dis-f from "../helpers.css";
+  padding: 1.5rem;
+  background: var(--messageGreen);
+  margin-top: 2rem;
+  line-height: 1.5rem;
+}
+
+.welcome-title {
+  composes: fw-n fz-2rem from "../helpers.css";
+  margin: 0;
+}
+
+.welcome-close {
+  composes: cur-p fz-2rem from "../helpers.css";
+  color: var(--brandPrimary);
+  margin-left: 1rem;
 }

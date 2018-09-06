@@ -57,6 +57,14 @@
   font-size: 1.4rem;
 }
 
+.fz-2rem {
+  font-size: 2rem;
+}
+
+.fw-n {
+  font-weight: normal;
+}
+
 .h-6rem {
   height: 6rem;
 }

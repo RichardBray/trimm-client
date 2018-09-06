@@ -20,6 +20,7 @@ import GlobalCss from "~/assets/styles/global";
 import deleteIcon from "~/assets/img/delete-icon.svg";
 import chevron from "~/assets/img/chevron.svg";
 
+
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   date = new Date();
@@ -261,20 +262,23 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   renderWelcomeMessage() {
     return (!document.cookie.includes('welcome_clicked=')) && (
-      <div className={this.state.show_welcome ? "welcome styles": "dis-n" }>
-        <div onClick={() => this._addWelcomeCookie()}>&times;</div>
+      <section className={this.state.show_welcome ? DashboardCss['welcome-message']: "dis-n" }>
         <div>
-          <h1>Hello {this.props.dashboard.user_info.user_name},</h1>
+          <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm,</h1>
           <p>
-            Welcome to Trimm,<br/>
-            A simple way to keep track of how much you spend every month. 
+            Trimm is a site that makes it easy to keep track of how much you spend every month. 
             This is a very early version of the app and I'm really open to any feedback you have,
             so if you spot any bugs or have anything nice to say click on the message icon on the bottom right of the screen.
           </p>
           Have fun :)<br/>
           <em>Richard</em>
         </div>
-      </div>
+        <div 
+          className={DashboardCss['welcome-close']}
+          onClick={() => this._addWelcomeCookie()}>
+          &times;
+        </div>
+      </section>
     );
   }
 
