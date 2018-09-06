@@ -19,3 +19,5 @@ $ yarn start
 ```
 
 - static page
+- clean old build
+- cookie message

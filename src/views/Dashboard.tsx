@@ -264,11 +264,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return (!document.cookie.includes('welcome_clicked=')) && (
       <section className={this.state.show_welcome ? DashboardCss['welcome-message']: "dis-n" }>
         <div>
-          <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm,</h1>
+          <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm, 👋</h1>
           <p>
             Trimm is a site that makes it easy to keep track of how much you spend every month. 
-            This is a very early version of the app and I'm really open to any feedback you have,
-            so if you spot any bugs or have anything nice to say click on the message icon on the bottom right of the screen.
+            This is a very very early version of the site and I'm really open to any feedback you have,
+            so if you spot any bugs or have anything nice to say, click on the message icon on the bottom right of the screen and type away.
           </p>
           Have fun :)<br/>
           <em>Richard</em>
