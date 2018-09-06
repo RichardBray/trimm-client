@@ -4,9 +4,9 @@ import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { ILogin, ILoginView, IAction, IReducers } from "../uitls/interfaces";
+import { ILogin, ILoginView, IAction, IReducers } from "../utils/interfaces";
 import { checkLoginDetails } from "../actions/LoginActions";
-import { PageHandler } from "../uitls";
+import { PageHandler, gaEvent } from "../utils";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
@@ -35,8 +35,10 @@ class Login extends PageHandler<ILoginView, ILogin> {
 		let formError: boolean = false;
 
 		if (code === 200) {
+			gaEvent('User Login - Success');
 			value = <Redirect to="/dashboard" />
 		} else if (code === 400) {
+			gaEvent('User Login - Error');
 			value = message;
 			formError = true;
 		}	

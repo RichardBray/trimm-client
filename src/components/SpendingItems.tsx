@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { monthToText } from "../uitls";
+import { monthToText } from "../utils";
 import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../actions/DashboardActions";
-import { IServerResponses, IAction } from "../uitls/interfaces";
+import { IServerResponses, IAction } from "../utils/interfaces";
 
 // Styles
 import SpendingItemCss from "~/assets/styles/components/SpendingItems";

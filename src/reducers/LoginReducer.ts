@@ -1,5 +1,5 @@
-import { IAction } from "../uitls/interfaces";
-import { LOGIN_STATUS, GET_LOGOUT } from "../uitls/constants";
+import { IAction } from "../utils/interfaces";
+import { LOGIN_STATUS, GET_LOGOUT } from "../utils/constants";
 
 
 export default function (state = {}, action: IAction) {

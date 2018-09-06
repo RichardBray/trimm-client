@@ -2,7 +2,7 @@ import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { ILayout, IAction } from "../uitls/interfaces";
+import { ILayout, IAction } from "../utils/interfaces";
 import { getLogout } from "../actions/LoginActions";
 
 // Styles

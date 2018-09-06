@@ -1,5 +1,5 @@
-import { IAction } from "../uitls/interfaces";
-import { POST_REGISTER } from "../uitls/constants";
+import { IAction } from "../utils/interfaces";
+import { POST_REGISTER } from "../utils/constants";
 
 
 export default function (state = {}, action: IAction) {

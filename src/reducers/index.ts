@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import LoginReducer from "./LoginReducer";
 import DashboardReducer from "./DashboardReducer";
-import { IReducers } from "../uitls/interfaces";
+import { IReducers } from "../utils/interfaces";
 import { Reducer, AnyAction } from "../../node_modules/redux";
 import RegisterReducer from "./RegisterReducer";
 

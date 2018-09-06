@@ -11,7 +11,7 @@ import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import Register from "./views/Register";
 import RedirectPage from "./views/RedirectPage";
-
+import { gaInit } from "./utils";
 import "~/assets/styles/global";
 
 
@@ -19,6 +19,7 @@ const useDevTools = composeWithDevTools(applyMiddleware(thunk));
 const middleware = process.env.NODE_ENV === "production" ? applyMiddleware(thunk) : useDevTools;
 const ROOT = document.querySelector(".react-root");
 const store = createStore(reducers, middleware);
+gaInit();
 
 ReactDOM.render(
 	<Provider store={store}>

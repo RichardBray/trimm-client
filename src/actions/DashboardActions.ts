@@ -1,5 +1,5 @@
 /* global fetch */
-import {  ISpendingDate, ISpendingItem } from '../uitls/interfaces';
+import {  ISpendingDate, ISpendingItem } from '../utils/interfaces';
 import { 
   GET_CATEGORIES_API, 
   GET_CATEGORIES, 
@@ -13,8 +13,8 @@ import {
   POST_CATEGORY,
   GET_CATEGORY_API,
   DELETE_CATEGORY,
-  UPDATE_CATEGORY_TOTALS} from '../uitls/constants';
-import { Http, modifyMonth } from '../uitls';
+  UPDATE_CATEGORY_TOTALS} from '../utils/constants';
+import { Http, modifyMonth } from '../utils';
 const http = new Http();
 
 

@@ -1,5 +1,5 @@
-import { IAction } from "../uitls/interfaces";
-import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM, DELETE_ITEM, UPDATE_CATEGORY_TOTALS, POST_CATEGORY } from "../uitls/constants";
+import { IAction } from "../utils/interfaces";
+import { GET_SPENDING_ITEMS, GET_CATEGORIES, GET_USER, POST_SPENDING_ITEM, DELETE_ITEM, UPDATE_CATEGORY_TOTALS, POST_CATEGORY } from "../utils/constants";
 
 
 export default function (state = _initialiseState(), action: IAction) {

@@ -4,8 +4,8 @@ import { Redirect } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { Link } from "react-router-dom";
 
-import { PageHandler } from "../uitls";
-import { IRegister, IReducers, IAction } from "../uitls/interfaces";
+import { PageHandler, gaEvent } from "../utils";
+import { IRegister, IReducers, IAction } from "../utils/interfaces";
 import { postRegister } from "../actions/RegisterActions";
 
 // Styles
@@ -35,10 +35,12 @@ class Register extends PageHandler<{}, IRegister> {
     let formError: boolean = false;
 
     if (code === 201) {
+      gaEvent('Register - Success');
       value = <Redirect to="/dashboard" />
     } else if (code === 400) {
       value = message;
       formError = true;
+      gaEvent('Register - Error');
     }
     return (
       <div className={formError ? LoginCss['right-column-error'] : LoginCss['right-column']}>

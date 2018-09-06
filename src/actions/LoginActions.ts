@@ -1,8 +1,8 @@
 import { ThunkAction } from 'redux-thunk';
 
-import { ILogin } from "../uitls/interfaces";
-import { LOGIN_API, LOGIN_STATUS, GET_LOGOUT, GET_LOGOUT_API } from "../uitls/constants";
-import { Http } from "../uitls";
+import { ILogin } from "../utils/interfaces";
+import { LOGIN_API, LOGIN_STATUS, GET_LOGOUT, GET_LOGOUT_API } from "../utils/constants";
+import { Http } from "../utils";
 const http = new Http();
 
 export function checkLoginDetails(loginDetails: ILogin): ThunkAction<Promise<void>, {}, null, null> {

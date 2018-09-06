@@ -4,6 +4,24 @@ import { Dispatch } from 'redux';
 import { IAction } from "./interfaces";
 import { Component } from 'react';
 
+var gtag:any;
+
+
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+
+export function gaInit(): void {
+  gtag('js', new Date());
+  gtag('config', 'UA-125324369-1');
+}
+
+export function gaEvent(name: string): void {
+  gtag("event", name, {
+    "event_category": "Button Click",
+    "event_label": "Trimm App"
+  });
+}
+
 export class PageHandler extends Component<{}, {}> {
   constructor(props: {}) {
     super(props);  
@@ -88,8 +106,4 @@ export function monthToText(month: string | number): string {
     return monthNames[11]
   }
   return monthNames[+month -1];
-}
-
-export function delay(func: () => {}, time: number): void {
-  setTimeout( () => { func() }, time);
 }

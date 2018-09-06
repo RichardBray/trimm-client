@@ -4,10 +4,10 @@ import { bindActionCreators, Dispatch } from "redux";
 import { Doughnut } from 'react-chartjs-2';
 import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal } from "../actions/DashboardActions";
 
-import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../uitls/interfaces";
+import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../utils/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
-import { modifyMonth, monthToText } from "../uitls";
+import { modifyMonth, monthToText, gaEvent } from "../utils";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
@@ -379,12 +379,15 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     if (this.state.spending_item.cat_id !== "0") {
       await this.props.postSpendingItem(this.state.spending_item);
       if (this.props.dashboard.new_spending_item.code === 201) {
-        await this.updateSpendingSection() 
+        await this.updateSpendingSection();
+        gaEvent('Add Item - Success'); 
       } else {
+        gaEvent('Add Item - Error'); 
         console.error('something has gone wrong'); // TODO change this at some point
       }
       this.setState({ spending_item: this.default_spending_item });
     } else {
+      gaEvent('Add Item - Forgot Category');
       alert("Please select a category");
     }
   };
@@ -421,22 +424,25 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });
-    this.setState({ spending_item: { ...this.state.spending_item, create_dttm: newDate}})
+    this.setState({ spending_item: { ...this.state.spending_item, create_dttm: newDate}});
+    gaEvent('Month Changed - Sucess');
   };
 
   private async _handleAddCategory(e: any): Promise<void> {
     e.preventDefault();
     await this.props.postNewCategory(this.state.new_category);
-
     const { code, message } = this.props.dashboard.new_category;
     if (this.props.dashboard.categories.data.length <= 10) {
       if (code === 400) {
+        gaEvent('Add Category - Error');
         alert(`${message}`);
       } else {
         this.setState({new_category: ""});
         this.props.getCategories();
+        gaEvent('Add Category - Success');
       }
     } else {
+      gaEvent('Add Category - Limit Reached');
       alert('Sorry you have hit the catgory limit');
     }
   };
@@ -450,9 +456,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     });
 
     if (!cat_has_total) {
+      gaEvent('Delete Category - Success');
       await this.props.deleteCategory(cat_uuid);
       await this.props.getCategories();      
     } else {
+      gaEvent('Delete Category - Error');
       alert('This category is in use');
     }
   
