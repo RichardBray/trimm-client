@@ -39,6 +39,8 @@ export interface IDashboardState {
 	spending_item: any;
 	new_category: string;
 	user_currency: string;
+	categories: {};
+	show_welcome: boolean;
 }
 
 export interface ISpendingItem {

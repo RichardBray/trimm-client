@@ -18,5 +18,4 @@ or
 $ yarn start
 ```
 
-- Add welcome message
 - static page

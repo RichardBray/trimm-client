@@ -23,9 +23,9 @@ import chevron from "~/assets/img/chevron.svg";
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   date = new Date();
-  date_year = this.date.getFullYear();
-  date_month = this.date.getMonth() + 1;
-  date_day = this.date.getDate();
+  date_year: number = this.date.getFullYear();
+  date_month: number = this.date.getMonth() + 1;
+  date_day: number = this.date.getDate();
 
   static graph_options = {
     legend: {
@@ -73,7 +73,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     new_category: "",
     data_loaded: false,
     user_currency: "",
-    categories: {}
+    categories: {},
+    show_welcome: true
   }
 
   /**
@@ -259,10 +260,20 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   }
 
   renderWelcomeMessage() {
-    return (!document.cookie.includes('welcome_message=')) && (
-      <div>
-        <h1>Hello {name},</h1>
-        Welcome to Trimm,
+    return (!document.cookie.includes('welcome_clicked=')) && (
+      <div className={this.state.show_welcome ? "welcome styles": "dis-n" }>
+        <div onClick={() => this._addWelcomeCookie()}>&times;</div>
+        <div>
+          <h1>Hello {this.props.dashboard.user_info.user_name},</h1>
+          <p>
+            Welcome to Trimm,<br/>
+            A simple way to keep track of how much you spend every month. 
+            This is a very early version of the app and I'm really open to any feedback you have,
+            so if you spot any bugs or have anything nice to say click on the message icon on the bottom right of the screen.
+          </p>
+          Have fun :)<br/>
+          <em>Richard</em>
+        </div>
       </div>
     );
   }
@@ -476,6 +487,11 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     });
 
     return total;
+  };
+
+  private _addWelcomeCookie(): any {
+    document.cookie = "welcome_clicked=true";
+    this.setState({ show_welcome: false });
   }
  
 }
