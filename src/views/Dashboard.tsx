@@ -40,7 +40,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     },
     maintainAspectRatio: true,
     cutoutPercentage: 65,
-    responsive: false,
+    responsive: false
   };
 
   static cat_colours: Array<string> = [ // 10 Colours
@@ -117,7 +117,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <section className={DashboardCss['cat-row__text']}>
           <div>{cat.cat_name}</div>
           <div className={DashboardCss['cat-row__price']}>
-            {this.state.user_currency}{catTotal}</div>
+            {this.state.user_currency}{Dashboard._roundNumber(catTotal)}</div>
           <img
             src={deleteIcon}
             className={GlobalCss['delete-icon']}
@@ -339,9 +339,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     (typeof (data) !== "undefined") && data.map((item: any) => {
       total += item.item_price;
     });
-    return total;
+
+    return Dashboard._roundNumber(total);
   }
 
+  private static _roundNumber(num: number): number {
+    return Math.round(num * 100) / 100
+  }
   private static _getCurrencySymbol(currency: string): string {
     const split_text = currency.split(" ");
     return split_text[0];
@@ -379,7 +383,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       labels: graph_labels,
       datasets: [{
         data: graph_totals,
-        backgroundColor: Dashboard.cat_colours
+        backgroundColor: Dashboard.cat_colours,
+        borderColor: "#f8f8f8"
       }]
     }
   }
