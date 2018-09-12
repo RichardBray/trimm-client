@@ -10,12 +10,10 @@ export default function (state = _initialiseState(), action: IAction) {
     if (catID === 0) {
       return spendingData;
     }
-    debugger;
     return spendingData.filter( (item: any) => item.cat_id === catID)
   };
 
   function updateLocalSpendingData(spending: any) {
-    debugger;
     spendingData = spending.data
     return spending;
   }

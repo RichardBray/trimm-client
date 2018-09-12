@@ -65,6 +65,10 @@
   font-weight: normal;
 }
 
+.fw-b {
+  font-weight: bold;
+}
+
 .h-6rem {
   height: 6rem;
 }

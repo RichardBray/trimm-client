@@ -79,6 +79,10 @@
   composes: flx-1 fz-1-2rem jc-sb dis-f from "../helpers.css";
 }
 
+.cat-row__name {
+  composes: cur-p fw-b from "../helpers.css";
+}
+
 .cat-row__price {
   composes: flx-1 ta-r from "../helpers.css";
   margin-right: 1rem;
@@ -121,4 +125,10 @@
   composes: cur-p fz-2rem from "../helpers.css";
   color: var(--brandPrimary);
   margin-left: 1rem;
+}
+
+.tip-text {
+  composes: ta-c mb-1rem from "../helpers.css";
+  font-style: italic;
+  color: var(--mediumGrey);
 }

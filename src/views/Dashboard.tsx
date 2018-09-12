@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Doughnut } from 'react-chartjs-2';
@@ -108,9 +108,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   filterSpendingItems(catID: number) {
     let filter_id: number;
-
     filter_id = (this.state.filter_id === catID) ? 0 : catID;
-
     this.setState({ filter_id });
     this.props.filterSpendingItems(filter_id);
   }
@@ -134,9 +132,10 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           />
           <section 
             className={DashboardCss['cat-row__text']}
-            onClick={() => this.filterSpendingItems(cat.cat_id)}
           >
-            <div>{cat.cat_name}</div>
+            <div 
+              className={this.state.filter_id === cat.cat_id ? DashboardCss['cat-row__name'] : HelpersCss['cur-p']} 
+              onClick={() => this.filterSpendingItems(cat.cat_id)}>{cat.cat_name}</div>
             <div className={DashboardCss['cat-row__price']}>
               {this.state.user_currency}{Dashboard._roundNumber(catTotal)}</div>
             <img
@@ -175,10 +174,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     function categoriesAndNewForm() {
       return (
-        <div className={DashboardCss['cat-container']}>
-          {add_category(false)}
-          {render_categories}
-        </div>
+        <Fragment>
+          <div className={DashboardCss['tip-text']}>Tip, click on a category name below to see items form it. <br/> Click on it again to siable filtering.</div>
+          <div className={DashboardCss['cat-container']}>
+            {add_category(false)}
+            {render_categories}
+          </div>
+        </Fragment>
       )
     }
 
@@ -465,6 +467,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });
+    this.setState({ filter_id: 0 });
     this.setState({ spending_item: { ...this.state.spending_item, create_dttm: newDate}});
     gaEvent('Month Changed - Sucess');
   };
