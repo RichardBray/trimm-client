@@ -6,7 +6,7 @@
 $ npm i
 ```
 
-Start verver
+Start server
 
 ```
 $ npm start
@@ -17,7 +17,7 @@ or
 ```
 $ yarn start
 ```
-
-- static page
+- filter spending items by clicking on category
 - clean old build
+- static page
 - cookie message
