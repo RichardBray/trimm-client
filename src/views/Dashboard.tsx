@@ -2,7 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Doughnut } from 'react-chartjs-2';
-import { getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal } from "../actions/DashboardActions";
+import { 
+  getCategories, 
+  getSpendingItems, 
+  getUserInfo, 
+  postSpendingItem, 
+  postNewCategory, 
+  deleteCategory, 
+  updateCategoriesTotal, 
+  filterSpendingItems } from "../actions/DashboardActions";
 
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../utils/interfaces";
 import Layout from "../components/Layout";
@@ -75,7 +83,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     data_loaded: false,
     user_currency: "",
     categories: {},
-    show_welcome: true
+    show_welcome: true,
+    filter_id: 0
   }
 
   /**
@@ -97,36 +106,48 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);  
   }
 
+  filterSpendingItems(catID: number) {
+    let filter_id: number;
+
+    filter_id = (this.state.filter_id === catID) ? 0 : catID;
+
+    this.setState({ filter_id });
+    this.props.filterSpendingItems(filter_id);
+  }
+
   /**
    * I've taken out the budget functionality for this version
    */
   renderCategories(): JSX.Element[] | JSX.Element {
     const { data, code } = this.props.dashboard.categories;
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
-    let catTotal = this._calculateCatTotal(cat.cat_id);
-  
-    return (
-      <section 
-        key={cat.cat_uuid}
-        className={DashboardCss['cat-row']} 
-      >
-        <div 
-          className={DashboardCss['cat-color-circle']}
-          style={ { backgroundColor: Dashboard.cat_colours[index]} } 
-        />
-        <section className={DashboardCss['cat-row__text']}>
-          <div>{cat.cat_name}</div>
-          <div className={DashboardCss['cat-row__price']}>
-            {this.state.user_currency}{Dashboard._roundNumber(catTotal)}</div>
-          <img
-            src={deleteIcon}
-            className={GlobalCss['delete-icon']}
-            alt="Delete Icon"
-            onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)} />
+      let catTotal = this._calculateCatTotal(cat.cat_id);
+    
+      return (
+        <section 
+          key={cat.cat_uuid}
+          className={DashboardCss['cat-row']} 
+        >
+          <div 
+            className={DashboardCss['cat-color-circle']}
+            style={ { backgroundColor: Dashboard.cat_colours[index]} } 
+          />
+          <section 
+            className={DashboardCss['cat-row__text']}
+            onClick={() => this.filterSpendingItems(cat.cat_id)}
+          >
+            <div>{cat.cat_name}</div>
+            <div className={DashboardCss['cat-row__price']}>
+              {this.state.user_currency}{Dashboard._roundNumber(catTotal)}</div>
+            <img
+              src={deleteIcon}
+              className={GlobalCss['delete-icon']}
+              alt="Delete Icon"
+              onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)} />
+          </section>
         </section>
-      </section>
-    )}
-    );
+      )
+    });
 
     const add_category = (no_categories: boolean = true) => { 
       return (
@@ -510,7 +531,15 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getCategories, getSpendingItems, getUserInfo, postSpendingItem, postNewCategory, deleteCategory, updateCategoriesTotal }, dispatch);
+  return bindActionCreators({ 
+    getCategories, 
+    getSpendingItems, 
+    getUserInfo, 
+    postSpendingItem, 
+    postNewCategory, 
+    deleteCategory, 
+    updateCategoriesTotal, 
+    filterSpendingItems }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

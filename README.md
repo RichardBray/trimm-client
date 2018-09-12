@@ -18,6 +18,5 @@ or
 $ yarn start
 ```
 - filter spending items by clicking on category
-- clean old build
 - static page
 - cookie message
