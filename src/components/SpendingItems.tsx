@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { monthToText } from "../utils";
+import { monthToText, roundNumber } from "../utils";
 import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../actions/DashboardActions";
 import { IServerResponses, IAction } from "../utils/interfaces";
 
@@ -27,7 +27,7 @@ class SpendingItems extends Component<any, {}> {
           </div>
           <div className={SpendingItemCss['second-column']}>
             <div className={HelpersCss['mb-1rem']}>{this._formatDate(item.create_dttm)}</div>
-            <div className={SpendingItemCss['price-text']}>{this.props.currency}{item.item_price}</div>
+            <div className={SpendingItemCss['price-text']}>{this.props.currency}{roundNumber(item.item_price)}</div>
           </div>
           <div className={SpendingItemCss['third-column']}>
             <img 

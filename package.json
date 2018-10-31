@@ -13,7 +13,6 @@
   "author": "Richard Oliver Bray",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "7.0.0-beta.55",
     "chart.js": "^2.7.2",
     "react": "^16.2.0",
     "react-chartjs-2": "^2.7.4",
@@ -25,6 +24,7 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/runtime": "7.0.0-beta.55",
     "@babel/core": "^7.0.0-beta.55",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.56",
     "@babel/plugin-transform-runtime": "^7.0.0-rc.1",

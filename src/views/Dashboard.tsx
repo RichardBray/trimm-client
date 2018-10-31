@@ -15,7 +15,7 @@ import {
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../utils/interfaces";
 import Layout from "../components/Layout";
 import SpendingItems from "../components/SpendingItems";
-import { modifyMonth, monthToText, gaEvent } from "../utils";
+import { modifyMonth, monthToText, gaEvent, roundNumber } from "../utils";
 
 // Styles
 import Inputs from "~/assets/styles/components/Inputs";
@@ -362,13 +362,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     (typeof (data) !== "undefined") && data.map((item: any) => {
       total += item.item_price;
     });
-
-    return Dashboard._roundNumber(total);
+    return roundNumber(total);
   }
 
-  private static _roundNumber(num: number): number {
-    return Math.round(num * 100) / 100
-  }
   private static _getCurrencySymbol(currency: string): string {
     const split_text = currency.split(" ");
     return split_text[0];
@@ -526,7 +522,6 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     document.cookie = "welcome_clicked=true";
     this.setState({ show_welcome: false });
   }
- 
 }
 
 function mapStateToProps(state: IReducers) {

@@ -86,11 +86,19 @@ export class Http {
 
 /**
  * Adds `0` to month if it has single number
- * @example _modifyMonth(8) // 08
- * @example _modifyMonth(11) // 11
+ * @example modifyMonth(8) // 08
+ * @example modifyMonth(11) // 11
  */
 export function modifyMonth(month: number): string {
   return (`0${month}`).slice(-2);
+}
+
+/**
+ * Rounds a number to 2 decimal places
+ * @example roundNumber(2.324543) // 2.34
+ */
+export function roundNumber(num: number): number {
+  return Math.round(num * 100) / 100
 }
 
 export function monthToText(month: string | number): string {
