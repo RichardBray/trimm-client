@@ -13,6 +13,7 @@ import {
   POST_CATEGORY,
   GET_CATEGORY_API,
   DELETE_CATEGORY,
+  FILTER_SPENDING_ITEMS,
   UPDATE_CATEGORY_TOTALS} from '../utils/constants';
 import { Http, modifyMonth } from '../utils';
 const http = new Http();
@@ -60,6 +61,12 @@ export function getUserInfo() {
   return http.get(GET_USER_API, GET_USER);
 }
 
+export function filterSpendingItems(catID: number) {
+  return {
+    type: FILTER_SPENDING_ITEMS,
+    payload: catID
+  }
+}
 /**
  * There's probably a better way this could be written
  */

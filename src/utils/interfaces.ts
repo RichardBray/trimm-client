@@ -30,6 +30,7 @@ export interface IDashvoardView {
 	postSpendingItem: (data: any) => {};
 	deleteCategory: (data: string) => {};
 	postNewCategory: (data: string) => {};
+	filterSpendingItems: (data: any) => {};
 	updateCategoriesTotal: any;
 }
 
@@ -41,6 +42,7 @@ export interface IDashboardState {
 	user_currency: string;
 	categories: {};
 	show_welcome: boolean;
+	filter_id: number;
 }
 
 export interface ISpendingItem {
