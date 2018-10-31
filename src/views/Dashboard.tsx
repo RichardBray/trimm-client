@@ -137,7 +137,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               className={this.state.filter_id === cat.cat_id ? DashboardCss['cat-row__name'] : HelpersCss['cur-p']} 
               onClick={() => this.filterSpendingItems(cat.cat_id)}>{cat.cat_name}</div>
             <div className={DashboardCss['cat-row__price']}>
-              {this.state.user_currency}{Dashboard._roundNumber(catTotal)}</div>
+              {this.state.user_currency}{roundNumber(catTotal)}</div>
             <img
               src={deleteIcon}
               className={GlobalCss['delete-icon']}
@@ -312,7 +312,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       return (
         <Layout>
           {this.renderWelcomeMessage()}
-          <section className={DashboardCss['month-change']}>
+          <header className={DashboardCss['month-change']}>
             <div 
               className={DashboardCss['month-change__btn']} 
               onClick={() => this._changeMonth()}
@@ -335,7 +335,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 alt="Next month"
               />              
             </div>
-          </section>
+          </header>
           <section className={DashboardCss.container}>
             <div className="w-50">
               {this.renderSpendingForm()}

@@ -39,7 +39,11 @@ class Layout extends Component<ILayout, {}> {
               src={logo} 
               alt="Trimm Logo"
               className={LayoutCss['main-header__logo']} />
-            <a className={HelpersCss['cur-p']} onClick={() => this.handleLogout()}>Logout</a>
+            <aside>
+              <a className={LayoutCss['header-link']} href="/dashboard">Dashboard</a>
+              <a className={LayoutCss['header-link']} href="/settings">Settings</a>
+              <a className={LayoutCss['header-link']} onClick={() => this.handleLogout()}>Logout</a>
+            </aside>
           </div>
         </header>
         <section className={LayoutCss['sticky-footer']}>

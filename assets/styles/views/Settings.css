@@ -1,0 +1,6 @@
+/* Settings */
+
+.container {
+  composes: bgc-white mx-a p-1rem from "../helpers.css";
+  max-width: 50rem;
+}
