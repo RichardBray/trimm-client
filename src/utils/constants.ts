@@ -11,6 +11,8 @@ export const POST_CATEGORIES: string = "POST_CATEGORIES";
 export const POST_CATEGORY: string = "POST_CATEGORY";
 export const POST_REGISTER: string = "POST_REGISTER";
 
+export const UPDATE_USER_INFO: string = "UPDATE_USER_INFO";
+
 export const FILTER_SPENDING_ITEMS: string = "FILTER_SPENDING_ITEMS";
 
 export const DELETE_ITEM: string = "DELETE_ITEM";
