@@ -30,4 +30,5 @@ export const GET_CATEGORIES_API: string = `${API}/categories`;
 export const GET_CATEGORY_API: string = `${API}/category`;
 export const GET_ITEMS_API: string = `${API}/items`;
 export const GET_USER_API: string = `${API}/auth`;
+export const EDIT_USER_API: string = `${API}/user-edit`;
 export const ITEM_API: string = `${API}/item`;

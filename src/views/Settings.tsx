@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Layout from "../components/Layout";
 import { bindActionCreators, Dispatch } from "redux";
+import { Redirect } from 'react-router';
 
 import { getUserInfo,} from "../actions/DashboardActions";
 import { updateUserCurency } from "../actions/SettingsActions";
@@ -13,11 +14,13 @@ import { IReducers, IAction } from "../utils/interfaces";
 import SettingsCss from "~/assets/styles/views/Settings";
 import Inputs from "~/assets/styles/components/Inputs";
 import HelpersCss from "~/assets/styles/helpers";
+import Buttons from "~/assets/styles/components/Buttons";
 
 class Settings extends Component<any, {}> {
 
   state = {
-    user_currency: ''
+    user_currency: '',
+    response_code: 0
   }
 
   async componentDidMount() {
@@ -49,7 +52,11 @@ class Settings extends Component<any, {}> {
       },
       {
         symbol: '¥',
-        name: 'Yen'
+        name: 'Yen / Renminbi'
+      }, 
+      {
+        symbol: '₩',
+        name: 'South Korean won'
       }
     ];
 
@@ -60,9 +67,10 @@ class Settings extends Component<any, {}> {
     ));
   }
 
-  submitChanges = (e: any) => {
+  submitChanges = async (e: any) => {
     e.preventDefault()
-    this.props.updateUserCurency(this.state.user_currency, this.props.user_info)
+    await this.props.updateUserCurency(this.state.user_currency, this.props.user_info)
+    this.setState({ response_code: this.props.settings.code})
   }
 
   changeCurrency = (e: any) => {
@@ -76,14 +84,17 @@ class Settings extends Component<any, {}> {
           <h2>Settings</h2>
         </header>
         <form className={SettingsCss.container} onSubmit={this.submitChanges}>
-          <div>
+          <div className={HelpersCss['mb-1rem']}>
             <h3>Curreny symbol:</h3>
             Choose a currency symbol for your expenses. There's no currency conversion in this app.
           </div>
           <select value={this.state.user_currency} name="" onChange={this.changeCurrency} className={Inputs['input-spending-form']}>
             {Settings.currencyDropdown()}
           </select>
-          <button type="submit">Save changes</button>
+          <div>
+            <button className={Buttons['primary-btn']} type="submit">Save changes</button>
+            {this.state.response_code === 200 && <Redirect to="/dashboard" />}
+          </div>
         </form>
       </Layout>
     )
@@ -91,7 +102,7 @@ class Settings extends Component<any, {}> {
 }
 
 function mapStateToProps(state: IReducers) {
-  return { user_info: state.dashboard.user_info };
+  return { user_info: state.dashboard.user_info, settings: state.settings };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
