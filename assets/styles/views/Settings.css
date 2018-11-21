@@ -4,3 +4,12 @@
   composes: bgc-white mx-a p-1rem from "../helpers.css";
   max-width: 50rem;
 }
+
+.button-cotainer {
+  composes: dis-f jc-sa mb-1rem from "../helpers.css";
+  margin-top: 1rem;
+}
+
+.button-cotainer button {
+  width: 20rem;
+}

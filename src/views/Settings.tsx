@@ -91,7 +91,7 @@ class Settings extends Component<any, {}> {
           <select value={this.state.user_currency} name="" onChange={this.changeCurrency} className={Inputs['input-spending-form']}>
             {Settings.currencyDropdown()}
           </select>
-          <div>
+          <div className={SettingsCss['button-cotainer']}>
             <button className={Buttons['primary-btn']} type="submit">Save changes</button>
             {this.state.response_code === 200 && <Redirect to="/dashboard" />}
           </div>
