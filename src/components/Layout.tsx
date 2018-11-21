@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { Link } from "react-router-dom";
 
 import { ILayout, IAction } from "../utils/interfaces";
 import { getLogout } from "../actions/LoginActions";
 
 // Styles
 import LayoutCss from "~/assets/styles/components/Layout";
-import HelpersCss from "~/assets/styles/helpers";
 
 // Images
 import logo from "~/assets/img/logo-white.svg";
@@ -39,7 +39,11 @@ class Layout extends Component<ILayout, {}> {
               src={logo} 
               alt="Trimm Logo"
               className={LayoutCss['main-header__logo']} />
-            <a className={HelpersCss['cur-p']} onClick={() => this.handleLogout()}>Logout</a>
+            <aside>
+              <Link className={LayoutCss['header-link']} to="/dashboard">Dashboard</Link>
+              <Link className={LayoutCss['header-link']} to="/settings">Settings</Link>
+              <a className={LayoutCss['header-link']} onClick={() => this.handleLogout()}>Logout</a>
+            </aside>
           </div>
         </header>
         <section className={LayoutCss['sticky-footer']}>

@@ -71,6 +71,7 @@ export interface IReducers {
 	login: ILoginResponse;
 	dashboard: any;
 	register: any;
+	settings: any;
 }
 
 export interface ILayout {

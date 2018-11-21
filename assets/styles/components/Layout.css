@@ -9,6 +9,18 @@
   width: 10rem;
 }
 
+.header-link {
+  composes: cur-p c-white from "../helpers.css";
+  text-decoration: none;
+  margin-right: .5rem;
+}
+.header-link:hover {
+  text-decoration: underline;
+}
+.header-link:last-of-type {
+  margin-right: 0;
+}
+
 .container {
   composes: mx-a from "../helpers.css";
   width: var(--desktopWidth);

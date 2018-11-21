@@ -46,12 +46,21 @@ export class Http {
     return this._fetchMethod("GET");
   }
 
+  put(url: string, action: string, data: any) {
+    this.url = url;
+    this.action = action;
+    this.data = data;
+    return this._fetchMethod("PUT");
+  }
+
   post(url: string, action: string, data: any) {
     this.url = url;
     this.action = action;  
     this.data = data;    
     return this._fetchMethod("POST");
   }
+
+  
 
   delete(url: string, action: string, data: any) {
     this.url = url;
@@ -114,4 +123,16 @@ export function monthToText(month: string | number): string {
     return monthNames[11]
   }
   return monthNames[+month -1];
+}
+
+/**
+ * Checks if obkect is empty
+ * stolen from `https://coderwall.com/p/_g3x9q/how-to-check-if-javascript-object-is-empty`
+ */
+export function isEmpty(obj: Object): boolean {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key))
+      return false;
+  }
+  return true;
 }

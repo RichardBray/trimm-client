@@ -11,6 +11,7 @@ import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
 import Register from "./views/Register";
 import RedirectPage from "./views/RedirectPage";
+import Settings from "./views/Settings";
 import { gaInit } from "./utils";
 import "~/assets/styles/global";
 
@@ -25,6 +26,7 @@ ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
 			<Switch>
+				<Route path="/settings" component={Settings} />
 				<Route path="/dashboard" component={Dashboard} />
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />

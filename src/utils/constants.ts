@@ -11,6 +11,8 @@ export const POST_CATEGORIES: string = "POST_CATEGORIES";
 export const POST_CATEGORY: string = "POST_CATEGORY";
 export const POST_REGISTER: string = "POST_REGISTER";
 
+export const UPDATE_USER_INFO: string = "UPDATE_USER_INFO";
+
 export const FILTER_SPENDING_ITEMS: string = "FILTER_SPENDING_ITEMS";
 
 export const DELETE_ITEM: string = "DELETE_ITEM";
@@ -28,4 +30,5 @@ export const GET_CATEGORIES_API: string = `${API}/categories`;
 export const GET_CATEGORY_API: string = `${API}/category`;
 export const GET_ITEMS_API: string = `${API}/items`;
 export const GET_USER_API: string = `${API}/auth`;
+export const EDIT_USER_API: string = `${API}/user-edit`;
 export const ITEM_API: string = `${API}/item`;
