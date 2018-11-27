@@ -34,10 +34,10 @@ class Settings extends Component<any, {}> {
         symbol: '£',
         name: 'Pounds'
       },
-      {
-        symbol: '€',
-        name: 'Euros'
-      },
+      // {
+      //   symbol: `&#8364;`,
+      //   name: 'Euros'
+      // },
       {
         symbol: '$',
         name: 'Dollars'
@@ -54,10 +54,10 @@ class Settings extends Component<any, {}> {
         symbol: '¥',
         name: 'Yen / Renminbi'
       }, 
-      {
-        symbol: '₩',
-        name: 'South Korean won'
-      }
+      // {
+      //   symbol: '₩',
+      //   name: 'South Korean won'
+      // }
     ];
 
     return currencies.map(currency => (
