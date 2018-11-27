@@ -68,13 +68,13 @@ class Settings extends Component<any, {}> {
   }
 
   submitChanges = async (e: any) => {
-    e.preventDefault()
-    await this.props.updateUserCurency(this.state.user_currency, this.props.user_info)
-    this.setState({ response_code: this.props.settings.code})
+    e.preventDefault();
+    await this.props.updateUserCurency(this.state.user_currency, this.props.user_info);
+    this.setState({ response_code: this.props.settings.code});
   }
 
   changeCurrency = (e: any) => {
-    this.setState({...this.state, user_currency: e.target.value})
+    this.setState({...this.state, user_currency: e.target.value});
   }
 
   render() {
@@ -88,7 +88,7 @@ class Settings extends Component<any, {}> {
             <h3>Curreny symbol:</h3>
             Choose a currency symbol for your expenses. There's no currency conversion in this app.
           </div>
-          <select value={this.state.user_currency} name="" onChange={this.changeCurrency} className={Inputs['input-spending-form']}>
+          <select value={this.state.user_currency} name="currencyDropdown" onChange={this.changeCurrency} className={Inputs['input-spending-form']}>
             {Settings.currencyDropdown()}
           </select>
           <div className={SettingsCss['button-cotainer']}>

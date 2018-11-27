@@ -58,6 +58,10 @@
 
 .cat-section {
   composes: w-50 from "../helpers.css";
+  display: inline-table;
+  padding-top: 1rem;
+  position: sticky;
+  top: 0;
 }
 
 .cat-section canvas {
