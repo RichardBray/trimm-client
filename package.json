@@ -13,6 +13,7 @@
   "author": "Richard Oliver Bray",
   "license": "ISC",
   "dependencies": {
+    "@sentry/browser": "^4.4.1",
     "chart.js": "^2.7.2",
     "react": "^16.2.0",
     "react-chartjs-2": "^2.7.4",

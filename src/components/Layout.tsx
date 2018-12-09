@@ -1,10 +1,11 @@
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Link } from "react-router-dom";
 
 import { ILayout, IAction } from "../utils/interfaces";
 import { getLogout } from "../actions/LoginActions";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 // Styles
 import LayoutCss from "~/assets/styles/components/Layout";
@@ -46,9 +47,11 @@ class Layout extends Component<ILayout, {}> {
             </aside>
           </div>
         </header>
-        <section className={LayoutCss['sticky-footer']}>
-          {this.props.children}
-        </section>
+        <ErrorBoundary>
+          <section className={LayoutCss['sticky-footer']}>
+            {this.props.children}
+          </section>
+        </ErrorBoundary>
         <footer className={LayoutCss.footer}>
           <section className={LayoutCss.container}>
             Trimm &copy; {currentYear}

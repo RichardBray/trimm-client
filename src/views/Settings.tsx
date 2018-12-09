@@ -34,10 +34,10 @@ class Settings extends Component<any, {}> {
         symbol: '£',
         name: 'Pounds'
       },
-      // {
-      //   symbol: `&#8364;`,
-      //   name: 'Euros'
-      // },
+      {
+        symbol: `€`,
+        name: 'Euros'
+      },
       {
         symbol: '$',
         name: 'Dollars'
@@ -54,10 +54,14 @@ class Settings extends Component<any, {}> {
         symbol: '¥',
         name: 'Yen / Renminbi'
       }, 
-      // {
-      //   symbol: '₩',
-      //   name: 'South Korean won'
-      // }
+      {
+        symbol: '₴',
+        name: 'Ukrainian Hryvnia'
+      },      
+      {
+        symbol: '₽',
+        name: 'Russian Ruble'
+      }
     ];
 
     return currencies.map(currency => (
@@ -85,7 +89,7 @@ class Settings extends Component<any, {}> {
         </header>
         <form className={SettingsCss.container} onSubmit={this.submitChanges}>
           <div className={HelpersCss['mb-1rem']}>
-            <h3>Curreny symbol:</h3>
+            <h3>Currency symbol:</h3>
             Choose a currency symbol for your expenses. There's no currency conversion in this app.
           </div>
           <select value={this.state.user_currency} name="currencyDropdown" onChange={this.changeCurrency} className={Inputs['input-spending-form']}>
