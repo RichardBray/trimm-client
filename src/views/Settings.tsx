@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Layout from "../components/Layout";
 import { bindActionCreators, Dispatch } from "redux";
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 
 import { getUserInfo,} from "../actions/DashboardActions";
 import { updateUserCurency } from "../actions/SettingsActions";
@@ -97,7 +97,7 @@ class Settings extends Component<any, {}> {
           </select>
           <div className={SettingsCss['button-cotainer']}>
             <button className={Buttons['primary-btn']} type="submit">Save changes</button>
-            {this.state.response_code === 200 && <Redirect to="/dashboard" />}
+            {this.state.response_code === 200 && <Navigate to="/dashboard" />}
           </div>
         </form>
       </Layout>

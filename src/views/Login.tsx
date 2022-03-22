@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
 import { bindActionCreators, Dispatch } from "redux";
 
@@ -36,7 +36,7 @@ class Login extends PageHandler<ILoginView, ILogin> {
 
 		if (code === 200) {
 			gaEvent('User Login - Success');
-			value = <Redirect to="/dashboard" />
+			value = <Navigate to="/dashboard" />
 		} else if (code === 400) {
 			gaEvent('User Login - Error');
 			value = message;

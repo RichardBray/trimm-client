@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -28,13 +28,13 @@ gaInit();
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
-			<Switch>
-				<Route path="/settings" component={Settings} />
-				<Route path="/dashboard" component={Dashboard} />
-				<Route path="/login" component={Login} />
-				<Route path="/register" component={Register} />
-				<Route path="/" component={RedirectPage} />
-			</Switch>
+			<Routes>
+				<Route path="/settings" element={<Settings />} />
+				<Route path="/dashboard" element={<Dashboard />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/" element={<RedirectPage />} />
+			</Routes>
 		</BrowserRouter>
 	</Provider>,
 	ROOT

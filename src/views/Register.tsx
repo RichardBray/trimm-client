@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
 import { Link } from "react-router-dom";
 
@@ -36,7 +36,7 @@ class Register extends PageHandler<{}, IRegister> {
 
     if (code === 201) {
       gaEvent('Register - Success');
-      value = <Redirect to="/dashboard" />
+      value = <Navigate to="/dashboard" />
     } else if (code === 400) {
       value = message;
       formError = true;
