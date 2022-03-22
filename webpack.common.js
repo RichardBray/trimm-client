@@ -22,8 +22,8 @@ module.exports = {
 		filename: "bundle.js"
 	},
 	module: {
-		rules: [	
-			_cssModulesRule(process.env.NODE_ENV),		
+		rules: [
+			_cssModulesRule(process.env.NODE_ENV),
 			{
 				test: /\.(jpg|png|gif|svg)$/,
 				use: [
@@ -33,23 +33,23 @@ module.exports = {
 							name: "[name].[ext]"
 						}
 					}
-				]				
-			},			
+				]
+			},
 			{
 				test: /\.tsx?/,
 				exclude: /node_modules/,
 				loader: "babel-loader",
 				query: {
-					presets: [ 
+					presets: [
 						[
 							"@babel/env", {
 							"targets": {
 								"chrome": "60"
-							}						
+							}
 						}
 					], "@babel/react", "@babel/typescript"],
 					plugins: [
-						"@babel/proposal-class-properties", 
+						"@babel/proposal-class-properties",
 						"@babel/transform-runtime"]
 				}
 			}
@@ -59,17 +59,17 @@ module.exports = {
 		extensions: [".js", ".ts", ".tsx", ".css"],
     alias: {
         ["~"]: path.resolve(__dirname)
-    }		
+    }
 	},
 	devServer: {
 		contentBase: "./",
-		port: 5000,
+		port: 3000,
 		historyApiFallback: true
 	},
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: "[name].css",
 			chunkFilename: "[id].css"
-		}),		
+		}),
 	]
 };
