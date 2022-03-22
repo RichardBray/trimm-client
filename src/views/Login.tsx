@@ -9,9 +9,9 @@ import { checkLoginDetails } from "../actions/LoginActions";
 import { PageHandler, gaEvent } from "../utils";
 
 // Styles
-import Inputs from "~/assets/styles/components/Inputs";
-import Buttons from "~/assets/styles/components/Buttons";
-import LoginCss from "~/assets/styles/views/Login";
+import Inputs from "~/assets/styles/components/Inputs.module.css";
+import Buttons from "~/assets/styles/components/Buttons.module.css";
+import LoginCss from "~/assets/styles/views/Login.module.css";
 
 // Images
 import logo from "~/assets/img/trimm-logo.svg";
@@ -41,21 +41,21 @@ class Login extends PageHandler<ILoginView, ILogin> {
 			gaEvent('User Login - Error');
 			value = message;
 			formError = true;
-		}	
+		}
 		return (
 			<div className={formError ? LoginCss['right-column-error'] : LoginCss['right-column']}>
 				<p className={LoginCss['right-text']}>
 					{value}
 				</p>
-			</div>);	
+			</div>);
 	}
 
 	render(): JSX.Element {
 		return (
 			<section className={LoginCss.container}>
 				<div className={LoginCss['left-column']}>
-					<form 
-						onSubmit={e => this.handleSubmit(e)} 
+					<form
+						onSubmit={e => this.handleSubmit(e)}
 						className={`dis-f fd-c ${LoginCss['left-column-form']}`}>
 						<div className={LoginCss['logo-pos']}>
 							<img src={logo} className={LoginCss['logo-width']} alt="Trimm logo"/>
@@ -78,9 +78,9 @@ class Login extends PageHandler<ILoginView, ILogin> {
 							onChange={e => this.handleChange(e)}
 							required
 						/>
-						<button 
-							type="submit" 
-							className={Buttons['primary-btn']} 
+						<button
+							type="submit"
+							className={Buttons['primary-btn']}
 							value="Login">
 								Login
 						</button>

@@ -1,34 +1,34 @@
 /* Dashboard */
 
 .container {
-  composes: dis-f jc-sb from "../helpers.css";
+  composes: dis-f jc-sb from "../helpers.module.css";
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
 
 .month-change {
-  composes: dis-f jc-sb from "../helpers.css";
+  composes: dis-f jc-sb from "../helpers.module.css";
   margin-top: 4rem;
 }
 
 .month-change__btn {
-  composes: dis-f ai-c cur-p fz-1-2rem from "../helpers.css";
+  composes: dis-f ai-c cur-p fz-1-2rem from "../helpers.module.css";
 }
 
 .month-header {
-  composes: fw-n from "../helpers.css";
+  composes: fw-n from "../helpers.module.css";
   margin: 0;
   font-size: 1.6rem;
 }
 
 .spending-form {
-  composes: bgc-white dis-f jc-sb c-primary p-1rem mb-1rem from "../helpers.css";
+  composes: bgc-white dis-f jc-sb c-primary p-1rem mb-1rem from "../helpers.module.css";
   border: 2px dashed var(--brandPrimary);
   box-shadow: 0 1px 9px 0 var(--shadowGrey);
 }
 
 .spending-form__text {
-  composes: dis-f fd-c ta-r from "../helpers.css";
+  composes: dis-f fd-c ta-r from "../helpers.module.css";
 }
 
 .spending-form__text_box {
@@ -37,7 +37,7 @@
 }
 
 .spending-total {
-  composes: ta-c fw-n from "../helpers.css";
+  composes: ta-c fw-n from "../helpers.module.css";
   font-size: 3rem;
   margin-top: -19rem;
   margin-bottom: 15rem;
@@ -46,7 +46,7 @@
 
 .spending-form__inputs {
   margin-left: 1rem;
-  margin-right: 1rem;  
+  margin-right: 1rem;
 }
 
 .cat-color-circle {
@@ -57,7 +57,7 @@
 }
 
 .cat-section {
-  composes: w-50 from "../helpers.css";
+  composes: w-50 from "../helpers.module.css";
   display: inline-table;
   padding-top: 1rem;
   position: sticky;
@@ -69,42 +69,42 @@
 }
 
 .cat-container {
-  composes: bgc-white from "../helpers.css";
+  composes: bgc-white from "../helpers.module.css";
   margin: 0 5rem;
 }
 
 .cat-row {
-  composes: dis-f ai-c from "../helpers.css";
+  composes: dis-f ai-c from "../helpers.module.css";
   padding: .5rem;
-  border-bottom: 3px solid var(--lightGrey);    
+  border-bottom: 3px solid var(--lightGrey);
 }
 
 .cat-row__text {
-  composes: flx-1 fz-1-2rem jc-sb dis-f from "../helpers.css";
+  composes: flx-1 fz-1-2rem jc-sb dis-f from "../helpers.module.css";
 }
 
 .cat-row__name {
-  composes: cur-p fw-b from "../helpers.css";
+  composes: cur-p fw-b from "../helpers.module.css";
 }
 
 .cat-row__price {
-  composes: flx-1 ta-r from "../helpers.css";
+  composes: flx-1 ta-r from "../helpers.module.css";
   margin-right: 1rem;
 }
 
 .cat-form__input {
-  composes: base-input from "../components/Inputs.css";
-  composes: fz-1-2rem from "../helpers.css";
+  composes: base-input from "../components/Inputs.module.css";
+  composes: fz-1-2rem from "../helpers.module.css";
   height: 33px;
-  padding: .4rem 1rem;  
+  padding: .4rem 1rem;
   border-top-left-radius: .6rem;
   border-bottom-left-radius: .6rem;
   flex: 4;
 }
 
 .cat-form__submit {
-  composes: base-button from "../components/Buttons.css";
-  composes: bgc-primary cur-p from "../helpers.css";
+  composes: base-button from "../components/Buttons.module.css";
+  composes: bgc-primary cur-p from "../helpers.module.css";
   border-top-right-radius: .6rem;
   border-bottom-right-radius: .6rem;
   height: 2.4rem;
@@ -113,7 +113,7 @@
 }
 
 .welcome-message {
-  composes: dis-f from "../helpers.css";
+  composes: dis-f from "../helpers.module.css";
   padding: 1.5rem;
   background: var(--messageGreen);
   margin-top: 2rem;
@@ -121,18 +121,18 @@
 }
 
 .welcome-title {
-  composes: fw-n fz-2rem from "../helpers.css";
+  composes: fw-n fz-2rem from "../helpers.module.css";
   margin: 0;
 }
 
 .welcome-close {
-  composes: cur-p fz-2rem from "../helpers.css";
+  composes: cur-p fz-2rem from "../helpers.module.css";
   color: var(--brandPrimary);
   margin-left: 1rem;
 }
 
 .tip-text {
-  composes: ta-c mb-1rem from "../helpers.css";
+  composes: ta-c mb-1rem from "../helpers.module.css";
   font-style: italic;
   color: var(--mediumGrey);
 }

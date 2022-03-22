@@ -7,7 +7,7 @@
   --shadowGrey: #dcdbdb;
   --desktopWidth: 73rem;
   --defaultBorderRadius: .6rem;
-  font-size: 14px;    
+  font-size: 14px;
 }
 
 body {
@@ -57,7 +57,7 @@ body {
 /* Shared */
 
 .delete-icon {
-  composes: cur-p tr-0-5s from "./helpers.css";
+  composes: cur-p tr-0-5s from "./helpers.module.css";
 }
 
 .delete-icon:hover {

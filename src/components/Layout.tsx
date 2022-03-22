@@ -8,7 +8,7 @@ import { getLogout } from "../actions/LoginActions";
 import ErrorBoundary from "../components/ErrorBoundary";
 
 // Styles
-import LayoutCss from "~/assets/styles/components/Layout";
+import LayoutCss from "~/assets/styles/components/Layout.module.css";
 
 // Images
 import logo from "~/assets/img/logo-white.svg";
@@ -36,8 +36,8 @@ class Layout extends Component<ILayout, {}> {
       <Fragment>
         <header className={LayoutCss['main-header']}>
           <div className={LayoutCss['header-container']}>
-            <img 
-              src={logo} 
+            <img
+              src={logo}
               alt="Trimm Logo"
               className={LayoutCss['main-header__logo']} />
             <aside>

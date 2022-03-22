@@ -14,14 +14,15 @@ import Register from "./views/Register";
 import RedirectPage from "./views/RedirectPage";
 import Settings from "./views/Settings";
 import { gaInit } from "./utils";
-import "~/assets/styles/global";
+import "~/assets/styles/global.module.css";
 
 
 const useDevTools = composeWithDevTools(applyMiddleware(thunk));
 const middleware = process.env.NODE_ENV === "production" ? applyMiddleware(thunk) : useDevTools;
 const ROOT = document.querySelector(".react-root");
 const store = createStore(reducers, middleware);
-Sentry.init({ dsn: "https://63e1cfd8630c4031b9f05d6e2f9937dc@sentry.io/1340368" }); 
+
+Sentry.init({ dsn: "https://63e1cfd8630c4031b9f05d6e2f9937dc@sentry.io/1340368" });
 gaInit();
 
 ReactDOM.render(

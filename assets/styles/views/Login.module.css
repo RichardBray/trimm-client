@@ -1,0 +1,44 @@
+.container {
+  composes: dis-f jc-sb bgc-white from "../helpers.module.css";
+}
+
+.right-column {
+  composes: bgc-primary w-50 h-100vh from "../helpers.module.css";
+}
+
+.right-column-error {
+  composes: bgc-secondary w-50 h-100vh from "../helpers.module.css";
+}
+
+.right-text {
+  composes: c-white from "../helpers.module.css";
+  font-size: 4rem;
+  margin-top: 40vh;
+  padding: 0 2rem;
+}
+
+.left-column {
+  composes: mx-a from "../helpers.module.css";
+}
+
+.left-column-form {
+  margin-top: 27vh;
+  width: 20rem;
+}
+
+.logo-pos {
+  composes: ta-c mb-2rem from "../helpers.module.css";
+}
+
+.logo-width {
+  width: 15rem;
+}
+
+.register-link {
+  composes: ta-c c-primary from "../helpers.module.css";
+  margin: 1rem;
+}
+
+.register-link a {
+  color: var(--brandPrimary);
+}

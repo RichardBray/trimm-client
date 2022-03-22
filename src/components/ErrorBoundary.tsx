@@ -3,9 +3,9 @@ import * as Sentry from '@sentry/browser';
 
 class ErrorBoundary extends Component<{}, {error: boolean}> {
 
-  state = { error: null };
+  state: any = { error: null };
 
-  componentDidCatch(error, errorInfo): void {
+  componentDidCatch(error: any, errorInfo: any): void {
     this.setState({ error });
     Sentry.withScope(scope => {
       Object.keys(errorInfo).forEach(key => {

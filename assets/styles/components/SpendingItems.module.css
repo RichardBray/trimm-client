@@ -1,0 +1,31 @@
+
+.container {
+  composes: bgc-white dis-f jc-sb mb-1rem from "../helpers.module.css";
+  padding: 1.2rem;
+}
+
+.price-text {
+  composes: c-primary from "../helpers.module.css";
+  font-size: 2rem;
+}
+
+.first-column {
+  composes: fz-1-4rem w-60 from "../helpers.module.css";
+}
+
+.second-column {
+  composes: ta-r w-30 from "../helpers.module.css";
+}
+
+.third-column {
+  composes: ta-r w-10 from "../helpers.module.css";
+}
+
+.cat-title {
+  composes: mb-1rem from "../helpers.module.css";
+  color: var(--mediumGrey);
+}
+
+.no-items {
+  composes: bgc-white fz-1-4rem p-1rem from "../helpers.module.css";
+}

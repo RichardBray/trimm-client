@@ -7,9 +7,9 @@ import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../
 import { IServerResponses, IAction } from "../utils/interfaces";
 
 // Styles
-import SpendingItemCss from "~/assets/styles/components/SpendingItems";
-import HelpersCss from "~/assets/styles/helpers";
-import GlobalCss from "~/assets/styles/global";
+import SpendingItemCss from "~/assets/styles/components/SpendingItems.module.css";
+import HelpersCss from "~/assets/styles/helpers.module.css";
+import GlobalCss from "~/assets/styles/global.module.css";
 
 // Images
 import deleteIcon from "~/assets/img/delete-icon.svg";
@@ -30,12 +30,12 @@ class SpendingItems extends Component<any, {}> {
             <div className={SpendingItemCss['price-text']}>{this.props.currency}{roundNumber(item.item_price)}</div>
           </div>
           <div className={SpendingItemCss['third-column']}>
-            <img 
+            <img
               src={deleteIcon}
               alt="Delete Icon"
               className={GlobalCss['delete-icon']}
               onClick={() => this._deleteItem(item.item_uuid)} />
-          </div>          
+          </div>
         </section>
       );
     }
@@ -69,8 +69,8 @@ class SpendingItems extends Component<any, {}> {
   private async _deleteItem(item_uuid: string): Promise<void> {
     await this.props.deleteSpendingItem(item_uuid);
     await this.props.getSpendingItems(this.props.dateRange);
-    await this.props.updateCategoriesTotal(this.props.data);     
-  }  
+    await this.props.updateCategoriesTotal(this.props.data);
+  }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {

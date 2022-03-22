@@ -2,14 +2,14 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Doughnut } from 'react-chartjs-2';
-import { 
-  getCategories, 
-  getSpendingItems, 
-  getUserInfo, 
-  postSpendingItem, 
-  postNewCategory, 
-  deleteCategory, 
-  updateCategoriesTotal, 
+import {
+  getCategories,
+  getSpendingItems,
+  getUserInfo,
+  postSpendingItem,
+  postNewCategory,
+  deleteCategory,
+  updateCategoriesTotal,
   filterSpendingItems } from "../actions/DashboardActions";
 
 import { IDashvoardView, IReducers, IAction, IDashboardState, IServerResponses, ISpendingItem, IDashboardDate } from "../utils/interfaces";
@@ -18,11 +18,11 @@ import SpendingItems from "../components/SpendingItems";
 import { modifyMonth, monthToText, gaEvent, roundNumber } from "../utils";
 
 // Styles
-import Inputs from "~/assets/styles/components/Inputs";
-import Buttons from "~/assets/styles/components/Buttons";
-import DashboardCss from "~/assets/styles/views/Dashboard";
-import HelpersCss from "~/assets/styles/helpers";
-import GlobalCss from "~/assets/styles/global";
+import Inputs from "~/assets/styles/components/Inputs.module.css";
+import Buttons from "~/assets/styles/components/Buttons.module.css";
+import DashboardCss from "~/assets/styles/views/Dashboard.module.css";
+import HelpersCss from "~/assets/styles/helpers.module.css";
+import GlobalCss from "~/assets/styles/global.module.css";
 
 // Images
 import deleteIcon from "~/assets/img/delete-icon.svg";
@@ -43,8 +43,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     tooltips: {
       enabled: false
     },
-    hover: { 
-      mode: null 
+    hover: {
+      mode: null
     },
     maintainAspectRatio: true,
     cutoutPercentage: 65,
@@ -93,17 +93,17 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   async componentDidMount(): Promise<void> {
     await this.props.getCategories();
     await this.updateSpendingSection();
-    await this.props.getUserInfo(); 
+    await this.props.getUserInfo();
     this.setState({ data_loaded: true });
-    this.setState({ 
-      user_currency: 
+    this.setState({
+      user_currency:
       Dashboard._getCurrencySymbol(this.props.dashboard.user_info.user_currency)
     });
   }
 
   async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
-    await this.props.getSpendingItems(dateRange ? dateRange: this.state.date); 
-    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);  
+    await this.props.getSpendingItems(dateRange ? dateRange: this.state.date);
+    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
   }
 
   filterSpendingItems(catID: number) {
@@ -120,21 +120,21 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { data, code } = this.props.dashboard.categories;
     const render_categories = (typeof (data) !== "undefined") && data.map((cat: any, index: number) => {
       let catTotal = this._calculateCatTotal(cat.cat_id);
-    
+
       return (
-        <section 
+        <section
           key={cat.cat_uuid}
-          className={DashboardCss['cat-row']} 
+          className={DashboardCss['cat-row']}
         >
-          <div 
+          <div
             className={DashboardCss['cat-color-circle']}
-            style={ { backgroundColor: Dashboard.cat_colours[index]} } 
+            style={ { backgroundColor: Dashboard.cat_colours[index]} }
           />
-          <section 
+          <section
             className={DashboardCss['cat-row__text']}
           >
-            <div 
-              className={this.state.filter_id === cat.cat_id ? DashboardCss['cat-row__name'] : HelpersCss['cur-p']} 
+            <div
+              className={this.state.filter_id === cat.cat_id ? DashboardCss['cat-row__name'] : HelpersCss['cur-p']}
               onClick={() => this.filterSpendingItems(cat.cat_id)}>{cat.cat_name}</div>
             <div className={DashboardCss['cat-row__price']}>
               {this.state.user_currency}{roundNumber(catTotal)}</div>
@@ -148,24 +148,24 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       )
     });
 
-    const add_category = (no_categories: boolean = true) => { 
+    const add_category = (no_categories: boolean = true) => {
       return (
-        <form 
+        <form
           className={HelpersCss['dis-f']}
           onSubmit={(e) => this._handleAddCategory(e)}>
-          {no_categories && "You have no categories 😢"} 
-          <input 
-            type="text" 
+          {no_categories && "You have no categories 😢"}
+          <input
+            type="text"
             name="new_category"
             className={DashboardCss['cat-form__input']}
             placeholder="e.g. Chocolate fund"
-            value={this.state.new_category} 
-            onChange={e => this._handleChange(e, false)} 
+            value={this.state.new_category}
+            onChange={e => this._handleChange(e, false)}
             required
           />
-          <button 
+          <button
             type="submit"
-            className={DashboardCss['cat-form__submit']}> 
+            className={DashboardCss['cat-form__submit']}>
             Add category
           </button>
         </form>
@@ -189,7 +189,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       404: add_category(),
       401: <div>Looks like you are somewhere you shouldn't be 🚫</div>
     }
-    
+
     return responses[code];
   }
 
@@ -197,8 +197,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const { categories } = this.props.dashboard;
     const { item_name, create_dttm, item_price } = this.state.spending_item;
     const category_list = categories.code === 200 && categories.data.map((cat: any) => (
-        <option 
-          key={cat.cat_id} 
+        <option
+          key={cat.cat_id}
           value={cat.cat_id}>
             {cat.cat_name}
         </option>
@@ -209,18 +209,18 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       <form className={DashboardCss['spending-form']} onSubmit={(e: any) => this._addSpendingItem(e)}>
         <section className={`${HelpersCss['w-70']} dis-f`}>
           <div className={DashboardCss['spending-form__text']}>
-            <label 
+            <label
               htmlFor="cat_id"
               className={DashboardCss['spending-form__text_box']}
             >Category:</label>
-            <label 
+            <label
               htmlFor="item_name"
               className={DashboardCss['spending-form__text_box']}
-            >Description:</label>  
-            <label 
+            >Description:</label>
+            <label
               htmlFor="create_dttm"
               className={DashboardCss['spending-form__text_box']}
-            >Date:</label>  
+            >Date:</label>
           </div>
           <div className={DashboardCss['spending-form__inputs']}>
             <select
@@ -231,7 +231,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               required>
               <option value="0" disabled>--</option>
               {category_list}
-            </select> 
+            </select>
             <input
               type="text"
               name="item_name"
@@ -240,7 +240,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               value={item_name}
               onChange={e => this._handleChange(e)}
               required
-            />   
+            />
             <input
               type="date"
               name="create_dttm"
@@ -248,8 +248,8 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
               className={Inputs['input-spending-form']}
               onChange={e => this._handleChange(e)}
               value={create_dttm}
-            />                      
-          </div>               
+            />
+          </div>
         </section>
         <section className={HelpersCss['w-30']}>
           <input
@@ -260,7 +260,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             value={item_price}
             onChange={e => this._handleChange(e)}
             required
-          />                          
+          />
           <button type="submit" className={Buttons['primary-btn']}>Add Item</button>
         </section>
       </form>
@@ -274,12 +274,12 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
           height={500}
           width={400}
           data={this._graph_data()} options={Dashboard.graph_options} />
-        <h2 
+        <h2
           className={DashboardCss['spending-total']}>
           {this.state.user_currency}
           {Dashboard._calculateSpendingTotal(this.props.dashboard.spending_items.data)}
         </h2>
-      </section>      
+      </section>
     );
   }
 
@@ -289,14 +289,14 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         <div>
           <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm, 👋</h1>
           <p>
-            Trimm is a site that makes it easy to keep track of how much you spend every month. 
+            Trimm is a site that makes it easy to keep track of how much you spend every month.
             This is a very very early version of the site and I'm really open to any feedback you have,
             so if you spot any bugs or have anything nice to say, click on the message icon on the bottom right of the screen and type away.
           </p>
           Have fun :)<br/>
           <em>Richard</em>
         </div>
-        <div 
+        <div
           className={DashboardCss['welcome-close']}
           onClick={() => this._addWelcomeCookie()}>
           &times;
@@ -307,40 +307,40 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
   render(): JSX.Element {
     const spendingItems = this.props.dashboard.spending_items;
-  
+
     if (this.state.data_loaded) {
       return (
         <Layout>
           {this.renderWelcomeMessage()}
           <header className={DashboardCss['month-change']}>
-            <div 
-              className={DashboardCss['month-change__btn']} 
+            <div
+              className={DashboardCss['month-change__btn']}
               onClick={() => this._changeMonth()}
             >
               <img
                 className={HelpersCss['trsf-180deg']}
                 src={chevron}
                 alt="Next month"
-              />             
-              {monthToText(this.state.date.month - 1)}             
+              />
+              {monthToText(this.state.date.month - 1)}
             </div>
             <h2 className={DashboardCss['month-header']}>{monthToText(this.state.date.month)} {this.state.date.year}</h2>
-            <div 
-              className={DashboardCss['month-change__btn']} 
+            <div
+              className={DashboardCss['month-change__btn']}
               onClick={() => this._changeMonth(true)}
             >
               {monthToText(this.state.date.month + 1)}
               <img
                 src={chevron}
                 alt="Next month"
-              />              
+              />
             </div>
           </header>
           <section className={DashboardCss.container}>
             <div className="w-50">
               {this.renderSpendingForm()}
-              <SpendingItems 
-                code={spendingItems.code} 
+              <SpendingItems
+                code={spendingItems.code}
                 data={spendingItems.data}
                 dateRange={this.state.date}
                 currency={this.state.user_currency}
@@ -349,14 +349,14 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             <div className={DashboardCss['cat-section']}>
               {this.renderCategoryGraph()}
               {this.renderCategories()}
-            </div>            
+            </div>
           </section>
         </Layout>
-      )      
+      )
     }
     return Dashboard._loadingSVG()
   }
-  
+
   private static _calculateSpendingTotal(data: any): number {
     let total = 0;
     (typeof (data) !== "undefined") && data.map((item: any) => {
@@ -419,9 +419,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       await this.props.postSpendingItem(this.state.spending_item);
       if (this.props.dashboard.new_spending_item.code === 201) {
         await this.updateSpendingSection();
-        gaEvent('Add Item - Success'); 
+        gaEvent('Add Item - Success');
       } else {
-        gaEvent('Add Item - Error'); 
+        gaEvent('Add Item - Error');
         console.error('something has gone wrong'); // TODO change this at some point
       }
       this.setState({ spending_item: this.default_spending_item });
@@ -498,13 +498,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     if (!cat_has_total) {
       gaEvent('Delete Category - Success');
       await this.props.deleteCategory(cat_uuid);
-      await this.props.getCategories();      
+      await this.props.getCategories();
     } else {
       gaEvent('Delete Category - Error');
       alert('This category is in use');
     }
-  
-  };  
+
+  };
 
   private _calculateCatTotal(cat_id: number): number {
     const { cat_totals } = this.props.dashboard;
@@ -529,14 +529,14 @@ function mapStateToProps(state: IReducers) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ 
-    getCategories, 
-    getSpendingItems, 
-    getUserInfo, 
-    postSpendingItem, 
-    postNewCategory, 
-    deleteCategory, 
-    updateCategoriesTotal, 
+  return bindActionCreators({
+    getCategories,
+    getSpendingItems,
+    getUserInfo,
+    postSpendingItem,
+    postNewCategory,
+    deleteCategory,
+    updateCategoriesTotal,
     filterSpendingItems }, dispatch);
 }
 

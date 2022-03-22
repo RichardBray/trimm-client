@@ -4,7 +4,6 @@ import { Dispatch } from 'redux';
 import { IAction } from "./interfaces";
 import { Component } from 'react';
 
-var gtag:any;
 
 
 window.dataLayer = window.dataLayer || [];
@@ -24,7 +23,7 @@ export function gaEvent(name: string): void {
 
 export class PageHandler extends Component<{}, {}> {
   constructor(props: {}) {
-    super(props);  
+    super(props);
     window.Intercom("update");
   };
 
@@ -55,17 +54,17 @@ export class Http {
 
   post(url: string, action: string, data: any) {
     this.url = url;
-    this.action = action;  
-    this.data = data;    
+    this.action = action;
+    this.data = data;
     return this._fetchMethod("POST");
   }
 
-  
+
 
   delete(url: string, action: string, data: any) {
     this.url = url;
     this.action = action;
-    this.data = data;      
+    this.data = data;
     return this._fetchMethod("DELETE");
   }
 
@@ -75,7 +74,7 @@ export class Http {
         .then(response => response.json())
         .then(payload => {
           dispatch({ type: this.action, payload })
-        });    
+        });
   }
 
   private _fetchHeader(method: string): RequestInit {
@@ -89,7 +88,7 @@ export class Http {
         Accept: "application/json",
         "Content-Type": "application/json"
       }
-    }    
+    }
   }
 }
 

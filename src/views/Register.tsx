@@ -9,9 +9,9 @@ import { IRegister, IReducers, IAction } from "../utils/interfaces";
 import { postRegister } from "../actions/RegisterActions";
 
 // Styles
-import Inputs from "~/assets/styles/components/Inputs";
-import Buttons from "~/assets/styles/components/Buttons";
-import LoginCss from "~/assets/styles/views/Login";
+import Inputs from "~/assets/styles/components/Inputs.module.css";
+import Buttons from "~/assets/styles/components/Buttons.module.css";
+import LoginCss from "~/assets/styles/views/Login.module.css";
 
 // Images
 import logo from "~/assets/img/trimm-logo.svg";
@@ -47,19 +47,19 @@ class Register extends PageHandler<{}, IRegister> {
         <p className={LoginCss['right-text']}>
           {value}
         </p>
-      </div>);	    
+      </div>);
   }
 
   render(): JSX.Element {
     return (
       <section className={LoginCss.container}>
         <div className={LoginCss['left-column']}>
-          <form 
+          <form
             onSubmit={e => this.handleSubmit(e)}
             className={`dis-f fd-c ${LoginCss['left-column-form']}`}>
             <div className={LoginCss['logo-pos']}>
-              <img 
-                src={logo} 
+              <img
+                src={logo}
                 alt="Trimm logo"
                 className={LoginCss['logo-width']} />
             </div>
@@ -90,21 +90,21 @@ class Register extends PageHandler<{}, IRegister> {
               onChange={e => this.handleChange(e)}
               required
             />
-            <button 
+            <button
               type="submit"
-              className={Buttons['primary-btn']}  
+              className={Buttons['primary-btn']}
               value="Register">
                 Register
               </button>
           </form>
           <div className={LoginCss['register-link']}>
             <Link to="/login">Login</Link>
-          </div>          
+          </div>
         </div>
         {this.renderErrors()}
       </section>
     )
-  }  
+  }
 }
 
 function mapStateToProps(state: IReducers) {

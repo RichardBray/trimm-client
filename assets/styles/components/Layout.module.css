@@ -2,7 +2,7 @@
 
 
 .main-header {
-  composes: bgc-primary h-6rem from "../helpers.css";
+  composes: bgc-primary h-6rem from "../helpers.module.css";
 }
 
 .main-header__logo {
@@ -10,7 +10,7 @@
 }
 
 .header-link {
-  composes: cur-p c-white from "../helpers.css";
+  composes: cur-p c-white from "../helpers.module.css";
   text-decoration: none;
   margin-right: .5rem;
 }
@@ -22,18 +22,18 @@
 }
 
 .container {
-  composes: mx-a from "../helpers.css";
+  composes: mx-a from "../helpers.module.css";
   width: var(--desktopWidth);
 }
 
 .header-container {
   composes: container;
-  composes: dis-f jc-sb c-white h-6rem ai-c from "../helpers.css";
+  composes: dis-f jc-sb c-white h-6rem ai-c from "../helpers.module.css";
 }
 
 .sticky-footer {
   composes: container;
-  composes: flx-1 from "../helpers.css";
+  composes: flx-1 from "../helpers.module.css";
 }
 
 .footer {

@@ -11,24 +11,24 @@
 }
 
 .input {
-  composes: fz-1-4rem br-default mb-2rem p-1rem from "../helpers.css";
+  composes: fz-1-4rem br-default mb-2rem p-1rem from "../helpers.module.css";
   composes: base-input;
 }
 
 .input-small {
   composes: base-input;
-  composes: w-100 br-default fz-1rem from "../helpers.css";
+  composes: w-100 br-default fz-1rem from "../helpers.module.css";
   height: 33px;
   padding: .4rem 1rem;
 }
 
 .input-spending-form {
   composes: input-small;
-  composes: mb-05rem bgc-white from "../helpers.css";
+  composes: mb-05rem bgc-white from "../helpers.module.css";
 }
 
 .input-spending-form-price {
   composes: base-input;
-  composes: mb-1rem fz-1-4rem bgc-white w-100 p-1rem from "../helpers.css";
+  composes: mb-1rem fz-1-4rem bgc-white w-100 p-1rem from "../helpers.module.css";
   height: 3.2rem;
 }

@@ -1,12 +1,12 @@
 /* Settings */
 
 .container {
-  composes: bgc-white mx-a p-1rem from "../helpers.css";
+  composes: bgc-white mx-a p-1rem from "../helpers.module.css";
   max-width: 50rem;
 }
 
 .button-cotainer {
-  composes: dis-f jc-sa mb-1rem from "../helpers.css";
+  composes: dis-f jc-sa mb-1rem from "../helpers.module.css";
   margin-top: 1rem;
 }
 
