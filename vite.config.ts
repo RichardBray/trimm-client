@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import eslintPlugin from 'vite-plugin-eslint';
+
 import path from "node:path";
 
 export default defineConfig({
@@ -8,5 +10,5 @@ export default defineConfig({
         '~' : path.resolve(__dirname,)
       },
     },
-  plugins: [react()]
+  plugins: [react(), eslintPlugin()]
 });
