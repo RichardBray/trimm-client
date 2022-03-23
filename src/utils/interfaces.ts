@@ -1,84 +1,81 @@
-
-
 export interface ILogin {
-	[email: string]: string;
-	password: string;
+  [key: string]: string;
+  password: string;
 }
 
 export interface IRegister extends ILogin {
-	username: string;
+  username: string;
 }
 
 export interface ILoginView {
-	login: ILoginResponse;
-	checkLoginDetails: (state: ILogin) => {};
+  login: ILoginResponse;
+  checkLoginDetails: (state: ILogin) => Record<string, unknown>;
 }
 
 export interface ILoginResponse {
-	user_name: string;
-	user_email: string;
-	user_currency: string;
-	code: number;
-	message?: string;
+  refreshToken: string;
+  accessToken: string;
 }
 
 export interface IDashvoardView {
-	dashboard: any;  // TODO
-	getCategories: () => {};
-	getSpendingItems: (date: IDashboardDate) => {};
-	getUserInfo: () => {};
-	postSpendingItem: (data: any) => {};
-	deleteCategory: (data: string) => {};
-	postNewCategory: (data: string) => {};
-	filterSpendingItems: (data: any) => {};
-	updateCategoriesTotal: any;
+  dashboard: any; // TODO
+  getCategories: () => Record<string, unknown>;
+  getSpendingItems: (date: IDashboardDate) => Record<string, unknown>;
+  getUserInfo: () => Record<string, unknown>;
+  postSpendingItem: (data: any) => Record<string, unknown>;
+  deleteCategory: (data: string) => Record<string, unknown>;
+  postNewCategory: (data: string) => Record<string, unknown>;
+  filterSpendingItems: (data: any) => Record<string, unknown>;
+  updateCategoriesTotal: any;
 }
 
 export interface IDashboardState {
-	data_loaded: boolean | any;
-	date: IDashboardDate;
-	spending_item: any;
-	new_category: string;
-	user_currency: string;
-	categories: {};
-	show_welcome: boolean;
-	filter_id: number;
+  data_loaded: boolean | any;
+  date: IDashboardDate;
+  spending_item: any;
+  new_category: string;
+  user_currency: string;
+  categories: Record<string, unknown>;
+  show_welcome: boolean;
+  filter_id: number;
 }
 
 export interface ISpendingItem {
-	item_name: string;
-	item_price: number;
-	create_dttm: string;
-	cat_id: string;
+  [key: string]: string | number;
+  item_name: string;
+  item_price: number;
+  create_dttm: string;
+  cat_id: string;
 }
 
 export interface IDashboardDate {
-	month: number;
-	year: number;
+  month: number;
+  year: number;
 }
 
-export interface ISpendingDate {
-	start_date: string;
-	end_date: string;
-}
+// export interface ISpendingDate {
+//   [key: string]: string;
+//   start_date: string;
+//   end_date: string;
+// }
 
 export interface IAction {
-	type: string;
-	payload: any | null;
+  type: string;
+  payload: any | null;
 }
 
 export interface IReducers {
-	login: ILoginResponse;
-	dashboard: any;
-	register: any;
-	settings: any;
+  login: ILoginResponse;
+  dashboard: any;
+  register: any;
+  settings: any;
 }
 
 export interface ILayout {
-	children: JSX.Element[];
-	getLogout: () => {};
+  children: JSX.Element[];
+  getLogout: () => Record<string, unknown>;
 }
 
 export interface IServerResponses {
-	[key: number]: JSX.Element[] | JSX.Element | any;
+  [key: number]: JSX.Element[] | JSX.Element | any;
 }

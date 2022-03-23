@@ -3,3 +3,4 @@ bundle.js
 build
 npm-debug.log
 .DS_Store
+.env

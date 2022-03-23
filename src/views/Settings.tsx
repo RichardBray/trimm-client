@@ -6,7 +6,7 @@ import { Navigate } from 'react-router';
 
 import { getUserInfo,} from "../actions/DashboardActions";
 import { updateUserCurency } from "../actions/SettingsActions";
-import { isEmpty } from "../utils";
+import { isObjEmpty } from "../utils";
 
 import { IReducers, IAction } from "../utils/interfaces";
 
@@ -24,7 +24,7 @@ class Settings extends Component<any, {}> {
   }
 
   async componentDidMount() {
-    if (isEmpty(this.props.user_info)) await this.props.getUserInfo();
+    if (isObjEmpty(this.props.user_info)) await this.props.getUserInfo();
     this.setState({ user_currency: this.props.user_info.user_currency})
   }
 

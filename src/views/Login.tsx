@@ -18,30 +18,30 @@ import logo from '@assets/img/trimm-logo.svg';
 
 class Login extends Component<ILoginView, ILogin> {
   state: ILogin = {
-    email: '',
+    username: '',
     password: '',
   };
 
-  handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
+  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     this.props.checkLoginDetails(this.state);
   }
 
-  handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+  handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  renderError(): JSX.Element | void {
-    const { code, message } = this.props.login;
-    let value: JSX.Element | string = 'Fill in your username and password';
-    let formError: boolean = false;
+  renderError() {
+    const { accessToken } = this.props.login;
+    let value ='Fill in your username and password';
+    let formError = false;
 
-    if (code === 200) {
+    if (!accessToken) {
       gaEvent('User Login - Success');
-      value = <Navigate to="/dashboard" />;
-    } else if (code === 400) {
+      <Navigate to="/dashboard" />;
+    } else {
       gaEvent('User Login - Error');
-      value = message as string;
+      value = 'Invalid username or password';
       formError = true;
     }
     return (
@@ -51,7 +51,7 @@ class Login extends Component<ILoginView, ILogin> {
     );
   }
 
-  render(): JSX.Element {
+  render() {
     return (
       <section className={LoginCss.container}>
         <div className={LoginCss['left-column']}>
@@ -61,8 +61,8 @@ class Login extends Component<ILoginView, ILogin> {
             </div>
             <input
               type="email"
-              name="email"
-              value={this.state.email}
+              name="username"
+              value={this.state.username}
               className={Inputs.input}
               placeholder="Email Address"
               onChange={(e) => this.handleChange(e)}

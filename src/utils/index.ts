@@ -1,8 +1,4 @@
-/* global fetch */
-import { Dispatch } from 'redux';
-
-import { IAction } from './interfaces';
-import { Component } from 'react';
+// import { Component } from 'react';
 
 window.dataLayer = window.dataLayer || [];
 function gtag() {
@@ -21,74 +17,16 @@ export function gaEvent(name: string): void {
   });
 }
 
-export class PageHandler extends Component<{}, {}> {
-  constructor(props: {}) {
-    super(props);
-    window.Intercom('update');
-  }
+// export class PageHandler extends Component<{}, {}> {
+//   constructor(props: {}) {
+//     super(props);
+//     window.Intercom('update');
+//   }
 
-  handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-}
-
-export class Http {
-  data: any = false;
-  url: string = '';
-  action: string = '';
-
-  get(url: string, action: string) {
-    this.url = url;
-    this.action = action;
-    this.data = false;
-
-    return this._fetchMethod('GET');
-  }
-
-  put(url: string, action: string, data: any) {
-    this.url = url;
-    this.action = action;
-    this.data = data;
-    return this._fetchMethod('PUT');
-  }
-
-  post(url: string, action: string, data: any) {
-    this.url = url;
-    this.action = action;
-    this.data = data;
-    return this._fetchMethod('POST');
-  }
-
-  delete(url: string, action: string, data: any) {
-    this.url = url;
-    this.action = action;
-    this.data = data;
-    return this._fetchMethod('DELETE');
-  }
-
-  private _fetchMethod(method: string) {
-    return (dispatch: Dispatch<IAction>) =>
-      fetch(this.url, this._fetchHeader(method))
-        .then((response) => response.json())
-        .then((payload) => {
-          dispatch({ type: this.action, payload });
-        });
-  }
-
-  private _fetchHeader(method: string): RequestInit {
-    const body = JSON.stringify(this.data);
-    const fetchBody = this.data && { body };
-    return {
-      method,
-      credentials: 'include',
-      ...fetchBody,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
-  }
-}
+//   handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+//     this.setState({ [e.target.name]: e.target.value });
+//   }
+// }
 
 /**
  * Adds `0` to month if it has single number
@@ -137,9 +75,9 @@ export function monthToText(month: string | number): string {
  * Checks if obkect is empty
  * stolen from `https://coderwall.com/p/_g3x9q/how-to-check-if-javascript-object-is-empty`
  */
-export function isEmpty(obj: Object): boolean {
+export function isObjEmpty(obj: Record<string, unknown>): boolean {
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) return false;
+    if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
   }
   return true;
 }
