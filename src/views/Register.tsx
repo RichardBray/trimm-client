@@ -9,12 +9,12 @@ import { IRegister, IReducers, IAction } from "../utils/interfaces";
 import { postRegister } from "../actions/RegisterActions";
 
 // Styles
-import Inputs from "~/assets/styles/components/Inputs.module.css";
-import Buttons from "~/assets/styles/components/Buttons.module.css";
-import LoginCss from "~/assets/styles/views/Login.module.css";
+import Inputs from "@assets/styles/components/Inputs.module.css";
+import Buttons from "@assets/styles/components/Buttons.module.css";
+import LoginCss from "@assets/styles/views/Login.module.css";
 
 // Images
-import logo from "~/assets/img/trimm-logo.svg";
+import logo from "@assets/img/trimm-logo.svg";
 
 
 class Register extends PageHandler<{}, IRegister> {

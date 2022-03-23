@@ -27,15 +27,15 @@ import SpendingItems from '../components/SpendingItems';
 import { modifyMonth, monthToText, gaEvent, roundNumber } from '../utils';
 
 // Styles
-import Inputs from '~/assets/styles/components/Inputs.module.css';
-import Buttons from '~/assets/styles/components/Buttons.module.css';
-import DashboardCss from '~/assets/styles/views/Dashboard.module.css';
-import HelpersCss from '~/assets/styles/helpers.module.css';
-import GlobalCss from '~/assets/styles/global.module.css';
+import Inputs from '@assets/styles/components/Inputs.module.css';
+import Buttons from '@assets/styles/components/Buttons.module.css';
+import DashboardCss from '@assets/styles/views/Dashboard.module.css';
+import HelpersCss from '@assets/styles/helpers.module.css';
+import GlobalCss from '@assets/styles/global.module.css';
 
 // Images
-import deleteIcon from '~/assets/img/delete-icon.svg';
-import chevron from '~/assets/img/chevron.svg';
+import deleteIcon from '@assets/img/delete-icon.svg';
+import chevron from '@assets/img/chevron.svg';
 
 class Dashboard extends Component<IDashvoardView, IDashboardState> {
   date = new Date();

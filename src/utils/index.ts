@@ -1,13 +1,13 @@
 /* global fetch */
 import { Dispatch } from 'redux';
 
-import { IAction } from "./interfaces";
+import { IAction } from './interfaces';
 import { Component } from 'react';
 
-
-
 window.dataLayer = window.dataLayer || [];
-function gtag() { dataLayer.push(arguments); }
+function gtag() {
+  dataLayer.push(arguments);
+}
 
 export function gaInit(): void {
   gtag('js', new Date());
@@ -15,17 +15,17 @@ export function gaInit(): void {
 }
 
 export function gaEvent(name: string): void {
-  gtag("event", name, {
-    "event_category": "Button Click",
-    "event_label": "Trimm App"
+  gtag('event', name, {
+    event_category: 'Button Click',
+    event_label: 'Trimm App',
   });
 }
 
 export class PageHandler extends Component<{}, {}> {
   constructor(props: {}) {
     super(props);
-    window.Intercom("update");
-  };
+    window.Intercom('update');
+  }
 
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({ [e.target.name]: e.target.value });
@@ -34,46 +34,44 @@ export class PageHandler extends Component<{}, {}> {
 
 export class Http {
   data: any = false;
-  url: string = "";
-  action: string = "";
+  url: string = '';
+  action: string = '';
 
   get(url: string, action: string) {
     this.url = url;
     this.action = action;
     this.data = false;
 
-    return this._fetchMethod("GET");
+    return this._fetchMethod('GET');
   }
 
   put(url: string, action: string, data: any) {
     this.url = url;
     this.action = action;
     this.data = data;
-    return this._fetchMethod("PUT");
+    return this._fetchMethod('PUT');
   }
 
   post(url: string, action: string, data: any) {
     this.url = url;
     this.action = action;
     this.data = data;
-    return this._fetchMethod("POST");
+    return this._fetchMethod('POST');
   }
-
-
 
   delete(url: string, action: string, data: any) {
     this.url = url;
     this.action = action;
     this.data = data;
-    return this._fetchMethod("DELETE");
+    return this._fetchMethod('DELETE');
   }
 
   private _fetchMethod(method: string) {
     return (dispatch: Dispatch<IAction>) =>
       fetch(this.url, this._fetchHeader(method))
-        .then(response => response.json())
-        .then(payload => {
-          dispatch({ type: this.action, payload })
+        .then((response) => response.json())
+        .then((payload) => {
+          dispatch({ type: this.action, payload });
         });
   }
 
@@ -82,13 +80,13 @@ export class Http {
     const fetchBody = this.data && { body };
     return {
       method,
-      credentials: "include",
+      credentials: 'include',
       ...fetchBody,
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    }
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
   }
 }
 
@@ -98,7 +96,7 @@ export class Http {
  * @example modifyMonth(11) // 11
  */
 export function modifyMonth(month: number): string {
-  return (`0${month}`).slice(-2);
+  return `0${month}`.slice(-2);
 }
 
 /**
@@ -106,22 +104,33 @@ export function modifyMonth(month: number): string {
  * @example roundNumber(2.324543) // 2.34
  */
 export function roundNumber(num: number): number {
-  return Math.round(num * 100) / 100
+  return Math.round(num * 100) / 100;
 }
 
 export function monthToText(month: string | number): string {
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   if (month === 13) {
-    return monthNames[0]
+    return monthNames[0];
   }
 
   if (month === 0) {
-    return monthNames[11]
+    return monthNames[11];
   }
-  return monthNames[+month -1];
+  return monthNames[+month - 1];
 }
 
 /**
@@ -129,9 +138,8 @@ export function monthToText(month: string | number): string {
  * stolen from `https://coderwall.com/p/_g3x9q/how-to-check-if-javascript-object-is-empty`
  */
 export function isEmpty(obj: Object): boolean {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
   }
   return true;
 }

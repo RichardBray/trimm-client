@@ -8,10 +8,10 @@ import { getLogout } from "../actions/LoginActions";
 import ErrorBoundary from "../components/ErrorBoundary";
 
 // Styles
-import LayoutCss from "~/assets/styles/components/Layout.module.css";
+import LayoutCss from "@assets/styles/components/Layout.module.css";
 
 // Images
-import logo from "~/assets/img/logo-white.svg";
+import logo from "@assets/img/logo-white.svg";
 
 class Layout extends Component<ILayout, {}> {
 

@@ -11,10 +11,10 @@ import { isEmpty } from "../utils";
 import { IReducers, IAction } from "../utils/interfaces";
 
 // Styles
-import SettingsCss from "~/assets/styles/views/Settings.module.css";
-import Inputs from "~/assets/styles/components/Inputs.module.css";
-import HelpersCss from "~/assets/styles/helpers.module.css";
-import Buttons from "~/assets/styles/components/Buttons.module.css";
+import SettingsCss from "@assets/styles/views/Settings.module.css";
+import Inputs from "@assets/styles/components/Inputs.module.css";
+import HelpersCss from "@assets/styles/helpers.module.css";
+import Buttons from "@assets/styles/components/Buttons.module.css";
 
 class Settings extends Component<any, {}> {
 

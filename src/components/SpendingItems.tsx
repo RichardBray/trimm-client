@@ -7,12 +7,12 @@ import { deleteSpendingItem, getSpendingItems, updateCategoriesTotal } from "../
 import { IServerResponses, IAction } from "../utils/interfaces";
 
 // Styles
-import SpendingItemCss from "~/assets/styles/components/SpendingItems.module.css";
-import HelpersCss from "~/assets/styles/helpers.module.css";
-import GlobalCss from "~/assets/styles/global.module.css";
+import SpendingItemCss from "@assets/styles/components/SpendingItems.module.css";
+import HelpersCss from "@assets/styles/helpers.module.css";
+import GlobalCss from "@assets/styles/global.module.css";
 
 // Images
-import deleteIcon from "~/assets/img/delete-icon.svg";
+import deleteIcon from "@assets/img/delete-icon.svg";
 
 
 class SpendingItems extends Component<any, {}> {

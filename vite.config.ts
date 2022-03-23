@@ -7,8 +7,9 @@ import path from "node:path";
 export default defineConfig({
   resolve:{
       alias:{
-        '~' : path.resolve(__dirname,)
+        '@assets' : path.resolve(__dirname, './assets'),
       },
     },
-  plugins: [react(), eslintPlugin()]
+  // plugins: [react(), eslintPlugin()]
+  plugins: [react()]
 });
