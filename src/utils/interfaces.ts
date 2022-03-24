@@ -1,15 +1,8 @@
-export interface ILogin {
+
+export interface IRegister {
   [key: string]: string;
   password: string;
-}
-
-export interface IRegister extends ILogin {
   username: string;
-}
-
-export interface ILoginView {
-  login: ILoginResponse;
-  checkLoginDetails: (state: ILogin) => Record<string, unknown>;
 }
 
 export interface ILoginResponse {

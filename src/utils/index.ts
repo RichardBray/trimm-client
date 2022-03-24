@@ -1,4 +1,4 @@
-// import { Component } from 'react';
+
 
 window.dataLayer = window.dataLayer || [];
 function gtag() {
