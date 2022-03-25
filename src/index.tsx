@@ -1,12 +1,9 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
 import * as Sentry from '@sentry/browser';
+import { createClient, Provider, dedupExchange, fetchExchange } from 'urql';
+import { cacheExchange } from '@urql/exchange-graphcache';
 
-import reducers from './reducers';
 import Login from './views/Login';
 import Dashboard from './views/Dashboard';
 import Register from './views/Register';
@@ -15,19 +12,25 @@ import Settings from './views/Settings';
 import { gaInit } from './utils';
 import '@assets/styles/global.module.css';
 
-const useDevTools = composeWithDevTools(applyMiddleware(thunk));
-const middleware = process.env.NODE_ENV === 'production' ? applyMiddleware(thunk) : useDevTools;
+const API_URL = import.meta.env.VITE_API_URL as string;
+const SENTRY_ID = import.meta.env.VITE_SENTRY_ID as string;
+const ENV = import.meta.env.VITE_ENV as string;
 
 const ROOT = document.querySelector('.react-root');
-const store = createStore(reducers, middleware);
-
-Sentry.init({
-  dsn: 'https://63e1cfd8630c4031b9f05d6e2f9937dc@sentry.io/1340368',
+const client = createClient({
+  url: `${API_URL}/graphql`,
+  exchanges: [dedupExchange, cacheExchange({}), fetchExchange],
 });
-gaInit();
+
+if (ENV === 'production') {
+  Sentry.init({
+    dsn: SENTRY_ID,
+  });
+  gaInit();
+}
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider value={client}>
     <BrowserRouter>
       <Routes>
         <Route path="/settings" element={<Settings />} />
@@ -38,5 +41,5 @@ ReactDOM.render(
       </Routes>
     </BrowserRouter>
   </Provider>,
-  ROOT,
+  ROOT
 );

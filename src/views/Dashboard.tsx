@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Doughnut } from 'react-chartjs-2';
+
 import {
   getCategories,
   getSpendingItems,
@@ -58,7 +59,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     responsive: false,
   };
 
-  static cat_colours: Array<string> = [
+  static catColours: string[] = [
     // 10 Colours
     '#8DE1FE',
     '#897ACC',
@@ -115,9 +116,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   }
 
   filterSpendingItems(catID: number) {
-    let filter_id: number;
-
-    filter_id = this.state.filter_id === catID ? 0 : catID;
+    const filter_id  = this.state.filter_id === catID ? 0 : catID;
     this.setState({ filter_id });
     this.props.filterSpendingItems(filter_id);
   }
@@ -130,13 +129,13 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const render_categories =
       typeof data !== 'undefined' &&
       data.map((cat: any, index: number) => {
-        let catTotal = this._calculateCatTotal(cat.cat_id);
+        const catTotal = this._calculateCatTotal(cat.cat_id);
 
         return (
           <section key={cat.cat_uuid} className={DashboardCss['cat-row']}>
             <div
               className={DashboardCss['cat-color-circle']}
-              style={{ backgroundColor: Dashboard.cat_colours[index] }}
+              style={{ backgroundColor: Dashboard.catColours[index] }}
             />
             <section className={DashboardCss['cat-row__text']}>
               <div
@@ -160,7 +159,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         );
       });
 
-    const add_category = (no_categories: boolean = true) => {
+    const add_category = (no_categories = true) => {
       return (
         <form className={HelpersCss['dis-f']} onSubmit={(e) => this._handleAddCategory(e)}>
           {no_categories && 'You have no categories 😢'}
@@ -197,7 +196,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     const responses: IServerResponses = {
       200: categoriesAndNewForm(),
       404: add_category(),
-      401: <div>Looks like you are somewhere you shouldn't be 🚫</div>,
+      401: <div>Looks like you are somewhere you shouldn&apos;t be 🚫</div>,
     };
 
     return responses[code];
@@ -415,7 +414,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       datasets: [
         {
           data: graph_totals,
-          backgroundColor: Dashboard.cat_colours,
+          backgroundColor: Dashboard.catColours,
           borderColor: '#f8f8f8',
         },
       ],
@@ -445,7 +444,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
   }
 
-  private _handleChange(e: any, spending_item: boolean = true): void {
+  private _handleChange(e: any, spending_item = true): void {
     const spendingState: any = {
       spending_item: {
         ...this.state.spending_item,
@@ -461,7 +460,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    * for the following month.
    * @param next If it's next or prev
    */
-  private _changeMonth(next: boolean = false): void {
+  private _changeMonth(next = false): void {
     const { month, year } = this.state.date;
     const chosenDate = new Date(`${year}-${month}-01`);
     const monthChange = next ? chosenDate.getMonth() + 1 : chosenDate.getMonth() - 1;
@@ -473,7 +472,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     };
 
     const stateDay = this.state.spending_item.create_dttm.split('-')[2];
-    const newDate: string = `${newStateDate.year}-${modifyMonth(newStateDate.month)}-${stateDay}`;
+    const newDate = `${newStateDate.year}-${modifyMonth(newStateDate.month)}-${stateDay}`;
 
     this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });

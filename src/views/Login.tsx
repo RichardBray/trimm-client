@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { gaEvent } from '../utils';
-import Http from '../services/Http';
+import Rest from '../services/Rest';
 
 // Styles
 import inputCss from '@assets/styles/components/Inputs.module.css';
@@ -88,7 +88,7 @@ class Login extends Component<LoginProps, LoginState> {
       password: this.state.password,
     };
 
-    const reponse = await Http.post('/login', {
+    const reponse = await Rest.post('/login', {
       body: JSON.stringify(data),
     });
 

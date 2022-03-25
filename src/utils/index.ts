@@ -5,7 +5,7 @@ function gtag() {
   dataLayer.push(arguments);
 }
 
-export function gaInit(): void {
+export function gaInit() {
   gtag('js', new Date());
   gtag('config', 'UA-125324369-1');
 }

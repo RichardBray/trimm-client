@@ -2,9 +2,9 @@ type ApiCallInput = {
   url: string;
   options?: RequestInit;
 };
-class Http {
+class Rest {
   static post(url: string, options?: RequestInit) {
-    return Http.#apiCall({ url, options: { ...options, method: 'POST' } });
+    return Rest.#apiCall({ url, options: { ...options, method: 'POST' } });
   }
 
   static async #apiCall(args: ApiCallInput) {
@@ -24,4 +24,4 @@ class Http {
   }
 }
 
-export default Http;
+export default Rest;
