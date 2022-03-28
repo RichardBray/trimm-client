@@ -14,7 +14,7 @@ class Graphql {
         }
       `;
 
-    const [result, _reexecuteQuery] = useQuery({
+    const [result] = useQuery({
       query,
     });
 

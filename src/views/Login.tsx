@@ -16,10 +16,6 @@ type LoginState = {
   [key: string]: string | Record<string, string | boolean>;
   username: string;
   password: string;
-  apiResponse: {
-    accessToken?: string;
-    refreshToken?: string;
-  };
   rightColumn: {
     text: string;
     errorExists: boolean;
@@ -34,7 +30,6 @@ class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
     username: '',
     password: '',
-    apiResponse: {},
     rightColumn: {
       text: 'Fill in your username and password',
       errorExists: false,
