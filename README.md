@@ -16,3 +16,4 @@ $ npm start
 - finish removing redux
 - add spinner to login button
 - add focus to all buttons and inputs
+- remove Google Analytics

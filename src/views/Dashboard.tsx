@@ -4,8 +4,8 @@ import { Doughnut } from 'react-chartjs-2';
 import { IServerResponses, ISpendingItem } from '../utils/interfaces';
 import Layout from '../components/Layout';
 import SpendingItems from '../components/SpendingItems';
-import { modifyMonth, monthToText, gaEvent, roundNumber } from '../utils';
-import GraphQL from '../services/GraphQL';
+import { modifyMonth, monthToText, roundNumber } from '../utils';
+import Graphql from '../services/Graphql';
 
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
@@ -17,6 +17,8 @@ import GlobalCss from '@assets/styles/global.module.css';
 // Images
 import deleteIcon from '@assets/img/delete-icon.svg';
 import chevron from '@assets/img/chevron.svg';
+import { ChartOptions } from 'chart.js';
+import { CombinedError } from 'urql';
 
 type DashboardState = {
   dataLoaded: boolean;
@@ -27,6 +29,7 @@ type DashboardState = {
   categories: Record<string, unknown>;
   show_welcome: boolean;
   filter_id: number;
+  apiData: Record<string, object> | undefined;
 };
 
 type DashboardDateInput = {
@@ -34,7 +37,13 @@ type DashboardDateInput = {
   year: number;
 };
 
-type DashboardProps = Record<string, unknown>;
+type DashboardProps = {
+  getCategories: {
+    data?: Record<string, object>,
+    fetching?: boolean,
+    error?: CombinedError
+  }
+};
 
 class Dashboard extends Component<DashboardProps, DashboardState> {
   date = new Date();
@@ -50,12 +59,12 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
       enabled: false,
     },
     hover: {
-      mode: null,
+      mode: 'x',
     },
     maintainAspectRatio: true,
     cutoutPercentage: 65,
     responsive: false,
-  };
+  } as ChartOptions;
 
   static catColours: string[] = [
     // 10 Colours
@@ -92,27 +101,34 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     categories: {},
     show_welcome: true,
     filter_id: 0,
+    apiData: {
+      items: [],
+      user: {
+        currency: '£',
+      },
+      categories: [],
+    },
   };
 
   /**
    * Get all the data needed for this page.
    */
-  async componentDidMount(): Promise<void> {
-    const data = await GraphQL.getCategories();
+  componentDidMount() {
+    const { data } = this.props.getCategories;
     console.log(data, 'data');
-    await this.#updateSpendingSection();
+    // await this.#updateSpendingSection();
     // await this.props.getUserInfo();
 
-    this.setState({ dataLoaded: true });
+    this.setState({ dataLoaded: true, apiData: data });
     this.setState({
-      user_currency: Dashboard.#getCurrencySymbol(this.props.dashboard.user_info.user_currency),
+      user_currency: Dashboard.#getCurrencySymbol(this.state.apiData.user.currency),
     });
   }
 
-  async #updateSpendingSection(dateRange?: DashboardDateInput): Promise<void> {
-    // await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
-    // await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
-  }
+  // async #updateSpendingSection(dateRange?: DashboardDateInput): Promise<void> {
+  //   await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
+  //   await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
+  // }
 
   /**
    * I've taken out the budget functionality for this version
@@ -163,7 +179,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             className={DashboardCss['cat-form__input']}
             placeholder="e.g. Chocolate fund"
             value={this.state.new_category}
-            onChange={(e) => this._handleChange(e, false)}
+            onChange={(e) => this.#handleChange(e, false)}
             required
           />
           <button type="submit" className={DashboardCss['cat-form__submit']}>
@@ -232,7 +248,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
               name="cat_id"
               value={this.state.spending_item.cat_id}
               className={Inputs['input-spending-form']}
-              onChange={(e) => this._handleChange(e)}
+              onChange={(e) => this.#handleChange(e)}
               required
             >
               <option value="0" disabled>
@@ -246,7 +262,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
               placeholder="Description"
               className={Inputs['input-spending-form']}
               value={item_name}
-              onChange={(e) => this._handleChange(e)}
+              onChange={(e) => this.#handleChange(e)}
               required
             />
             <input
@@ -254,7 +270,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
               name="create_dttm"
               placeholder="Date"
               className={Inputs['input-spending-form']}
-              onChange={(e) => this._handleChange(e)}
+              onChange={(e) => this.#handleChange(e)}
               value={create_dttm}
             />
           </div>
@@ -266,7 +282,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             placeholder="Price"
             className={Inputs['input-spending-form-price']}
             value={item_price}
-            onChange={(e) => this._handleChange(e)}
+            onChange={(e) => this.#handleChange(e)}
             required
           />
           <button type="submit" className={Buttons['primary-btn']}>
@@ -280,10 +296,10 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   renderCategoryGraph() {
     return (
       <section>
-        <Doughnut height={500} width={400} data={this._graph_data()} options={Dashboard.#graphOptions} />
+        <Doughnut height={500} width={400} data={this.#graph_data()} options={Dashboard.#graphOptions} />
         <h2 className={DashboardCss['spending-total']}>
           {this.state.user_currency}
-          {Dashboard.#calculateSpendingTotal(this.props.dashboard.spending_items.data)}
+          {Dashboard.#calculateSpendingTotal(this.state.apiData.items)}
         </h2>
       </section>
     );
@@ -297,10 +313,10 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm, 👋</h1>
             <p>
               Trimm is a site that makes it easy to keep track of how much you spend every month. This is a very very
-              early version of the site and I'm really open to any feedback you have, so if you spot any bugs or have
+              early version of the site and I&apos;m really open to any feedback you have, so if you spot any bugs or have
               anything nice to say, click on the message icon on the bottom right of the screen and type away.
             </p>
-            Have fun :)
+            Have fun
             <br />
             <em>Richard</em>
           </div>
@@ -320,14 +336,14 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         <Layout>
           {this.renderWelcomeMessage()}
           <header className={DashboardCss['month-change']}>
-            <div className={DashboardCss['month-change__btn']} onClick={() => this._changeMonth()}>
+            <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth()}>
               <img className={HelpersCss['trsf-180deg']} src={chevron} alt="Next month" />
               {monthToText(this.state.date.month - 1)}
             </div>
             <h2 className={DashboardCss['month-header']}>
               {monthToText(this.state.date.month)} {this.state.date.year}
             </h2>
-            <div className={DashboardCss['month-change__btn']} onClick={() => this._changeMonth(true)}>
+            <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth(true)}>
               {monthToText(this.state.date.month + 1)}
               <img src={chevron} alt="Next month" />
             </div>
@@ -353,11 +369,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     return Dashboard.#loadingSVG();
   }
 
-  static #calculateSpendingTotal(data): number {
+  static #calculateSpendingTotal(data: Record<string, number>[]): number {
     let total = 0;
 
     typeof data !== 'undefined' &&
-      data.map((item) => {
+      data.map((item: Record<string, number>) => {
         total += item.item_price;
       });
     return roundNumber(total);
@@ -398,15 +414,15 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   /**
    * Generates data for the Doughnut graph
    */
-  private _graph_data(): any {
-    let graph_labels: Array<string> = [];
-    let graph_totals: Array<number> = [];
-    const { data } = this.props.dashboard.categories;
+  #graph_data() {
+    const graph_labels: string[] = [];
+    const graph_totals: number[] = [];
+    const data = this.state.apiData.categories;
 
     typeof data !== 'undefined' &&
-      data.map((cat: any, index: number) => {
-        const catTotal = this.#calculateCatTotal(cat.cat_id);
-        graph_labels.push(cat.cat_name);
+      data.map((cat: Record<string, unknown>) => {
+        const catTotal = this.#calculateCatTotal(cat.cat_id as number);
+        graph_labels.push(cat.cat_name as string);
         graph_totals.push(catTotal);
       });
 
@@ -427,25 +443,16 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
    * send an api request, and if the return code is not
    * 201 then tell the user something went wrong.
    */
-  private async _addSpendingItem(e: any): Promise<void> {
+  private async _addSpendingItem(e: Event): Promise<void> {
     e.preventDefault();
     if (this.state.spending_item.cat_id !== '0') {
-      await this.props.postSpendingItem(this.state.spending_item);
-      if (this.props.dashboard.new_spending_item.code === 201) {
-        await this.updateSpendingSection();
-        gaEvent('Add Item - Success');
-      } else {
-        gaEvent('Add Item - Error');
-        console.error('something has gone wrong'); // TODO change this at some point
-      }
       this.setState({ spending_item: this.default_spending_item });
     } else {
-      gaEvent('Add Item - Forgot Category');
       alert('Please select a category');
     }
   }
 
-  private _handleChange(e: any, spending_item = true): void {
+  #handleChange(e: any, spending_item = true): void {
     const spendingState: any = {
       spending_item: {
         ...this.state.spending_item,
@@ -461,7 +468,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
    * for the following month.
    * @param next If it's next or prev
    */
-  private _changeMonth(next = false): void {
+  #changeMonth(next = false): void {
     const { month, year } = this.state.date;
     const chosenDate = new Date(`${year}-${month}-01`);
     const monthChange = next ? chosenDate.getMonth() + 1 : chosenDate.getMonth() - 1;
@@ -475,11 +482,10 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     const stateDay = this.state.spending_item.create_dttm.split('-')[2];
     const newDate = `${newStateDate.year}-${modifyMonth(newStateDate.month)}-${stateDay}`;
 
-    this.updateSpendingSection(newStateDate);
+    // this.updateSpendingSection(newStateDate);
     this.setState({ date: newStateDate });
     this.setState({ filter_id: 0 });
     this.setState({ spending_item: { ...this.state.spending_item, create_dttm: newDate } });
-    gaEvent('Month Changed - Sucess');
   }
 
   private async _handleAddCategory(e: any): Promise<void> {
@@ -488,15 +494,12 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     const { code, message } = this.props.dashboard.new_category;
     if (this.props.dashboard.categories.data.length <= 10) {
       if (code === 400) {
-        gaEvent('Add Category - Error');
-        alert(`${message}`);
+        // alert(`${message}`);
       } else {
         this.setState({ new_category: '' });
-        this.props.getCategories();
-        gaEvent('Add Category - Success');
+        // this.props.getCategories();
       }
     } else {
-      gaEvent('Add Category - Limit Reached');
       alert('Sorry you have hit the catgory limit');
     }
   }
@@ -510,11 +513,9 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     });
 
     if (!cat_has_total) {
-      gaEvent('Delete Category - Success');
-      await this.props.deleteCategory(cat_uuid);
-      await this.props.getCategories();
+      // await this.props.deleteCategory(cat_uuid);
+      // await this.props.getCategories();
     } else {
-      gaEvent('Delete Category - Error');
       alert('This category is in use');
     }
   }
@@ -537,6 +538,20 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   }
 }
 
+function addHooksTo(Comp: typeof Dashboard) {
+  function CompWithHooks(props: DashboardProps) {
+    const getCategories = Graphql.getCategories();
+    const data = {
+      ...props,
+      getCategories
+    }
+
+    return <Comp {...data} />;
+  }
+
+  return CompWithHooks;
+}
+
 // function mapStateToProps(state: IReducers) {
 //   return { dashboard: state.dashboard };
 // }
@@ -557,4 +572,4 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 //   );
 // }
 
-export default Dashboard;
+export default addHooksTo(Dashboard);

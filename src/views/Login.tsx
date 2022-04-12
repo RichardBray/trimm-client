@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { gaEvent } from '../utils';
 import Rest from '../services/Rest';
 
 // Styles
@@ -111,11 +110,9 @@ class Login extends Component<LoginProps, LoginState> {
     const accessTokenExists = response.accessToken;
 
     if (accessTokenExists) {
-      gaEvent('User Login - Success');
       sessionStorage.setItem('accessToken', response.accessToken as string);
       this.props.navigate?.('/dashboard');
     } else {
-      gaEvent('User Login - Error');
       const rightColumnClone = { ...this.state.rightColumn };
 
       rightColumnClone.text = 'Invalid username or password';
@@ -126,7 +123,7 @@ class Login extends Component<LoginProps, LoginState> {
   }
 }
 
-function withHooks(Comp: typeof Login) {
+function addHooksTo(Comp: typeof Login) {
   function CompWithHooks(props: LoginProps) {
     const navigate = useNavigate();
 
@@ -136,4 +133,4 @@ function withHooks(Comp: typeof Login) {
   return CompWithHooks;
 }
 
-export default withHooks(Login);
+export default addHooksTo(Login);
