@@ -3,7 +3,7 @@ import { Doughnut } from 'react-chartjs-2';
 
 import { IServerResponses, ISpendingItem } from '../utils/interfaces';
 import Layout from '../components/Layout';
-import SpendingItems from '../components/SpendingItems';
+import SpendingItems from '../components/Dashboard/SpendingItems';
 import { modifyMonth, monthToText, roundNumber } from '../utils';
 import Graphql from '../services/Graphql';
 
@@ -21,7 +21,6 @@ import { ChartOptions } from 'chart.js';
 import { CombinedError } from 'urql';
 
 type DashboardState = {
-  dataLoaded: boolean;
   date: DashboardDateInput;
   spending_item: any;
   new_category: string;
@@ -29,7 +28,6 @@ type DashboardState = {
   categories: Record<string, unknown>;
   show_welcome: boolean;
   filter_id: number;
-  apiData: Record<string, object> | undefined;
 };
 
 type DashboardDateInput = {
@@ -96,34 +94,12 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
       ...this.default_spending_item,
     },
     new_category: '',
-    dataLoaded: false,
     user_currency: '',
     categories: {},
     show_welcome: true,
     filter_id: 0,
-    apiData: {
-      items: [],
-      user: {
-        currency: '£',
-      },
-      categories: [],
-    },
   };
 
-  /**
-   * Get all the data needed for this page.
-   */
-  componentDidMount() {
-    const { data } = this.props.getCategories;
-    console.log(data, 'data');
-    // await this.#updateSpendingSection();
-    // await this.props.getUserInfo();
-
-    this.setState({ dataLoaded: true, apiData: data });
-    this.setState({
-      user_currency: Dashboard.#getCurrencySymbol(this.state.apiData.user.currency),
-    });
-  }
 
   // async #updateSpendingSection(dateRange?: DashboardDateInput): Promise<void> {
   //   await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
@@ -305,68 +281,51 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     );
   }
 
-  renderWelcomeMessage(): JSX.Element {
-    return (
-      !document.cookie.includes('welcome_clicked=') ?<div>test</div> : (
-        <section className={this.state.show_welcome ? DashboardCss['welcome-message'] : 'dis-n'}>
-          <div>
-            <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm, 👋</h1>
-            <p>
-              Trimm is a site that makes it easy to keep track of how much you spend every month. This is a very very
-              early version of the site and I&apos;m really open to any feedback you have, so if you spot any bugs or have
-              anything nice to say, click on the message icon on the bottom right of the screen and type away.
-            </p>
-            Have fun
-            <br />
-            <em>Richard</em>
-          </div>
-          <div className={DashboardCss['welcome-close']} onClick={() => this.#addWelcomeCookie()}>
-            &times;
-          </div>
-        </section>
-      )
-    );
-  }
-
   render(): JSX.Element {
+    const { data, fetching, error } = this.props.getCategories;
+    console.log(data, 'data');
+    if (error) {
+      console.log(error, 'error')
+    }
     const spendingItems = {data: [], code: 200};
 
-    if (this.state.dataLoaded) {
-      return (
-        <Layout>
-          {this.renderWelcomeMessage()}
-          <header className={DashboardCss['month-change']}>
-            <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth()}>
-              <img className={HelpersCss['trsf-180deg']} src={chevron} alt="Next month" />
-              {monthToText(this.state.date.month - 1)}
-            </div>
-            <h2 className={DashboardCss['month-header']}>
-              {monthToText(this.state.date.month)} {this.state.date.year}
-            </h2>
-            <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth(true)}>
-              {monthToText(this.state.date.month + 1)}
-              <img src={chevron} alt="Next month" />
-            </div>
-          </header>
-          <section className={DashboardCss.container}>
-            <div className="w-50">
-              {this.renderSpendingForm()}
-              <SpendingItems
-                code={spendingItems.code}
-                data={spendingItems.data}
-                dateRange={this.state.date}
-                currency={this.state.user_currency}
-              />
-            </div>
-            <div className={DashboardCss['cat-section']}>
-              {this.renderCategoryGraph()}
-              {this.renderCategories()}
-            </div>
-          </section>
-        </Layout>
-      );
+    if (fetching) {
+      return Dashboard.#loadingSVG();
     }
-    return Dashboard.#loadingSVG();
+
+    return (
+      <Layout>
+        <header className={DashboardCss['month-change']}>
+          <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth()}>
+            <img className={HelpersCss['trsf-180deg']} src={chevron} alt="Next month" />
+            {monthToText(this.state.date.month - 1)}
+          </div>
+          <h2 className={DashboardCss['month-header']}>
+            {monthToText(this.state.date.month)} {this.state.date.year}
+          </h2>
+          <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth(true)}>
+            {monthToText(this.state.date.month + 1)}
+            <img src={chevron} alt="Next month" />
+          </div>
+        </header>
+        <section className={DashboardCss.container}>
+          <div className="w-50">
+            {this.renderSpendingForm()}
+            <SpendingItems
+              code={spendingItems.code}
+              data={spendingItems.data}
+              dateRange={this.state.date}
+              currency={this.state.user_currency}
+            />
+          </div>
+          <div className={DashboardCss['cat-section']}>
+            {this.renderCategoryGraph()}
+            {this.renderCategories()}
+          </div>
+        </section>
+      </Layout>
+    );
+
   }
 
   static #calculateSpendingTotal(data: Record<string, number>[]): number {
@@ -551,25 +510,5 @@ function addHooksTo(Comp: typeof Dashboard) {
 
   return CompWithHooks;
 }
-
-// function mapStateToProps(state: IReducers) {
-//   return { dashboard: state.dashboard };
-// }
-
-// function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-//   return bindActionCreators(
-//     {
-//       getCategories,
-//       getSpendingItems,
-//       getUserInfo,
-//       postSpendingItem,
-//       postNewCategory,
-//       deleteCategory,
-//       updateCategoriesTotal,
-//       filterSpendingItems,
-//     },
-//     dispatch
-//   );
-// }
 
 export default addHooksTo(Dashboard);

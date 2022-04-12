@@ -20,7 +20,7 @@ class Graphql {
   static getCategories() {
     const query = Graphql.getDashboardData;
 
-    const [result, reexecuteQuery] = useQuery({
+    const [result] = useQuery({
       query,
     });
 
