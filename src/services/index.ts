@@ -1,22 +1,4 @@
 
-
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-  dataLayer.push(arguments);
-}
-
-export function gaInit() {
-  gtag('js', new Date());
-  gtag('config', 'UA-125324369-1');
-}
-
-export function gaEvent(name: string): void {
-  gtag('event', name, {
-    event_category: 'Button Click',
-    event_label: 'Trimm App',
-  });
-}
-
 // export class PageHandler extends Component<{}, {}> {
 //   constructor(props: {}) {
 //     super(props);
@@ -27,6 +9,8 @@ export function gaEvent(name: string): void {
 //     this.setState({ [e.target.name]: e.target.value });
 //   }
 // }
+
+// UTILITIES
 
 /**
  * Adds `0` to month if it has single number

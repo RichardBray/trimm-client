@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Layout from "../components/Layout";
+import Layout from "../templates/Layout";
 import { bindActionCreators, Dispatch } from "redux";
 import { Navigate } from 'react-router';
 
-import { getUserInfo,} from "../actions/DashboardActions";
-import { updateUserCurency } from "../actions/SettingsActions";
-import { isObjEmpty } from "../utils";
+// import { getUserInfo,} from "../actions/DashboardActions";
+// import { updateUserCurency } from "../actions/SettingsActions";
+import { isObjEmpty } from "../services";
 
-import { IReducers, IAction } from "../utils/interfaces";
+import { IReducers, IAction } from "../services/interfaces";
 
 // Styles
 import SettingsCss from "@assets/styles/views/Settings.module.css";

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-import { IServerResponses, ISpendingItem } from '../utils/interfaces';
-import Layout from '../components/Layout';
-import SpendingItems from '../components/Dashboard/SpendingItems';
-import { modifyMonth, monthToText, roundNumber } from '../utils';
-import Graphql from '../services/Graphql';
+import { IServerResponses, ISpendingItem } from '../../services/interfaces';
+import Layout from '../../templates/Layout';
+import SpendingItems from './components/SpendingItems';
+import { modifyMonth, monthToText, roundNumber } from '../../services';
+import Graphql from '../../services/Graphql';
 
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
@@ -99,12 +99,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     show_welcome: true,
     filter_id: 0,
   };
-
-
-  // async #updateSpendingSection(dateRange?: DashboardDateInput): Promise<void> {
-  //   await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
-  //   await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
-  // }
 
   /**
    * I've taken out the budget functionality for this version

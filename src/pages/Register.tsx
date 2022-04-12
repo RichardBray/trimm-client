@@ -4,9 +4,7 @@ import { Navigate } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Link } from 'react-router-dom';
 
-import { gaEvent } from '../utils';
-import { IRegister, IReducers, IAction } from '../utils/interfaces';
-import { postRegister } from '../actions/RegisterActions';
+import { IRegister, IReducers, IAction } from '../services/interfaces';
 
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
@@ -46,12 +44,10 @@ class Register extends Component<RegisterProps, IRegister> {
     let formError = false;
 
     if (code === 201) {
-      gaEvent('Register - Success');
       value = <Navigate to="/dashboard" />;
     } else if (code === 400) {
       value = message;
       formError = true;
-      gaEvent('Register - Error');
     }
     return (
       <div className={formError ? LoginCss['right-column-error'] : LoginCss['right-column']}>

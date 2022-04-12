@@ -5,12 +5,11 @@ import { createClient, Provider, dedupExchange, fetchExchange } from 'urql';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import { devtoolsExchange } from '@urql/devtools';
 
-import Login from './views/Login';
-import Dashboard from './views/Dashboard';
-import Register from './views/Register';
-import RedirectPage from './views/RedirectPage';
-import Settings from './views/Settings';
-import { gaInit } from './utils';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Register from './pages/Register';
+import RedirectPage from './pages/RedirectPage';
+import Settings from './pages/Settings';
 import '@assets/styles/global.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL as string;

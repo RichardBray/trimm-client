@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Link } from "react-router-dom";
 
-import { ILayout, IAction } from "../utils/interfaces";
-import { getLogout } from "../actions/LoginActions";
-import ErrorBoundary from "../components/ErrorBoundary";
+import { ILayout, IAction } from "../services/interfaces";
+import ErrorBoundary from "./ErrorBoundary";
 
 // Styles
 import LayoutCss from "@assets/styles/components/Layout.module.css";
@@ -25,7 +24,7 @@ class Layout extends Component<ILayout, {}> {
    * redux stuff
    */
   handleLogout(): void {
-    this.props.getLogout();
+    // this.props.getLogout();
     window.location.replace('/');
   }
 
