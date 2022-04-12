@@ -1,31 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-import {
-  getCategories,
-  getSpendingItems,
-  getUserInfo,
-  postSpendingItem,
-  postNewCategory,
-  deleteCategory,
-  updateCategoriesTotal,
-  filterSpendingItems,
-} from '../actions/DashboardActions';
-
-import {
-  IDashvoardView,
-  IReducers,
-  IAction,
-  IDashboardState,
-  IServerResponses,
-  ISpendingItem,
-  IDashboardDate,
-} from '../utils/interfaces';
+import { IServerResponses, ISpendingItem } from '../utils/interfaces';
 import Layout from '../components/Layout';
 import SpendingItems from '../components/SpendingItems';
 import { modifyMonth, monthToText, gaEvent, roundNumber } from '../utils';
+import GraphQL from '../services/GraphQL';
 
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
@@ -38,13 +18,31 @@ import GlobalCss from '@assets/styles/global.module.css';
 import deleteIcon from '@assets/img/delete-icon.svg';
 import chevron from '@assets/img/chevron.svg';
 
-class Dashboard extends Component<IDashvoardView, IDashboardState> {
+type DashboardState = {
+  dataLoaded: boolean;
+  date: DashboardDateInput;
+  spending_item: any;
+  new_category: string;
+  user_currency: string;
+  categories: Record<string, unknown>;
+  show_welcome: boolean;
+  filter_id: number;
+};
+
+type DashboardDateInput = {
+  month: number;
+  year: number;
+};
+
+type DashboardProps = Record<string, unknown>;
+
+class Dashboard extends Component<DashboardProps, DashboardState> {
   date = new Date();
   date_year: number = this.date.getFullYear();
   date_month: number = this.date.getMonth() + 1;
   date_day: number = this.date.getDate();
 
-  static graph_options = {
+  static #graphOptions = {
     legend: {
       display: false,
     },
@@ -89,7 +87,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
       ...this.default_spending_item,
     },
     new_category: '',
-    data_loaded: false,
+    dataLoaded: false,
     user_currency: '',
     categories: {},
     show_welcome: true,
@@ -100,36 +98,32 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
    * Get all the data needed for this page.
    */
   async componentDidMount(): Promise<void> {
-    await this.props.getCategories();
-    await this.updateSpendingSection();
-    await this.props.getUserInfo();
+    const data = await GraphQL.getCategories();
+    console.log(data, 'data');
+    await this.#updateSpendingSection();
+    // await this.props.getUserInfo();
 
-    this.setState({ data_loaded: true });
+    this.setState({ dataLoaded: true });
     this.setState({
-      user_currency: Dashboard._getCurrencySymbol(this.props.dashboard.user_info.user_currency),
+      user_currency: Dashboard.#getCurrencySymbol(this.props.dashboard.user_info.user_currency),
     });
   }
 
-  async updateSpendingSection(dateRange?: IDashboardDate): Promise<void> {
-    await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
-    await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
-  }
-
-  filterSpendingItems(catID: number) {
-    const filter_id  = this.state.filter_id === catID ? 0 : catID;
-    this.setState({ filter_id });
-    this.props.filterSpendingItems(filter_id);
+  async #updateSpendingSection(dateRange?: DashboardDateInput): Promise<void> {
+    // await this.props.getSpendingItems(dateRange ? dateRange : this.state.date);
+    // await this.props.updateCategoriesTotal(this.props.dashboard.spending_items.data);
   }
 
   /**
    * I've taken out the budget functionality for this version
    */
   renderCategories(): JSX.Element[] | JSX.Element {
-    const { data, code } = this.props.dashboard.categories;
+    // const { data, code } = this.props.dashboard.categories;
+    const { data, code } = {data: [], code: 200};
     const render_categories =
       typeof data !== 'undefined' &&
       data.map((cat: any, index: number) => {
-        const catTotal = this._calculateCatTotal(cat.cat_id);
+        const catTotal = this.#calculateCatTotal(cat.cat_id);
 
         return (
           <section key={cat.cat_uuid} className={DashboardCss['cat-row']}>
@@ -152,7 +146,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
                 src={deleteIcon}
                 className={GlobalCss['delete-icon']}
                 alt="Delete Icon"
-                onClick={() => this._deleteCategory(cat.cat_uuid, cat.cat_id)}
+                onClick={() => this.#deleteCategory(cat.cat_uuid, cat.cat_id)}
               />
             </section>
           </section>
@@ -181,7 +175,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     function categoriesAndNewForm() {
       return (
-        <Fragment>
+        <>
           <div className={DashboardCss['tip-text']}>
             Tip, click on a category name below to see items form it. <br /> Click on it again to siable filtering.
           </div>
@@ -189,7 +183,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             {add_category(false)}
             {render_categories}
           </div>
-        </Fragment>
+        </>
       );
     }
 
@@ -202,8 +196,14 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return responses[code];
   }
 
+  filterSpendingItems(catID: number) {
+    const filter_id = this.state.filter_id === catID ? 0 : catID;
+    this.setState({ filter_id });
+    // this.props.filterSpendingItems(filter_id);
+  }
+
   renderSpendingForm(): JSX.Element {
-    const { categories } = this.props.dashboard;
+    const { categories } = {categories: {data: [], code: 200}}
     const { item_name, create_dttm, item_price } = this.state.spending_item;
     const category_list =
       categories.code === 200 &&
@@ -280,18 +280,18 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   renderCategoryGraph() {
     return (
       <section>
-        <Doughnut height={500} width={400} data={this._graph_data()} options={Dashboard.graph_options} />
+        <Doughnut height={500} width={400} data={this._graph_data()} options={Dashboard.#graphOptions} />
         <h2 className={DashboardCss['spending-total']}>
           {this.state.user_currency}
-          {Dashboard._calculateSpendingTotal(this.props.dashboard.spending_items.data)}
+          {Dashboard.#calculateSpendingTotal(this.props.dashboard.spending_items.data)}
         </h2>
       </section>
     );
   }
 
-  renderWelcomeMessage() {
+  renderWelcomeMessage(): JSX.Element {
     return (
-      !document.cookie.includes('welcome_clicked=') && (
+      !document.cookie.includes('welcome_clicked=') ?<div>test</div> : (
         <section className={this.state.show_welcome ? DashboardCss['welcome-message'] : 'dis-n'}>
           <div>
             <h1 className={DashboardCss['welcome-title']}>Welcome to Trimm, 👋</h1>
@@ -304,7 +304,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
             <br />
             <em>Richard</em>
           </div>
-          <div className={DashboardCss['welcome-close']} onClick={() => this._addWelcomeCookie()}>
+          <div className={DashboardCss['welcome-close']} onClick={() => this.#addWelcomeCookie()}>
             &times;
           </div>
         </section>
@@ -313,9 +313,9 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
   }
 
   render(): JSX.Element {
-    const spendingItems = this.props.dashboard.spending_items;
+    const spendingItems = {data: [], code: 200};
 
-    if (this.state.data_loaded) {
+    if (this.state.dataLoaded) {
       return (
         <Layout>
           {this.renderWelcomeMessage()}
@@ -350,24 +350,25 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
         </Layout>
       );
     }
-    return Dashboard._loadingSVG();
+    return Dashboard.#loadingSVG();
   }
 
-  private static _calculateSpendingTotal(data: any): number {
+  static #calculateSpendingTotal(data): number {
     let total = 0;
+
     typeof data !== 'undefined' &&
-      data.map((item: any) => {
+      data.map((item) => {
         total += item.item_price;
       });
     return roundNumber(total);
   }
 
-  private static _getCurrencySymbol(currency: string): string {
+  static #getCurrencySymbol(currency: string): string {
     const split_text = currency.split(' ');
     return split_text[0];
   }
 
-  private static _loadingSVG() {
+  static #loadingSVG() {
     return (
       <div title="1">
         <svg
@@ -404,7 +405,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
 
     typeof data !== 'undefined' &&
       data.map((cat: any, index: number) => {
-        const catTotal = this._calculateCatTotal(cat.cat_id);
+        const catTotal = this.#calculateCatTotal(cat.cat_id);
         graph_labels.push(cat.cat_name);
         graph_totals.push(catTotal);
       });
@@ -500,7 +501,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
   }
 
-  private async _deleteCategory(cat_uuid: string, cat_id: number): Promise<void> {
+  async #deleteCategory(cat_uuid: string, cat_id: number): Promise<void> {
     let cat_has_total = false;
     this.props.dashboard.cat_totals.map((cat_total: [number, number]) => {
       if (cat_total[0] === cat_id && cat_total[1] !== 0) {
@@ -518,7 +519,7 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     }
   }
 
-  private _calculateCatTotal(cat_id: number): number {
+  #calculateCatTotal(cat_id: number): number {
     const { cat_totals } = this.props.dashboard;
     let total = 0;
     cat_totals.map((cat: [number, number], index: number) => {
@@ -530,30 +531,30 @@ class Dashboard extends Component<IDashvoardView, IDashboardState> {
     return total;
   }
 
-  private _addWelcomeCookie(): any {
+  #addWelcomeCookie() {
     document.cookie = 'welcome_clicked=true';
     this.setState({ show_welcome: false });
   }
 }
 
-function mapStateToProps(state: IReducers) {
-  return { dashboard: state.dashboard };
-}
+// function mapStateToProps(state: IReducers) {
+//   return { dashboard: state.dashboard };
+// }
 
-function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators(
-    {
-      getCategories,
-      getSpendingItems,
-      getUserInfo,
-      postSpendingItem,
-      postNewCategory,
-      deleteCategory,
-      updateCategoriesTotal,
-      filterSpendingItems,
-    },
-    dispatch
-  );
-}
+// function mapDispatchToProps(dispatch: Dispatch<IAction>) {
+//   return bindActionCreators(
+//     {
+//       getCategories,
+//       getSpendingItems,
+//       getUserInfo,
+//       postSpendingItem,
+//       postNewCategory,
+//       deleteCategory,
+//       updateCategoriesTotal,
+//       filterSpendingItems,
+//     },
+//     dispatch
+//   );
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default Dashboard;

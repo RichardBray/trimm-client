@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import * as Sentry from '@sentry/browser';
 import { createClient, Provider, dedupExchange, fetchExchange } from 'urql';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import { authExchange } from '@urql/exchange-auth';
 
 import Login from './views/Login';
 import Dashboard from './views/Dashboard';
@@ -20,7 +19,12 @@ const ENV = import.meta.env.VITE_ENV as string;
 const ROOT = document.querySelector('.react-root');
 const client = createClient({
   url: `${API_URL}/graphql`,
-  exchanges: [dedupExchange, cacheExchange({}), authExchange(), fetchExchange],
+  fetchOptions: {
+    headers: {
+      Authorization: `bearer ${sessionStorage.getItem('accessToken')}`,
+    }
+  },
+  exchanges: [dedupExchange, cacheExchange({}), fetchExchange],
 });
 
 if (ENV === 'production') {

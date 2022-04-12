@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from 'urql';
 
-class Graphql {
+class GraphQL {
   static getCategories() {
     const query = `#graphql
         query {
@@ -18,8 +18,9 @@ class Graphql {
       query,
     });
 
+    debugger
     return result;
   }
 }
 
-export default Graphql;
+export default GraphQL;

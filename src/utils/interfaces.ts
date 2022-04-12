@@ -10,28 +10,7 @@ export interface ILoginResponse {
   accessToken: string;
 }
 
-export interface IDashvoardView {
-  dashboard: any; // TODO
-  getCategories: () => Record<string, unknown>;
-  getSpendingItems: (date: IDashboardDate) => Record<string, unknown>;
-  getUserInfo: () => Record<string, unknown>;
-  postSpendingItem: (data: any) => Record<string, unknown>;
-  deleteCategory: (data: string) => Record<string, unknown>;
-  postNewCategory: (data: string) => Record<string, unknown>;
-  filterSpendingItems: (data: any) => Record<string, unknown>;
-  updateCategoriesTotal: any;
-}
 
-export interface IDashboardState {
-  data_loaded: boolean | any;
-  date: IDashboardDate;
-  spending_item: any;
-  new_category: string;
-  user_currency: string;
-  categories: Record<string, unknown>;
-  show_welcome: boolean;
-  filter_id: number;
-}
 
 export interface ISpendingItem {
   [key: string]: string | number;
@@ -39,11 +18,6 @@ export interface ISpendingItem {
   item_price: number;
   create_dttm: string;
   cat_id: string;
-}
-
-export interface IDashboardDate {
-  month: number;
-  year: number;
 }
 
 // export interface ISpendingDate {
