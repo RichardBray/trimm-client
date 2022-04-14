@@ -17,24 +17,23 @@
     "@sentry/browser": "^6.19.1",
     "@urql/devtools": "^2.0.3",
     "@urql/exchange-graphcache": "^4.3.6",
-    "@vitejs/plugin-react": "^1.2.0",
+    "@vitejs/plugin-react": "^1.3.1",
     "chart.js": "^3.7.1",
     "graphql": "^16.3.0",
     "npm-check-updates": "^12.5.4",
     "react": "^18.0.0",
-    "react-chartjs-2": "^4.0.1",
+    "react-chartjs-2": "^4.1.0",
     "react-dom": "^18.0.0",
-    "react-router": "^6.2.2",
-    "react-router-dom": "^6.2.2",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
     "redux": "^4.1.2",
     "urql": "^2.2.0",
-    "vite": "^2.8.6"
+    "vite": "^2.9.5"
   },
   "devDependencies": {
     "@types/node": "^17.0.22",
-    "@types/react": "^18.0.0",
+    "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.0",
-    "@types/react-router-dom": "^5.3.3",
-    "vite-plugin-eslint": "^1.3.0"
+    "@types/react-router-dom": "^5.3.3"
   }
 }
