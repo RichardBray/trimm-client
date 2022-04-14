@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import * as Sentry from '@sentry/browser';
 import { createClient, Provider, dedupExchange, fetchExchange } from 'urql';
@@ -16,7 +16,8 @@ const API_URL = import.meta.env.VITE_API_URL as string;
 const SENTRY_ID = import.meta.env.VITE_SENTRY_ID as string;
 const ENV = import.meta.env.VITE_ENV as string;
 
-const ROOT = document.querySelector('.react-root');
+const ROOT = document.querySelector('.react-root') as Element;
+const root = ReactDOM.createRoot(ROOT);
 
 console.log(sessionStorage.getItem('accessToken'), 'sdf')
 const client = createClient({
@@ -35,7 +36,7 @@ if (ENV === 'production') {
   });
 }
 
-ReactDOM.render(
+root.render(
   <Provider value={client}>
     <BrowserRouter>
       <Routes>
@@ -46,6 +47,5 @@ ReactDOM.render(
         <Route path="/" element={<RedirectPage />} />
       </Routes>
     </BrowserRouter>
-  </Provider>,
-  ROOT
+  </Provider>
 );

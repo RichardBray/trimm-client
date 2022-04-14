@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { IServerResponses, ISpendingItem } from '../../services/interfaces';
 import Layout from '../../templates/Layout';
 import { modifyMonth, monthToText, roundNumber } from '../../services';
-import Graphql, {spending} from '../../services/Graphql';
+import Graphql, { spending, categories, user } from '../../services/Graphql';
 
 // - components
 import SpendingItems from './components/SpendingItems';
@@ -20,9 +20,6 @@ import deleteIcon from '@assets/img/delete-icon.svg';
 import chevron from '@assets/img/chevron.svg';
 import { ChartOptions } from 'chart.js';
 import { CombinedError } from 'urql';
-
-// - types
-import { categories } from '../../services/Graphql';
 
 type DashboardState = {
   date: DashboardDateInput;
@@ -43,10 +40,12 @@ type DashboardProps = {
   getCategories: {
     data?: {
       categories: categories[];
-    },
-    fetching?: boolean,
-    error?: CombinedError
-  }
+      items: spending[];
+      getUser: user;
+    };
+    fetching?: boolean;
+    error?: CombinedError;
+  };
 };
 
 class Dashboard extends Component<DashboardProps, DashboardState> {
@@ -111,7 +110,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
    */
   renderCategories(): JSX.Element[] | JSX.Element {
     // const { data, code } = this.props.dashboard.categories;
-    const { data, code } = {data: [], code: 200};
+    const { data, code } = { data: [], code: 200 };
     const render_categories =
       typeof data !== 'undefined' &&
       data.map((cat: any, index: number) => {
@@ -209,19 +208,18 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   render(): JSX.Element {
     const { data, fetching, error } = this.props.getCategories;
     console.log(data, 'data');
-    if (error) {
-      console.log(error, 'error')
-    }
-    const spendingItems = {data: [], code: 200};
 
     if (fetching) {
       return Dashboard.#loadingSVG();
     }
 
+    if (error) {
+      console.log(error, 'error');
+    }
+
     return (
       <Layout>
-        <SpendingItemsForm categoriesData={data?.categories} />
-        {/* <header className={DashboardCss['month-change']}>
+        <header className={DashboardCss['month-change']}>
           <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth()}>
             <img className={HelpersCss['trsf-180deg']} src={chevron} alt="Next month" />
             {monthToText(this.state.date.month - 1)}
@@ -238,20 +236,18 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
           <div className="w-50">
             <SpendingItemsForm categoriesData={data?.categories} />
             <SpendingItems
-              code={spendingItems.code}
-              data={spendingItems.data}
-              dateRange={this.state.date}
-              currency={this.state.user_currency}
+              items={data?.items}
+              categories={data?.categories}
+              currency={Dashboard.#getCurrencySymbol(data?.getUser.user_currency)}
             />
           </div>
-          <div className={DashboardCss['cat-section']}>
+          {/* <div className={DashboardCss['cat-section']}>
             {this.renderCategoryGraph()}
             {this.renderCategories()}
-          </div>
-        </section> */}
+          </div> */}
+        </section>
       </Layout>
     );
-
   }
 
   static #calculateSpendingTotal(data: spending[]): number {
@@ -264,8 +260,10 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     return roundNumber(total);
   }
 
-  static #getCurrencySymbol(currency: string): string {
-    const split_text = currency.split(' ');
+  static #getCurrencySymbol(currency: string | undefined): string {
+    if (!currency) return '£';
+
+    const split_text = currency?.split('-');
     return split_text[0];
   }
 
@@ -411,11 +409,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 
 function addHooksTo(Comp: typeof Dashboard) {
   function CompWithHooks(props: DashboardProps) {
-    const getCategories = Graphql.getCategories();
+    const getCategories = Graphql.getDashboardData();
     const data = {
       ...props,
-      getCategories
-    }
+      getCategories,
+    };
 
     return <Comp {...data} />;
   }

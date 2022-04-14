@@ -1,60 +1,67 @@
-import React, {Component} from "react";
-import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import React from 'react';
 
-import { monthToText, roundNumber } from "../../../services";
-import { IServerResponses, IAction } from "../../../services/interfaces";
+import { monthToText, roundNumber } from '@services/index';
+import { spending, categories } from '@services/Graphql';
 
-// Styles
-import SpendingItemCss from "@assets/styles/components/SpendingItems.module.css";
-import HelpersCss from "@assets/styles/helpers.module.css";
-import GlobalCss from "@assets/styles/global.module.css";
+// - styles
+import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
+import HelpersCss from '@assets/styles/helpers.module.css';
+import GlobalCss from '@assets/styles/global.module.css';
 
-// Images
-import deleteIcon from "@assets/img/delete-icon.svg";
+// - images
+import deleteIcon from '@assets/img/delete-icon.svg';
 
+type SpendingItemsProps = {
+  items: spending[] | undefined;
+  categories: categories[] | undefined;
+  currency: string | undefined;
+};
+class SpendingItems {
+  static main(props: SpendingItemsProps): JSX.Element[] | JSX.Element {
+    const { items } = props;
+    const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
 
-class SpendingItems extends Component<any, {}> {
-
-  renderItems(data: any): JSX.Element {
-    return (typeof (data) !== "undefined") && data.map((item: any) => {
-      return (
-        <section key={item.item_uuid} className={SpendingItemCss.container}>
-          <div className={SpendingItemCss['first-column']}>
-            <div className={SpendingItemCss['cat-title']}>{item.cat_name}</div>
-            <div>{item.item_name}</div>
-          </div>
-          <div className={SpendingItemCss['second-column']}>
-            <div className={HelpersCss['mb-1rem']}>{this._formatDate(item.create_dttm)}</div>
-            <div className={SpendingItemCss['price-text']}>{this.props.currency}{roundNumber(item.item_price)}</div>
-          </div>
-          <div className={SpendingItemCss['third-column']}>
-            <img
-              src={deleteIcon}
-              alt="Delete Icon"
-              className={GlobalCss['delete-icon']}
-              onClick={() => this._deleteItem(item.item_uuid)} />
-          </div>
-        </section>
-      );
+    if (dataDoesNotExist) {
+      return <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
     }
-    );
-  };
 
-  render(): JSX.Element[] | JSX.Element {
-    const { data, code } = this.props;
-    const render_no_items = <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
-    const responses: IServerResponses = {
-      200: this.renderItems(data),
-      404: render_no_items,
-      401: <div className={SpendingItemCss['no-items']}>Looks like you are somewhere you shouldn't be ✋</div>
+    return items.map((item: spending) => (
+      <section key={item.item_uuid} className={SpendingItemCss.container}>
+        <div className={SpendingItemCss['first-column']}>
+          <div className={SpendingItemCss['cat-title']}>{SpendingItems.#categoryNameFromUuid(props?.categories, item.cat_uuid)}</div>
+          <div>{item.item_name}</div>
+        </div>
+        <div className={SpendingItemCss['second-column']}>
+          <div className={HelpersCss['mb-1rem']}>{SpendingItems.#formatDate(item.create_dttm)}</div>
+          <div className={SpendingItemCss['price-text']}>
+            {props.currency}
+            {roundNumber(item.item_price)}
+          </div>
+        </div>
+        <div className={SpendingItemCss['third-column']}>
+          <img
+            src={deleteIcon}
+            alt="Delete Icon"
+            className={GlobalCss['delete-icon']}
+            onClick={() => SpendingItems.#deleteItem(item.item_uuid)}
+          />
+        </div>
+      </section>
+    ));
+  }
+
+  static #categoryNameFromUuid(categories: categories[] | undefined, catUuid: string): string {
+    if (typeof categories === 'undefined') {
+      return '';
     }
-    return responses[code];
-  };
+    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as categories;
 
-  private _formatDate(date: string): string {
-    const splitTime = date.split(" ");
-    const splitDates = splitTime[0].split("-");
+    return selectedCategory.cat_name;
+  }
+
+  static #formatDate(date: Date) {
+    const splitTime = String(date).split('T');
+    const splitDates = splitTime[0].split('-');
     const year = splitDates[0];
     const month = monthToText(splitDates[1]);
     const day = splitDates[2];
@@ -63,17 +70,9 @@ class SpendingItems extends Component<any, {}> {
   }
 
   /**
-   * Editing will come later
+   * Should be graphql mutation
    */
-  private async _deleteItem(item_uuid: string): Promise<void> {
-    await this.props.deleteSpendingItem(item_uuid);
-    await this.props.getSpendingItems(this.props.dateRange);
-    await this.props.updateCategoriesTotal(this.props.data);
-  }
+  static #deleteItem(item_uuid: string): Promise<void> {}
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ deleteSpendingItem, getSpendingItems, updateCategoriesTotal }, dispatch);
-}
-
-export default connect(null, mapDispatchToProps)(SpendingItems);
+export default SpendingItems.main;
