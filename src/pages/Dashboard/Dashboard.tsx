@@ -3,26 +3,30 @@ import { Doughnut } from 'react-chartjs-2';
 
 import { IServerResponses, ISpendingItem } from '../../services/interfaces';
 import Layout from '../../templates/Layout';
-import SpendingItems from './components/SpendingItems';
 import { modifyMonth, monthToText, roundNumber } from '../../services';
-import Graphql from '../../services/Graphql';
+import Graphql, {spending} from '../../services/Graphql';
 
-// Styles
-import Inputs from '@assets/styles/components/Inputs.module.css';
-import Buttons from '@assets/styles/components/Buttons.module.css';
+// - components
+import SpendingItems from './components/SpendingItems';
+import SpendingItemsForm from './components/SpendingItemsForm';
+
+// - styles
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
 import HelpersCss from '@assets/styles/helpers.module.css';
 import GlobalCss from '@assets/styles/global.module.css';
 
-// Images
+// - images
 import deleteIcon from '@assets/img/delete-icon.svg';
 import chevron from '@assets/img/chevron.svg';
 import { ChartOptions } from 'chart.js';
 import { CombinedError } from 'urql';
 
+// - types
+import { categories } from '../../services/Graphql';
+
 type DashboardState = {
   date: DashboardDateInput;
-  spending_item: any;
+  spending_item: unknown;
   new_category: string;
   user_currency: string;
   categories: Record<string, unknown>;
@@ -37,7 +41,9 @@ type DashboardDateInput = {
 
 type DashboardProps = {
   getCategories: {
-    data?: Record<string, object>,
+    data?: {
+      categories: categories[];
+    },
     fetching?: boolean,
     error?: CombinedError
   }
@@ -188,88 +194,13 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     // this.props.filterSpendingItems(filter_id);
   }
 
-  renderSpendingForm(): JSX.Element {
-    const { categories } = {categories: {data: [], code: 200}}
-    const { item_name, create_dttm, item_price } = this.state.spending_item;
-    const category_list =
-      categories.code === 200 &&
-      categories.data.map((cat: any) => (
-        <option key={cat.cat_id} value={cat.cat_id}>
-          {cat.cat_name}
-        </option>
-      ));
-
-    return (
-      <form className={DashboardCss['spending-form']} onSubmit={(e: any) => this._addSpendingItem(e)}>
-        <section className={`${HelpersCss['w-70']} dis-f`}>
-          <div className={DashboardCss['spending-form__text']}>
-            <label htmlFor="cat_id" className={DashboardCss['spending-form__text_box']}>
-              Category:
-            </label>
-            <label htmlFor="item_name" className={DashboardCss['spending-form__text_box']}>
-              Description:
-            </label>
-            <label htmlFor="create_dttm" className={DashboardCss['spending-form__text_box']}>
-              Date:
-            </label>
-          </div>
-          <div className={DashboardCss['spending-form__inputs']}>
-            <select
-              name="cat_id"
-              value={this.state.spending_item.cat_id}
-              className={Inputs['input-spending-form']}
-              onChange={(e) => this.#handleChange(e)}
-              required
-            >
-              <option value="0" disabled>
-                --
-              </option>
-              {category_list}
-            </select>
-            <input
-              type="text"
-              name="item_name"
-              placeholder="Description"
-              className={Inputs['input-spending-form']}
-              value={item_name}
-              onChange={(e) => this.#handleChange(e)}
-              required
-            />
-            <input
-              type="date"
-              name="create_dttm"
-              placeholder="Date"
-              className={Inputs['input-spending-form']}
-              onChange={(e) => this.#handleChange(e)}
-              value={create_dttm}
-            />
-          </div>
-        </section>
-        <section className={HelpersCss['w-30']}>
-          <input
-            type="number"
-            name="item_price"
-            placeholder="Price"
-            className={Inputs['input-spending-form-price']}
-            value={item_price}
-            onChange={(e) => this.#handleChange(e)}
-            required
-          />
-          <button type="submit" className={Buttons['primary-btn']}>
-            Add Item
-          </button>
-        </section>
-      </form>
-    );
-  }
-
-  renderCategoryGraph() {
+  renderCategoryGraph(items: spending[]) {
     return (
       <section>
         <Doughnut height={500} width={400} data={this.#graph_data()} options={Dashboard.#graphOptions} />
         <h2 className={DashboardCss['spending-total']}>
           {this.state.user_currency}
-          {Dashboard.#calculateSpendingTotal(this.state.apiData.items)}
+          {Dashboard.#calculateSpendingTotal(items)}
         </h2>
       </section>
     );
@@ -289,7 +220,8 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 
     return (
       <Layout>
-        <header className={DashboardCss['month-change']}>
+        <SpendingItemsForm categoriesData={data?.categories} />
+        {/* <header className={DashboardCss['month-change']}>
           <div className={DashboardCss['month-change__btn']} onClick={() => this.#changeMonth()}>
             <img className={HelpersCss['trsf-180deg']} src={chevron} alt="Next month" />
             {monthToText(this.state.date.month - 1)}
@@ -304,7 +236,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         </header>
         <section className={DashboardCss.container}>
           <div className="w-50">
-            {this.renderSpendingForm()}
+            <SpendingItemsForm categoriesData={data?.categories} />
             <SpendingItems
               code={spendingItems.code}
               data={spendingItems.data}
@@ -316,17 +248,17 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             {this.renderCategoryGraph()}
             {this.renderCategories()}
           </div>
-        </section>
+        </section> */}
       </Layout>
     );
 
   }
 
-  static #calculateSpendingTotal(data: Record<string, number>[]): number {
+  static #calculateSpendingTotal(data: spending[]): number {
     let total = 0;
 
     typeof data !== 'undefined' &&
-      data.map((item: Record<string, number>) => {
+      data.map((item: spending) => {
         total += item.item_price;
       });
     return roundNumber(total);
@@ -389,20 +321,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         },
       ],
     };
-  }
-
-  /**
-   * If a category hasn't been selected don't
-   * send an api request, and if the return code is not
-   * 201 then tell the user something went wrong.
-   */
-  private async _addSpendingItem(e: Event): Promise<void> {
-    e.preventDefault();
-    if (this.state.spending_item.cat_id !== '0') {
-      this.setState({ spending_item: this.default_spending_item });
-    } else {
-      alert('Please select a category');
-    }
   }
 
   #handleChange(e: any, spending_item = true): void {

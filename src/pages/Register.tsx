@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Navigate } from 'react-router';
-import { bindActionCreators, Dispatch } from 'redux';
 import { Link } from 'react-router-dom';
 
-import { IRegister, IReducers, IAction } from '../services/interfaces';
+import { IRegister} from '../services/interfaces';
 
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
@@ -105,12 +103,12 @@ class Register extends Component<RegisterProps, IRegister> {
   }
 }
 
-function mapStateToProps(state: IReducers) {
-  return { register: state.register };
-}
+// function mapStateToProps(state: IReducers) {
+//   return { register: state.register };
+// }
 
-function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ postRegister }, dispatch);
-}
+// function mapDispatchToProps(dispatch: Dispatch<IAction>) {
+//   return bindActionCreators({ postRegister }, dispatch);
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default Register;

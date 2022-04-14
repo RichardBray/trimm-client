@@ -1,9 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
 import { Link } from "react-router-dom";
 
-import { ILayout, IAction } from "../services/interfaces";
+import { ILayout } from "../services/interfaces";
 import ErrorBoundary from "./ErrorBoundary";
 
 // Styles
@@ -61,8 +59,4 @@ class Layout extends Component<ILayout, {}> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getLogout }, dispatch);
-}
-
-export default connect(null, mapDispatchToProps)(Layout);
+export default Layout;

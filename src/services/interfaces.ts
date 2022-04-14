@@ -39,8 +39,7 @@ export interface IReducers {
 }
 
 export interface ILayout {
-  children: JSX.Element[];
-  getLogout: () => Record<string, unknown>;
+  children: JSX.Element[] | JSX.Element;
 }
 
 export interface IServerResponses {

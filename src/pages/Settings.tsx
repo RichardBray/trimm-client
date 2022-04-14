@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import Layout from "../templates/Layout";
-import { bindActionCreators, Dispatch } from "redux";
 import { Navigate } from 'react-router';
 
 // import { getUserInfo,} from "../actions/DashboardActions";
@@ -105,12 +103,12 @@ class Settings extends Component<any, {}> {
   }
 }
 
-function mapStateToProps(state: IReducers) {
-  return { user_info: state.dashboard.user_info, settings: state.settings };
-}
+// function mapStateToProps(state: IReducers) {
+//   return { user_info: state.dashboard.user_info, settings: state.settings };
+// }
 
-function mapDispatchToProps(dispatch: Dispatch<IAction>) {
-  return bindActionCreators({ getUserInfo, updateUserCurency }, dispatch);
-}
+// function mapDispatchToProps(dispatch: Dispatch<IAction>) {
+//   return bindActionCreators({ getUserInfo, updateUserCurency }, dispatch);
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default Settings;
