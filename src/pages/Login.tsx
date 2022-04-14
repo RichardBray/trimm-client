@@ -25,6 +25,11 @@ type LoginProps = {
   navigate?: (arg: string) => void;
 };
 
+type AuthResponse = {
+  accessToken?: string;
+  refreshToken?: string
+}
+
 class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
     username: '',
@@ -103,24 +108,30 @@ class Login extends Component<LoginProps, LoginState> {
     );
   }
 
-  #handleApiResponse(response: {
-    accessToken?: string;
-    refreshToken?: string;
-  }) {
+  #handleApiResponse(response: AuthResponse) {
     const accessTokenExists = response.accessToken;
 
     if (accessTokenExists) {
-      sessionStorage.setItem('accessToken', response.accessToken as string);
-      this.props.navigate?.('/dashboard');
-    } else {
-      const rightColumnClone = { ...this.state.rightColumn };
-
-      rightColumnClone.text = 'Invalid username or password';
-      rightColumnClone.errorExists = true;
-
-      this.setState({ rightColumn: rightColumnClone });
+      Login.#addTokenToSessionStorage(response);
+      return this.props.navigate?.('/dashboard');
     }
+
+    const rightColumnClone = { ...this.state.rightColumn };
+
+    rightColumnClone.text = 'Invalid username or password';
+    rightColumnClone.errorExists = true;
+
+    this.setState({ rightColumn: rightColumnClone });
   }
+
+  static #addTokenToSessionStorage(response: AuthResponse) {
+    if (sessionStorage.getItem('accessToken')) {
+      sessionStorage.removeItem('accessToken');
+    }
+
+    sessionStorage.setItem('accessToken', response.accessToken as string);
+  }
+
 }
 
 function addHooksTo(Comp: typeof Login) {

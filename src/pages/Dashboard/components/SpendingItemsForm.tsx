@@ -71,7 +71,7 @@ class SpendingItemsForm {
               name="cat_id"
               value={state.spending_item.cat_id}
               className={Inputs['input-spending-form']}
-              onChange={(e) => this.#handleChange(e, stateData)}
+              onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
               required
             >
               <option value="0" disabled>
@@ -85,7 +85,7 @@ class SpendingItemsForm {
               placeholder="Description"
               className={Inputs['input-spending-form']}
               value={item_name}
-              onChange={(e) => this.#handleChange(e, stateData)}
+              onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
               required
             />
             <input
@@ -93,8 +93,10 @@ class SpendingItemsForm {
               name="create_dttm"
               placeholder="Date"
               className={Inputs['input-spending-form']}
-              onChange={(e) => this.#handleChange(e, stateData)}
+              onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
               value={create_dttm}
+              autoComplete="off"
+              data-form-type="other"
             />
           </div>
         </section>
@@ -105,7 +107,7 @@ class SpendingItemsForm {
             placeholder="Price"
             className={Inputs['input-spending-form-price']}
             value={item_price}
-            onChange={(e) => this.#handleChange(e, stateData)}
+            onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
             required
           />
           <button type="submit" className={Buttons['primary-btn']}>
@@ -124,7 +126,7 @@ class SpendingItemsForm {
         [e.target?.name]: e.target?.value,
       },
     };
-
+    console.log(updatedState, 'updatedState');
     updateState(updatedState);
   }
 
