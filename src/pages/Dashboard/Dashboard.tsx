@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { IServerResponses, ISpendingItem } from '../../services/interfaces';
 import Layout from '../../templates/Layout';
 import { modifyMonth, monthToText, roundNumber } from '../../services';
-import Graphql, { spending, categories, user } from '../../services/Graphql';
+import Graphql, { Spending, Categories, User } from '../../services/Graphql';
 
 // - components
 import SpendingItems from './components/SpendingItems';
@@ -39,9 +39,9 @@ type DashboardDateInput = {
 type DashboardProps = {
   getCategories: {
     data?: {
-      categories: categories[];
-      items: spending[];
-      getUser: user;
+      categories: Categories[];
+      items: Spending[];
+      getUser: User;
     };
     fetching?: boolean;
     error?: CombinedError;
@@ -83,7 +83,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     '#C2C2C2',
   ];
 
-  default_spending_item: ISpendingItem = {
+  #defaultSpendingItem: ISpendingItem = {
     item_name: '',
     item_price: 0,
     create_dttm: `${this.date_year}-${modifyMonth(this.date_month)}-${modifyMonth(this.date_day)}`,
@@ -96,7 +96,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
       year: this.date_year,
     },
     spending_item: {
-      ...this.default_spending_item,
+      ...this.#defaultSpendingItem,
     },
     new_category: '',
     user_currency: '',
@@ -193,11 +193,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     // this.props.filterSpendingItems(filter_id);
   }
 
-  renderCategoryGraph(items: spending[]) {
+  renderCategoryGraph(items: Spending[]) {
     return (
       <section>
         <Doughnut height={500} width={400} data={this.#graph_data()} options={Dashboard.#graphOptions} />
-        <h2 className={DashboardCss['spending-total']}>
+        <h2 className={DashboardCss['Spending-total']}>
           {this.state.user_currency}
           {Dashboard.#calculateSpendingTotal(items)}
         </h2>
@@ -250,11 +250,11 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     );
   }
 
-  static #calculateSpendingTotal(data: spending[]): number {
+  static #calculateSpendingTotal(data: Spending[]): number {
     let total = 0;
 
     typeof data !== 'undefined' &&
-      data.map((item: spending) => {
+      data.map((item: Spending) => {
         total += item.item_price;
       });
     return roundNumber(total);
@@ -297,13 +297,13 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   /**
    * Generates data for the Doughnut graph
    */
-  #graph_data() {
+  #graph_data(data: {categories: Categories[]}) {
     const graph_labels: string[] = [];
     const graph_totals: number[] = [];
-    const data = this.state.apiData.categories;
+    const categories = data?.categories;
 
-    typeof data !== 'undefined' &&
-      data.map((cat: Record<string, unknown>) => {
+    typeof categories !== 'undefined' &&
+    categories.map((cat: Record<string, unknown>) => {
         const catTotal = this.#calculateCatTotal(cat.cat_id as number);
         graph_labels.push(cat.cat_name as string);
         graph_totals.push(catTotal);
@@ -333,7 +333,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   }
 
   /**
-   * Gets the spending items
+   * Gets the Spending items
    * for the following month.
    * @param next If it's next or prev
    */
@@ -399,11 +399,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     });
 
     return total;
-  }
-
-  #addWelcomeCookie() {
-    document.cookie = 'welcome_clicked=true';
-    this.setState({ show_welcome: false });
   }
 }
 

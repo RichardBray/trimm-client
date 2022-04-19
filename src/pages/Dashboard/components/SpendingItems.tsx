@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { monthToText, roundNumber } from '@services/index';
-import { spending, categories } from '@services/Graphql';
+import Graphql, { Spending, Categories } from '@services/Graphql';
 
 // - styles
 import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
@@ -12,12 +12,12 @@ import GlobalCss from '@assets/styles/global.module.css';
 import deleteIcon from '@assets/img/delete-icon.svg';
 
 type SpendingItemsProps = {
-  items: spending[] | undefined;
-  categories: categories[] | undefined;
+  items: Spending[] | undefined;
+  categories: Categories[] | undefined;
   currency: string | undefined;
 };
 class SpendingItems {
-  static main(props: SpendingItemsProps): JSX.Element[] | JSX.Element {
+  static main(props: SpendingItemsProps) {
     const { items } = props;
     const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
 
@@ -25,7 +25,7 @@ class SpendingItems {
       return <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
     }
 
-    return items.map((item: spending) => (
+    const spendingItems = items.map((item: Spending) => (
       <section key={item.item_uuid} className={SpendingItemCss.container}>
         <div className={SpendingItemCss['first-column']}>
           <div className={SpendingItemCss['cat-title']}>{SpendingItems.#categoryNameFromUuid(props?.categories, item.cat_uuid)}</div>
@@ -48,13 +48,15 @@ class SpendingItems {
         </div>
       </section>
     ));
+
+    return <>{spendingItems}</>
   }
 
-  static #categoryNameFromUuid(categories: categories[] | undefined, catUuid: string): string {
+  static #categoryNameFromUuid(categories: Categories[] | undefined, catUuid: string): string {
     if (typeof categories === 'undefined') {
       return '';
     }
-    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as categories;
+    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as Categories;
 
     return selectedCategory.cat_name;
   }
@@ -69,10 +71,18 @@ class SpendingItems {
     return `${day} ${month} ${year}`;
   }
 
-  /**
-   * Should be graphql mutation
-   */
-  static #deleteItem(item_uuid: string): Promise<void> {}
+  static async #deleteItem(item_uuid: string): Promise<void> {
+    try {
+      const result = await Graphql.deleteItem(item_uuid);
+
+      if (result.error) {
+        console.error('Oh no!', result.error);
+      }
+
+    } catch(err) {
+      console.error(err);
+    }
+  }
 }
 
 export default SpendingItems.main;
