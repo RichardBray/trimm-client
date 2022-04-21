@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Doughnut } from 'react-chartjs-2';
 
-import { IServerResponses, ISpendingItem } from '../../services/interfaces';
 import Layout from '../../templates/Layout';
-import { modifyMonth, monthToText, roundNumber } from '../../services';
-import Graphql, { Spending, Categories, User } from '../../services/Graphql';
+
+// - services
+import { IServerResponses, ISpendingItem } from '@services/interfaces';
+import { modifyMonth, monthToText, roundNumber, categoryColours } from '@services/index';
+import Graphql, { Spending, Categories, User } from '@services/Graphql';
+import CategoryTotals from '@services/CategoryTotals';
+const calculateCategoryTotals = CategoryTotals.main;
 
 // - components
 import SpendingItems from './components/SpendingItems';
 import SpendingItemsForm from './components/SpendingItemsForm';
+import CategoryDonutGraph from './components/CategoryDonutGraph';
 
 // - styles
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
@@ -18,7 +22,6 @@ import GlobalCss from '@assets/styles/global.module.css';
 // - images
 import deleteIcon from '@assets/img/delete-icon.svg';
 import chevron from '@assets/img/chevron.svg';
-import { ChartOptions } from 'chart.js';
 import { CombinedError } from 'urql';
 
 type DashboardState = {
@@ -54,35 +57,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   date_month: number = this.date.getMonth() + 1;
   date_day: number = this.date.getDate();
 
-  static #graphOptions = {
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false,
-    },
-    hover: {
-      mode: 'x',
-    },
-    maintainAspectRatio: true,
-    cutoutPercentage: 65,
-    responsive: false,
-  } as ChartOptions;
-
-  static catColours: string[] = [
-    // 10 Colours
-    '#8DE1FE',
-    '#897ACC',
-    '#F9BB82',
-    '#F3A2B9',
-    '#B9E185',
-    '#EDEF78',
-    '#DFA2F3',
-    '#A2BEF3',
-    '#F3A2A2',
-    '#C2C2C2',
-  ];
-
   #defaultSpendingItem: ISpendingItem = {
     item_name: '',
     item_price: 0,
@@ -105,22 +79,19 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     filter_id: 0,
   };
 
-  /**
-   * I've taken out the budget functionality for this version
-   */
+
   renderCategories(): JSX.Element[] | JSX.Element {
-    // const { data, code } = this.props.dashboard.categories;
     const { data, code } = { data: [], code: 200 };
     const render_categories =
       typeof data !== 'undefined' &&
       data.map((cat: any, index: number) => {
-        const catTotal = this.#calculateCatTotal(cat.cat_id);
+        const catTotal = this.calculateCatTotal(cat.cat_id);
 
         return (
           <section key={cat.cat_uuid} className={DashboardCss['cat-row']}>
             <div
               className={DashboardCss['cat-color-circle']}
-              style={{ backgroundColor: Dashboard.catColours[index] }}
+              style={{ backgroundColor: categoryColours()[index] }}
             />
             <section className={DashboardCss['cat-row__text']}>
               <div
@@ -193,18 +164,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     // this.props.filterSpendingItems(filter_id);
   }
 
-  renderCategoryGraph(items: Spending[]) {
-    return (
-      <section>
-        <Doughnut height={500} width={400} data={this.#graph_data()} options={Dashboard.#graphOptions} />
-        <h2 className={DashboardCss['Spending-total']}>
-          {this.state.user_currency}
-          {Dashboard.#calculateSpendingTotal(items)}
-        </h2>
-      </section>
-    );
-  }
-
   render(): JSX.Element {
     const { data, fetching, error } = this.props.getCategories;
     console.log(data, 'data');
@@ -241,23 +200,17 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
               currency={Dashboard.#getCurrencySymbol(data?.getUser.user_currency)}
             />
           </div>
-          {/* <div className={DashboardCss['cat-section']}>
-            {this.renderCategoryGraph()}
-            {this.renderCategories()}
-          </div> */}
+          <div className={DashboardCss['cat-section']}>
+            <CategoryDonutGraph
+              items={data?.items}
+              categories={data?.categories}
+              currency={Dashboard.#getCurrencySymbol(data?.getUser.user_currency)}
+            />
+            {/* {this.renderCategories()} */}
+          </div>
         </section>
       </Layout>
     );
-  }
-
-  static #calculateSpendingTotal(data: Spending[]): number {
-    let total = 0;
-
-    typeof data !== 'undefined' &&
-      data.map((item: Spending) => {
-        total += item.item_price;
-      });
-    return roundNumber(total);
   }
 
   static #getCurrencySymbol(currency: string | undefined): string {
@@ -292,33 +245,6 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
         </svg>
       </div>
     );
-  }
-
-  /**
-   * Generates data for the Doughnut graph
-   */
-  #graph_data(data: {categories: Categories[]}) {
-    const graph_labels: string[] = [];
-    const graph_totals: number[] = [];
-    const categories = data?.categories;
-
-    typeof categories !== 'undefined' &&
-    categories.map((cat: Record<string, unknown>) => {
-        const catTotal = this.#calculateCatTotal(cat.cat_id as number);
-        graph_labels.push(cat.cat_name as string);
-        graph_totals.push(catTotal);
-      });
-
-    return {
-      labels: graph_labels,
-      datasets: [
-        {
-          data: graph_totals,
-          backgroundColor: Dashboard.catColours,
-          borderColor: '#f8f8f8',
-        },
-      ],
-    };
   }
 
   #handleChange(e: any, spending_item = true): void {
@@ -389,7 +315,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     }
   }
 
-  #calculateCatTotal(cat_id: number): number {
+  calculateCatTotal(cat_id: number): number {
     const { cat_totals } = this.props.dashboard;
     let total = 0;
     cat_totals.map((cat: [number, number], index: number) => {

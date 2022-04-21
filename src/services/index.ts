@@ -1,15 +1,3 @@
-
-// export class PageHandler extends Component<{}, {}> {
-//   constructor(props: {}) {
-//     super(props);
-//     window.Intercom('update');
-//   }
-
-//   handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-//     this.setState({ [e.target.name]: e.target.value });
-//   }
-// }
-
 // UTILITIES
 
 /**
@@ -27,6 +15,10 @@ export function modifyMonth(month: number): string {
  */
 export function roundNumber(num: number): number {
   return Math.round(num * 100) / 100;
+}
+
+export function categoryColours(): string[] {
+  return ['#8DE1FE', '#897ACC', '#F9BB82', '#F3A2B9', '#B9E185', '#EDEF78', '#DFA2F3', '#A2BEF3', '#F3A2A2', '#C2C2C2'];
 }
 
 export function monthToText(month: string | number): string {
@@ -55,10 +47,6 @@ export function monthToText(month: string | number): string {
   return monthNames[+month - 1];
 }
 
-/**
- * Checks if obkect is empty
- * stolen from `https://coderwall.com/p/_g3x9q/how-to-check-if-javascript-object-is-empty`
- */
 export function isObjEmpty(obj: Record<string, unknown>): boolean {
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
