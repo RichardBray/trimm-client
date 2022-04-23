@@ -12,6 +12,7 @@ import Graphql, { Spending, Categories, User } from '@services/Graphql';
 import SpendingItems from './components/SpendingItems';
 import SpendingItemsForm from './components/SpendingItemsForm';
 import CategoryDonutGraph from './components/CategoryDonutGraph';
+import CategoriesList from './components/CategoriesList';
 
 // - styles
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
@@ -79,6 +80,10 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     const { data, fetching, error } = this.props.getCategories;
     console.log(data, 'data');
 
+    if (!data) {
+      console.error('no data found');
+    }
+
     if (fetching) {
       return Dashboard.#loadingSVG();
     }
@@ -86,6 +91,8 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
     if (error) {
       console.log(error, 'error');
     }
+
+    const userCurrency = Dashboard.#getCurrencySymbol(data?.getUser.user_currency);
 
     return (
       <Layout>
@@ -108,16 +115,20 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
             <SpendingItems
               items={data?.items}
               categories={data?.categories}
-              currency={Dashboard.#getCurrencySymbol(data?.getUser.user_currency)}
+              currency={userCurrency}
             />
           </div>
           <div className={DashboardCss['cat-section']}>
             <CategoryDonutGraph
               items={data?.items}
               categories={data?.categories}
-              currency={Dashboard.#getCurrencySymbol(data?.getUser.user_currency)}
+              currency={userCurrency}
             />
-            {/* {this.renderCategories()} */}
+            <CategoriesList
+              items={data?.items}
+              categories={data?.categories}
+              currency={userCurrency}
+            />
           </div>
         </section>
       </Layout>

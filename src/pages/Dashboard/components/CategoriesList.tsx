@@ -125,4 +125,4 @@ class CategoriesList {
   }
 }
 
-export default CategoriesList;
+export default CategoriesList.main;

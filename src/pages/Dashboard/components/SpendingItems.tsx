@@ -56,6 +56,7 @@ class SpendingItems {
     if (typeof categories === 'undefined') {
       return '';
     }
+
     const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as Categories;
 
     return selectedCategory.cat_name;
