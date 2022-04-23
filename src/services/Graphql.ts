@@ -62,9 +62,54 @@ class Graphql {
       }
     `;
 
+    return Graphql.#executeMutation(query, { itemUuid });
+  }
+
+  static getCategories() {
+    const query = `#graphql
+      query {
+        categories {
+          cat_uuid
+          cat_name
+        }
+      }
+    `;
+
+    const [result] = useQuery({
+      query,
+    });
+
+    return result;
+  }
+
+  static addCategory(catName: string) {
+    const query = `#graphql
+      mutation($catName: String!) {
+        createCategory(cat_name: $catName) {
+          cat_uuid
+        }
+      }
+    `;
+
+    return Graphql.#executeMutation(query, { catName });
+  }
+
+  static deleteCategory(catUuid: string) {
+    const query = `#graphql
+      mutation($catUuid: String!) {
+        deleteCategory(cat_uuid: $catName) {
+          cat_uuid
+        }
+      }
+    `;
+
+    return Graphql.#executeMutation(query, { catUuid });
+  }
+
+  static #executeMutation(query: string, mutationIdenfifier: Record<string, string>) {
     const [_updateResults, updateFn] = useMutation(query);
 
-    return updateFn({ itemUuid });
+    return updateFn(mutationIdenfifier);
   }
 }
 

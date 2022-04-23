@@ -130,9 +130,3 @@
   color: var(--brandPrimary);
   margin-left: 1rem;
 }
-
-.tip-text {
-  composes: ta-c mb-1rem from "../helpers.module.css";
-  font-style: italic;
-  color: var(--mediumGrey);
-}

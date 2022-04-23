@@ -4,6 +4,9 @@
   "description": "",
   "private": true,
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "type-check": "tsc",
     "dev": "NODE_ENV=development vite",

@@ -75,9 +75,7 @@ class SpendingItems {
     try {
       const result = await Graphql.deleteItem(item_uuid);
 
-      if (result.error) {
-        console.error('Oh no!', result.error);
-      }
+      if (result.error) throw new Error(result.error.message);
 
     } catch(err) {
       console.error(err);
