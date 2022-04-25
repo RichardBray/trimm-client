@@ -37,7 +37,7 @@ type DashboardDateInput = {
 };
 
 type DashboardProps = {
-  getCategories: {
+  getCategories?: {
     data?: {
       categories: Categories[];
       items: Spending[];
@@ -77,12 +77,8 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
   };
 
   render(): JSX.Element {
-    const { data, fetching, error } = this.props.getCategories;
+    const { data, fetching, error } = this.props?.getCategories || {};
     console.log(data, 'data');
-
-    if (!data) {
-      console.error('no data found');
-    }
 
     if (fetching) {
       return Dashboard.#loadingSVG();

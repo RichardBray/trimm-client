@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { Component, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import Rest from '../services/Rest';
+import Rest from '@services/Rest';
 
 // Styles
 import inputCss from '@assets/styles/components/Inputs.module.css';
@@ -112,7 +112,7 @@ class Login extends Component<LoginProps, LoginState> {
     const accessTokenExists = response.accessToken;
 
     if (accessTokenExists) {
-      Login.#addTokenToSessionStorage(response);
+      Login.#storeAccessToken(response);
       return this.props.navigate?.('/dashboard');
     }
 
@@ -124,7 +124,7 @@ class Login extends Component<LoginProps, LoginState> {
     this.setState({ rightColumn: rightColumnClone });
   }
 
-  static #addTokenToSessionStorage(response: AuthResponse) {
+  static #storeAccessToken(response: AuthResponse) {
     if (sessionStorage.getItem('accessToken')) {
       sessionStorage.removeItem('accessToken');
     }
