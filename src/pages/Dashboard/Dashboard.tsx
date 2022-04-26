@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { CombinedError } from 'urql';
 
-import Layout from '../../templates/Layout';
+import Layout from '@templates/Layout';
 
 // - services
 import { ISpendingItem } from '@services/interfaces';
