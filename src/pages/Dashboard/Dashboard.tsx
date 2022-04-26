@@ -6,7 +6,7 @@ import Layout from '../../templates/Layout';
 // - services
 import { ISpendingItem } from '@services/interfaces';
 import { modifyMonth, monthToText } from '@services/index';
-import Graphql, { Spending, Categories, User } from '@services/Graphql';
+import Graphql, { Spending, Category, User } from '@services/Graphql';
 
 // - components
 import SpendingItems from './components/SpendingItems';
@@ -39,7 +39,7 @@ type DashboardDateInput = {
 type DashboardProps = {
   getCategories?: {
     data?: {
-      categories: Categories[];
+      categories: Category[];
       items: Spending[];
       getUser: User;
     };

@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from 'urql';
 
-export type Categories = {
+export type Category = {
   id?: string;
   cat_uuid: string;
   cat_name: string;
@@ -23,6 +23,13 @@ export type User = {
   user_name: string;
   user_email: string;
   user_currency: string;
+};
+
+export type CreateItemInput = {
+  name: string;
+  price: string;
+  createDttm: string;
+  catUuid: string;
 };
 
 class Graphql {
@@ -51,6 +58,21 @@ class Graphql {
     });
 
     return result;
+  }
+
+  static createItem() {
+    const query = `#graphql
+      mutation ($itemCreateInput: ItemCreateInput!) {
+        createItem(itemCreateInput: $itemCreateInput) {
+          item_name
+          item_uuid
+        }
+      }
+    `;
+
+    return useMutation(query);
+
+    // return Graphql.#executeMutation(query, { itemCreateInput });
   }
 
   static deleteItem(itemUuid: string) {
@@ -106,7 +128,7 @@ class Graphql {
     return Graphql.#executeMutation(query, { catUuid });
   }
 
-  static #executeMutation(query: string, mutationIdenfifier: Record<string, string>) {
+  static #executeMutation(query: string, mutationIdenfifier: Record<string, string> | Record<string, CreateItemInput>) {
     const [_updateResults, updateFn] = useMutation(query);
 
     return updateFn(mutationIdenfifier);

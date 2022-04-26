@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
+import Graphql from '@services/Graphql';
 // - styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
 import Buttons from '@assets/styles/components/Buttons.module.css';
@@ -7,11 +8,10 @@ import DashboardCss from '@assets/styles/views/Dashboard.module.css';
 import HelpersCss from '@assets/styles/helpers.module.css';
 
 // - types
-import { categories } from '../../../services/Graphql';
-
+import { Category, CreateItemInput } from '@services/Graphql';
 
 type SpendingItemsFormProps = {
-  categoriesData: categories[] | undefined;
+  categoriesData: Category[] | undefined;
 };
 
 type SpendingItemsFormState = {
@@ -23,10 +23,7 @@ type SpendingItemsFormState = {
   };
 };
 
-type StateOutput = [
-  SpendingItemsFormState,
-  React.Dispatch<React.SetStateAction<SpendingItemsFormState>>
-];
+type StateOutput = [SpendingItemsFormState, React.Dispatch<React.SetStateAction<SpendingItemsFormState>>];
 
 class SpendingItemsForm {
   static #defaultState: SpendingItemsFormState = {
@@ -42,8 +39,9 @@ class SpendingItemsForm {
     const stateData = useState(SpendingItemsForm.#defaultState);
     const [state] = stateData;
     const { item_name, create_dttm, item_price } = state.spending_item;
+    const [_updateResults, updateFn] = Graphql.createItem();
 
-    const categoryList = props.categoriesData?.map((cat: categories) => (
+    const categoryList = props.categoriesData?.map((cat: Category) => (
       <option key={cat.cat_uuid} value={cat.cat_uuid}>
         {cat.cat_name}
       </option>
@@ -52,7 +50,7 @@ class SpendingItemsForm {
     return (
       <form
         className={DashboardCss['spending-form']}
-        onSubmit={(e) => SpendingItemsForm.#addSpendingItemToState(e, stateData)}
+        onSubmit={async (e) => await SpendingItemsForm.#createSpendingItem(e, stateData, updateFn)}
       >
         <section className={`${HelpersCss['w-70']} dis-f`}>
           <div className={DashboardCss['spending-form__text']}>
@@ -126,21 +124,31 @@ class SpendingItemsForm {
         [e.target?.name]: e.target?.value,
       },
     };
-    console.log(updatedState, 'updatedState');
     updateState(updatedState);
   }
 
-  // TODO this should be sending an API request
-  static async #addSpendingItemToState(e: FormEvent<HTMLFormElement>, stateData: StateOutput) {
-    const [state, updateState] = stateData;
-    const categoryDoesNotExist = state.spending_item.cat_id !== '0';
+  static async #createSpendingItem(e: FormEvent<HTMLFormElement>, stateData: StateOutput, updateFn) {
+    const [state] = stateData;
 
     e.preventDefault();
 
-    if (categoryDoesNotExist) {
-      return alert('Please select a category');
+    try {
+      const itemCreateInput: CreateItemInput = {
+        name: state.spending_item.item_name,
+        price: state.spending_item.item_price,
+        catUuid: state.spending_item.cat_id,
+        createDttm: state.spending_item.create_dttm,
+      };
+
+
+
+      const res = await updateFn({itemCreateInput});
+      if (res.error) {
+        throw new Error(res.error.message);
+      }
+    } catch (error) {
+      console.error(`createSpendingItem error: ${error}`);
     }
-    updateState(SpendingItemsForm.#defaultState);
   }
 }
 

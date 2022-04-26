@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Graphql, { Spending, Categories } from '@services/Graphql';
+import Graphql, { Spending, Category } from '@services/Graphql';
 import { roundNumber, categoryColours } from '@services/index';
 import CategoryTotals from '@services/CategoryTotals';
 const calculateCategoryTotals = CategoryTotals.main;
@@ -15,7 +15,7 @@ import deleteIcon from '@assets/img/delete-icon.svg';
 
 type CategoriesListProps = {
   items: Spending[] | undefined;
-  categories: Categories[] | undefined;
+  categories: Category[] | undefined;
   currency: string | undefined;
 };
 
@@ -83,7 +83,7 @@ class CategoriesList {
   static #renderCategoriesList(args: RenderCategoriesListInput) {
     const { props, filteredCategoryId, setFiteredCategoryId } = args;
 
-    return props.categories?.map((cat: Categories, index: number) => {
+    return props.categories?.map((cat: Category, index: number) => {
       const categoryTotals = calculateCategoryTotals(props.items);
       const categoryFiltered = filteredCategoryId === cat.cat_uuid;
       const categoryTotal = categoryTotals.find((categoryTotal) => categoryTotal.cat_uuid === cat.cat_uuid)?.cat_total;

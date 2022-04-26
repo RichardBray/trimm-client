@@ -1,4 +1,4 @@
-import { Component, useContext } from 'react';
+import { Component } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Rest from '@services/Rest';

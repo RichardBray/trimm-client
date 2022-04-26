@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { monthToText, roundNumber } from '@services/index';
-import Graphql, { Spending, Categories } from '@services/Graphql';
+import Graphql, { Spending, Category } from '@services/Graphql';
 
 // - styles
 import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
@@ -13,7 +13,7 @@ import deleteIcon from '@assets/img/delete-icon.svg';
 
 type SpendingItemsProps = {
   items: Spending[] | undefined;
-  categories: Categories[] | undefined;
+  categories: Category[] | undefined;
   currency: string | undefined;
 };
 class SpendingItems {
@@ -52,12 +52,12 @@ class SpendingItems {
     return <>{spendingItems}</>
   }
 
-  static #categoryNameFromUuid(categories: Categories[] | undefined, catUuid: string): string {
+  static #categoryNameFromUuid(categories: Category[] | undefined, catUuid: string): string {
     if (typeof categories === 'undefined') {
       return '';
     }
 
-    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as Categories;
+    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as Category;
 
     return selectedCategory.cat_name;
   }

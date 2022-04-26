@@ -1,9 +1,9 @@
-import { ChartOptions } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
 // - services
 import { roundNumber, categoryColours } from '@services/index';
-import { Spending, Categories } from '@services/Graphql';
+import { Spending, Category } from '@services/Graphql';
 import CategoryTotals from '@services/CategoryTotals';
 const calculateCategoryTotals = CategoryTotals.main;
 
@@ -12,24 +12,21 @@ import DashboardCss from '@assets/styles/views/Dashboard.module.css';
 
 type CategoryDonutGraphProps = {
   items: Spending[] | undefined;
-  categories: Categories[] | undefined;
+  categories: Category[] | undefined;
   currency: string | undefined;
 };
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 class CategoryDonutGraph {
   static #graphOptions = {
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false,
-    },
+
     hover: {
       mode: 'x',
     },
     maintainAspectRatio: true,
     cutoutPercentage: 65,
-    responsive: false,
+    responsive: true,
   } as ChartOptions;
 
   static main(props: CategoryDonutGraphProps) {
@@ -52,7 +49,7 @@ class CategoryDonutGraph {
   /**
    * Generates data for the Doughnut graph
    */
-  static #graphData(categories: Categories[] | undefined, items: Spending[] | undefined) {
+  static #graphData(categories: Category[] | undefined, items: Spending[] | undefined) {
     const graph_labels: string[] = [];
     const graph_totals: number[] = [];
     const categoryTotals = calculateCategoryTotals(items);
