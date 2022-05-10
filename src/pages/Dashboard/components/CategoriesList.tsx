@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Graphql, { Spending, Category } from '@services/Graphql';
 import { roundNumber, categoryColours } from '@services/index';
 import CategoryTotals from '@services/CategoryTotals';
-const calculateCategoryTotals = CategoryTotals.main;
 
 // - styles
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
@@ -84,6 +83,7 @@ class CategoriesList {
     const { props, filteredCategoryId, setFiteredCategoryId } = args;
 
     return props.categories?.map((cat: Category, index: number) => {
+      const calculateCategoryTotals = CategoryTotals.main;
       const categoryTotals = calculateCategoryTotals(props.items);
       const categoryFiltered = filteredCategoryId === cat.cat_uuid;
       const categoryTotal = categoryTotals.find((categoryTotal) => categoryTotal.cat_uuid === cat.cat_uuid)?.cat_total;

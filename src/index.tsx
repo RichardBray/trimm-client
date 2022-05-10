@@ -11,7 +11,7 @@ import Settings from './pages/Settings';
 import '@assets/styles/global.module.css';
 
 const SENTRY_ID = import.meta.env.VITE_SENTRY_ID as string;
-const ENV = import.meta.env.VITE_ENV as string;
+const ENV = import.meta.env.MODE as string;
 
 const ROOT = document.querySelector('.react-root');
 const root = ReactDOM.createRoot(ROOT as Element);

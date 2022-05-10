@@ -5,7 +5,6 @@ import { Doughnut } from 'react-chartjs-2';
 import { roundNumber, categoryColours } from '@services/index';
 import { Spending, Category } from '@services/Graphql';
 import CategoryTotals from '@services/CategoryTotals';
-const calculateCategoryTotals = CategoryTotals.main;
 
 // - styles
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
@@ -31,18 +30,18 @@ class CategoryDonutGraph {
 
   static main(props: CategoryDonutGraphProps) {
     return (
-      <section>
+      <>
         <Doughnut
           height={500}
           width={400}
           data={CategoryDonutGraph.#graphData(props.categories, props.items)}
           options={CategoryDonutGraph.#graphOptions}
         />
-        <h2 className={DashboardCss['Spending-total']}>
+        <strong className={DashboardCss.spendingTotal}>
           {props.currency}
           {CategoryDonutGraph.#calculateSpendingTotal(props.items)}
-        </h2>
-      </section>
+        </strong>
+      </>
     );
   }
 
@@ -52,6 +51,7 @@ class CategoryDonutGraph {
   static #graphData(categories: Category[] | undefined, items: Spending[] | undefined) {
     const graph_labels: string[] = [];
     const graph_totals: number[] = [];
+    const calculateCategoryTotals = CategoryTotals.main;
     const categoryTotals = calculateCategoryTotals(items);
 
     categoryTotals.map((catTotal) => {
