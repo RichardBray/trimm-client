@@ -4,13 +4,14 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
 type ViteConfigInput = {
-  mode: string;
-  command: string;
-};
+  mode: string,
+  command: string,
+}
+
 export default (args: ViteConfigInput) => {
   const generateScopedName = args.mode === 'production'
-    ? '[hash:base64:2]'
-    : '[local]_[hash:base64:2]';
+  ? '[hash:base64:2]'
+  : '[local]_[hash:base64:2]';
 
   return defineConfig({
     resolve: {
@@ -20,12 +21,12 @@ export default (args: ViteConfigInput) => {
         '@templates': path.resolve(__dirname, './src/templates'),
       },
     },
+    plugins: [react()],
     css: {
       modules: {
         localsConvention: 'camelCase',
         generateScopedName,
       },
     },
-    plugins: [react()],
   });
 };

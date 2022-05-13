@@ -43,7 +43,7 @@ class Login extends Component<LoginProps, LoginState> {
   render() {
     return (
       <section className={loginCss.container}>
-        <div className={loginCss['left-column']}>
+        <div className={loginCss.leftColumn}>
           <form onSubmit={(e) => this.#handleSubmit(e)} className={`dis-f fd-c ${loginCss['left-column-form']}`}>
             <div className={loginCss['logo-pos']}>
               <img src={logo} className={loginCss['logo-width']} alt="Trimm logo" />
