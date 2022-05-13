@@ -1,14 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
-import Graphql from '@services/Graphql';
+import Graphql, { Category, CreateItemInput, UpdateMutationFn }  from '@services/Graphql';
 // - styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
 import Buttons from '@assets/styles/components/Buttons.module.css';
 import DashboardCss from '@assets/styles/views/Dashboard.module.css';
 import HelpersCss from '@assets/styles/helpers.module.css';
 
-// - types
-import { Category, CreateItemInput } from '@services/Graphql';
 
 type SpendingItemsFormProps = {
   categoriesData: Category[] | undefined;
@@ -25,6 +23,12 @@ type SpendingItemsFormState = {
 
 type StateOutput = [SpendingItemsFormState, React.Dispatch<React.SetStateAction<SpendingItemsFormState>>];
 
+type CreateSpendingItemInput = {
+  formEvent: FormEvent<HTMLFormElement>;
+  stateData: StateOutput;
+  updateFn: UpdateMutationFn;
+};
+
 class SpendingItemsForm {
   static #defaultState: SpendingItemsFormState = {
     spending_item: {
@@ -40,6 +44,7 @@ class SpendingItemsForm {
     const [state] = stateData;
     const { item_name, create_dttm, item_price } = state.spending_item;
     const [_updateResults, updateFn] = Graphql.createItem();
+    const [_rsult, refresh] = Graphql.refreshSpendingAllItems();
 
     const categoryList = props.categoriesData?.map((cat: Category) => (
       <option key={cat.cat_uuid} value={cat.cat_uuid}>
@@ -50,7 +55,9 @@ class SpendingItemsForm {
     return (
       <form
         className={DashboardCss['spending-form']}
-        onSubmit={async (e) => await SpendingItemsForm.#createSpendingItem(e, stateData, updateFn)}
+        onSubmit={(e) =>
+          SpendingItemsForm.#createSpendingItem({ formEvent: e, stateData, updateFn: updateFn as UpdateMutationFn })
+        }
       >
         <section className={`${HelpersCss['w-70']} dis-f`}>
           <div className={DashboardCss['spending-form__text']}>
@@ -127,22 +134,22 @@ class SpendingItemsForm {
     updateState(updatedState);
   }
 
-  static async #createSpendingItem(e: FormEvent<HTMLFormElement>, stateData: StateOutput, updateFn) {
+  static async #createSpendingItem(options: CreateSpendingItemInput) {
+    const { formEvent, stateData, updateFn } = options;
     const [state] = stateData;
 
-    e.preventDefault();
+    formEvent.preventDefault();
 
     try {
       const itemCreateInput: CreateItemInput = {
         name: state.spending_item.item_name,
-        price: state.spending_item.item_price,
+        price: Number(state.spending_item.item_price),
         catUuid: state.spending_item.cat_id,
-        createDttm: state.spending_item.create_dttm,
+        createDttm: new Date(state.spending_item.create_dttm),
       };
 
+      const res = await updateFn({ itemCreateInput });
 
-
-      const res = await updateFn({itemCreateInput});
       if (res.error) {
         throw new Error(res.error.message);
       }

@@ -27,8 +27,8 @@ type LoginProps = {
 
 type AuthResponse = {
   accessToken?: string;
-  refreshToken?: string
-}
+  refreshToken?: string;
+};
 
 class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
@@ -91,7 +91,7 @@ class Login extends Component<LoginProps, LoginState> {
       body: JSON.stringify(data),
     });
 
-    this.#handleApiResponse(reponse);
+    await this.#handleApiResponse(reponse);
   }
 
   #handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -108,11 +108,11 @@ class Login extends Component<LoginProps, LoginState> {
     );
   }
 
-  #handleApiResponse(response: AuthResponse) {
+  async #handleApiResponse(response: AuthResponse) {
     const accessTokenExists = response.accessToken;
 
     if (accessTokenExists) {
-      Login.#storeAccessToken(response);
+      await Login.#storeAccessToken(response);
       return this.props.navigate?.('/dashboard');
     }
 
@@ -129,9 +129,10 @@ class Login extends Component<LoginProps, LoginState> {
       sessionStorage.removeItem('accessToken');
     }
 
-    sessionStorage.setItem('accessToken', response.accessToken as string);
+    return Promise.resolve().then(() => {
+      return sessionStorage.setItem('accessToken', response.accessToken as string);
+    });
   }
-
 }
 
 function addHooksTo(Comp: typeof Login) {

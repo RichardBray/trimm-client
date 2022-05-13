@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from 'urql';
+import { useQuery, useMutation, OperationContext, OperationResult  } from 'urql';
 
 export type Category = {
   id?: string;
@@ -27,10 +27,12 @@ export type User = {
 
 export type CreateItemInput = {
   name: string;
-  price: string;
-  createDttm: string;
+  price: number;
+  createDttm: Date;
   catUuid: string;
 };
+
+export type UpdateMutationFn = (variables?: unknown, context?: Partial<OperationContext>) => Promise<OperationResult<unknown, unknown>>;
 
 class Graphql {
   static getDashboardData() {
@@ -58,6 +60,25 @@ class Graphql {
     });
 
     return result;
+  }
+
+  static refreshSpendingAllItems() {
+    const query = `#graphql
+      query {
+        items(startDate: "2022-03-01", endDate: "2022-04-01") {
+          item_uuid
+          item_name
+          item_price
+          create_dttm
+          cat_uuid
+        }
+      }
+  `;
+
+    return useQuery({
+      query,
+    });
+    reexecuteQuery({ requestPolicy: 'network-only' });
   }
 
   static createItem() {
