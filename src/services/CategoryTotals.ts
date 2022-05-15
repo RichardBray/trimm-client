@@ -1,4 +1,4 @@
-import { Spending } from '@services/Graphql';
+import { Spending } from '@services/Api';
 
 type CategoryTotalsOutput = {
   cat_uuid: string;

@@ -34,7 +34,7 @@ export type CreateItemInput = {
 
 export type UpdateMutationFn = (variables?: unknown, context?: Partial<OperationContext>) => Promise<OperationResult<unknown, unknown>>;
 
-class Graphql {
+class Api {
   static getDashboardData() {
     const query = `#graphql
       query {
@@ -96,7 +96,7 @@ class Graphql {
 
     return useMutation(query);
 
-    // return Graphql.#executeMutation(query, { itemCreateInput });
+    // return Api.#executeMutation(query, { itemCreateInput });
   }
 
   static deleteItem(itemUuid: string) {
@@ -108,7 +108,7 @@ class Graphql {
       }
     `;
 
-    return Graphql.#executeMutation(query, { itemUuid });
+    return Api.#executeMutation(query, { itemUuid });
   }
 
   static getCategories() {
@@ -137,7 +137,7 @@ class Graphql {
       }
     `;
 
-    return Graphql.#executeMutation(query, { catName });
+    return Api.#executeMutation(query, { catName });
   }
 
   static deleteCategory(catUuid: string) {
@@ -149,7 +149,7 @@ class Graphql {
       }
     `;
 
-    return Graphql.#executeMutation(query, { catUuid });
+    return Api.#executeMutation(query, { catUuid });
   }
 
   static #executeMutation(query: string, mutationIdenfifier: Record<string, string> | Record<string, CreateItemInput>) {
@@ -159,4 +159,4 @@ class Graphql {
   }
 }
 
-export default Graphql;
+export default Api;

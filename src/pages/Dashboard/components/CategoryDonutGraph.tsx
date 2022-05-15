@@ -3,7 +3,7 @@ import { Doughnut } from 'react-chartjs-2';
 
 // - services
 import { roundNumber, categoryColours } from '@services/index';
-import { Spending, Category } from '@services/Graphql';
+import { Spending, Category } from '@services/Api';
 import CategoryTotals from '@services/CategoryTotals';
 
 // - styles

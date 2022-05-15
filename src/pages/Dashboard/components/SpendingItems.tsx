@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { monthToText, roundNumber } from '@services/index';
-import Graphql, { Spending, Category } from '@services/Graphql';
+import Api, { Spending, Category } from '@services/Api';
 
 // - styles
 import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
@@ -84,7 +84,7 @@ class SpendingItems {
 
   static async #deleteItem(item_uuid: string): Promise<void> {
     try {
-      const result = await Graphql.deleteItem(item_uuid);
+      const result = await Api.deleteItem(item_uuid);
 
       if (result.error) throw new Error(result.error.message);
     } catch (err) {

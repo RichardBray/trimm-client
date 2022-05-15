@@ -6,7 +6,7 @@ import Layout from '@templates/Layout';
 // - services
 import { ISpendingItem } from '@services/interfaces';
 import { modifyMonth, monthToText } from '@services/index';
-import Graphql, { Spending, Category, User } from '@services/Graphql';
+import Api, { Spending, Category, User } from '@services/Api';
 
 // - components
 import SpendingItems from './components/SpendingItems';
@@ -188,7 +188,7 @@ class Dashboard extends Component<DashboardProps, DashboardState> {
 
 function addHooksTo(Comp: typeof Dashboard) {
   function CompWithHooks(props: DashboardProps) {
-    const getCategories = Graphql.getDashboardData();
+    const getCategories = Api.getDashboardData();
     const data = {
       ...props,
       getCategories,

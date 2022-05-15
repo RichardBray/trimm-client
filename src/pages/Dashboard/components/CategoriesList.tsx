@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Graphql, { Spending, Category } from '@services/Graphql';
+import Api, { Spending, Category } from '@services/Api';
 import { roundNumber, categoryColours } from '@services/index';
 import CategoryTotals from '@services/CategoryTotals';
 
@@ -63,9 +63,9 @@ class CategoriesList {
   static async #handleAddCategory(e: React.FormEvent<HTMLFormElement>, newCategory: string) {
     try {
       e.preventDefault();
-      const result = await Graphql.addCategory(newCategory);
+      const result = await Api.addCategory(newCategory);
 
-      const categories = Graphql.getCategories();
+      const categories = Api.getCategories();
 
       if (categories.data.length === MAX_CATEGORIES) {
         throw new Error('You have reached the maximum number of categories');
@@ -116,7 +116,7 @@ class CategoriesList {
 
   static async #deleteCategory(cat_uuid: string) {
     try {
-      const result = await Graphql.deleteCategory(cat_uuid);
+      const result = await Api.deleteCategory(cat_uuid);
 
       if (result.error) throw new Error(result.error.message);
     } catch (error) {

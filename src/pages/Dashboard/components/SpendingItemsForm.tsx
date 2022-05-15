@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
-import Graphql, { Category, CreateItemInput, UpdateMutationFn }  from '@services/Graphql';
+import Api, { Category, CreateItemInput, UpdateMutationFn }  from '@services/Api';
 // - styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
 import Buttons from '@assets/styles/components/Buttons.module.css';
@@ -43,8 +43,8 @@ class SpendingItemsForm {
     const stateData = useState(SpendingItemsForm.#defaultState);
     const [state] = stateData;
     const { item_name, create_dttm, item_price } = state.spending_item;
-    const [_updateResults, updateFn] = Graphql.createItem();
-    const [_rsult, refresh] = Graphql.refreshSpendingAllItems();
+    const [_updateResults, updateFn] = Api.createItem();
+    const [_rsult, refresh] = Api.refreshSpendingAllItems();
 
     const categoryList = props.categoriesData?.map((cat: Category) => (
       <option key={cat.cat_uuid} value={cat.cat_uuid}>
