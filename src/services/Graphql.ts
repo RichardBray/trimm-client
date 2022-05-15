@@ -78,15 +78,18 @@ class Graphql {
     return useQuery({
       query,
     });
-    reexecuteQuery({ requestPolicy: 'network-only' });
+    // reexecuteQuery({ requestPolicy: 'network-only' });
   }
 
   static createItem() {
     const query = `#graphql
       mutation ($itemCreateInput: ItemCreateInput!) {
         createItem(itemCreateInput: $itemCreateInput) {
-          item_name
           item_uuid
+          item_name
+          item_price
+          create_dttm
+          cat_uuid
         }
       }
     `;

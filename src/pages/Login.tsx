@@ -129,9 +129,11 @@ class Login extends Component<LoginProps, LoginState> {
       sessionStorage.removeItem('accessToken');
     }
 
-    return Promise.resolve().then(() => {
-      return sessionStorage.setItem('accessToken', response.accessToken as string);
-    });
+    return new Promise((resolve) => {
+      const data = sessionStorage.setItem('accessToken', response.accessToken as string);
+      console.log(data, 'session storage data')
+      resolve(data);
+    })
   }
 }
 

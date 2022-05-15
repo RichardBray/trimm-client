@@ -18,38 +18,44 @@ type SpendingItemsProps = {
 };
 class SpendingItems {
   static main(props: SpendingItemsProps) {
-    const { items } = props;
-    const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
+    try {
+      const { items } = props;
+      const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
 
-    if (dataDoesNotExist) {
-      return <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
-    }
+      if (dataDoesNotExist) {
+        return <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
+      }
 
-    const spendingItems = items.map((item: Spending) => (
-      <section key={item.item_uuid} className={SpendingItemCss.container}>
-        <div className={SpendingItemCss['first-column']}>
-          <div className={SpendingItemCss['cat-title']}>{SpendingItems.#categoryNameFromUuid(props?.categories, item.cat_uuid)}</div>
-          <div>{item.item_name}</div>
-        </div>
-        <div className={SpendingItemCss['second-column']}>
-          <div className={HelpersCss['mb-1rem']}>{SpendingItems.#formatDate(item.create_dttm)}</div>
-          <div className={SpendingItemCss['price-text']}>
-            {props.currency}
-            {roundNumber(item.item_price)}
+      const spendingItems = items.map((item: Spending) => (
+        <section key={item.item_uuid} className={SpendingItemCss.container}>
+          <div className={SpendingItemCss['first-column']}>
+            <div className={SpendingItemCss['cat-title']}>
+              {SpendingItems.#categoryNameFromUuid(props?.categories, item.cat_uuid)}
+            </div>
+            <div>{item.item_name}</div>
           </div>
-        </div>
-        <div className={SpendingItemCss['third-column']}>
-          <img
-            src={deleteIcon}
-            alt="Delete Icon"
-            className={GlobalCss['delete-icon']}
-            onClick={() => SpendingItems.#deleteItem(item.item_uuid)}
-          />
-        </div>
-      </section>
-    ));
+          <div className={SpendingItemCss['second-column']}>
+            <div className={HelpersCss['mb-1rem']}>{SpendingItems.#formatDate(item.create_dttm)}</div>
+            <div className={SpendingItemCss['price-text']}>
+              {props.currency}
+              {roundNumber(item.item_price)}
+            </div>
+          </div>
+          <div className={SpendingItemCss['third-column']}>
+            <img
+              src={deleteIcon}
+              alt="Delete Icon"
+              className={GlobalCss['delete-icon']}
+              onClick={() => SpendingItems.#deleteItem(item.item_uuid)}
+            />
+          </div>
+        </section>
+      ));
 
-    return <>{spendingItems}</>
+      return <>{spendingItems}</>;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   static #categoryNameFromUuid(categories: Category[] | undefined, catUuid: string): string {
@@ -57,7 +63,11 @@ class SpendingItems {
       return '';
     }
 
-    const selectedCategory = categories.find(category => category.cat_uuid === catUuid) as Category;
+    const selectedCategory = categories.find((category) => category.cat_uuid === catUuid);
+
+    if (!selectedCategory) {
+      throw new Error(`categoryNameFromUuid: category with uuid ${catUuid} not found`);
+    }
 
     return selectedCategory.cat_name;
   }
@@ -77,8 +87,7 @@ class SpendingItems {
       const result = await Graphql.deleteItem(item_uuid);
 
       if (result.error) throw new Error(result.error.message);
-
-    } catch(err) {
+    } catch (err) {
       console.error(err);
     }
   }
