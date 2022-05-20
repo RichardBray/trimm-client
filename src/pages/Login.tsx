@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { Component, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-import Rest from '@services/Rest';
+import Api from '@services/Api';
+import { GlobalStore, Dispatch, DispatchActionTypes } from '@services/GlobalStore';
 
 // Styles
 import inputCss from '@assets/styles/components/Inputs.module.css';
@@ -23,6 +23,7 @@ type LoginState = {
 
 type LoginProps = {
   navigate?: (arg: string) => void;
+  dispatch: Dispatch;
 };
 
 type AuthResponse = {
@@ -80,18 +81,20 @@ class Login extends Component<LoginProps, LoginState> {
   }
 
   async #handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const data = {
-      username: this.state.username,
-      password: this.state.password,
-    };
+      const data = {
+        username: this.state.username,
+        password: this.state.password,
+      };
 
-    const reponse = await Rest.post('/login', {
-      body: JSON.stringify(data),
-    });
+      const reponse = await Api.login(data);
 
-    await this.#handleApiResponse(reponse);
+      await this.#handleApiResponse(reponse);
+    } catch(error) {
+      console.error(`Login handleSubmit: ${error}`);
+    }
   }
 
   #handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -112,7 +115,7 @@ class Login extends Component<LoginProps, LoginState> {
     const accessTokenExists = response.accessToken;
 
     if (accessTokenExists) {
-      await Login.#storeAccessToken(response);
+      await this.#storeAccessToken(response);
       return this.props.navigate?.('/dashboard');
     }
 
@@ -124,24 +127,29 @@ class Login extends Component<LoginProps, LoginState> {
     this.setState({ rightColumn: rightColumnClone });
   }
 
-  static #storeAccessToken(response: AuthResponse) {
+  #storeAccessToken(response: AuthResponse) {
+    if (!response.accessToken) throw new Error('Access token not returned from AWS');
+
+    this.props.dispatch({
+      type: DispatchActionTypes.addAccessToken,
+      payload: response.accessToken,
+    });
+
     if (sessionStorage.getItem('accessToken')) {
       sessionStorage.removeItem('accessToken');
     }
 
-    return new Promise((resolve) => {
-      const data = sessionStorage.setItem('accessToken', response.accessToken as string);
-      console.log(data, 'session storage data')
-      resolve(data);
-    })
+    sessionStorage.setItem('accessToken', response.accessToken);
   }
 }
 
 function addHooksTo(Comp: typeof Login) {
   function CompWithHooks(props: LoginProps) {
     const navigate = useNavigate();
+    const globalStore = useContext(GlobalStore);
+    const dispatch = globalStore?.dispatch as Dispatch;
 
-    return <Comp {...props} navigate={navigate} />;
+    return <Comp {...props} navigate={navigate} dispatch={dispatch} />;
   }
 
   return CompWithHooks;

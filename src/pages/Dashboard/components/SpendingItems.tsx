@@ -55,6 +55,7 @@ class SpendingItems {
       return <>{spendingItems}</>;
     } catch (error) {
       console.error(error);
+      return null;
     }
   }
 
