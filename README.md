@@ -14,8 +14,9 @@ $ npm start
 fekisimi@tempmailin.com
 
 - session expired page, add server error (500), console.error(s)
-- refresh FE after item added
-- pass accessTOkan to dashboard component redirection
+- delete spending items
+- change dates
+- logout
 - finish removing redux
 - add spinner to login button
 - add focus to all buttons and inputs
