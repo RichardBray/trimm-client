@@ -13,11 +13,11 @@ $ npm start
 ```
 fekisimi@tempmailin.com
 
+- session expired page, add server error (500), console.error(s)
 - refresh FE after item added
-- add item successfully added log to BE
+- pass accessTOkan to dashboard component redirection
 - finish removing redux
 - add spinner to login button
-- session expired page, add server error (500), console.error(s)
 - add focus to all buttons and inputs
 - remove Google Analytics
 - use context to store access token

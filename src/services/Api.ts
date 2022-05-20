@@ -1,4 +1,5 @@
-import { useQuery, useMutation, OperationContext, OperationResult  } from 'urql';
+import { useQuery, useMutation, OperationContext, OperationResult } from 'urql';
+import Rest from '@services/Rest';
 
 export type Category = {
   id?: string;
@@ -32,9 +33,38 @@ export type CreateItemInput = {
   catUuid: string;
 };
 
-export type UpdateMutationFn = (variables?: unknown, context?: Partial<OperationContext>) => Promise<OperationResult<unknown, unknown>>;
+export type UpdateMutationFn = (
+  variables?: unknown,
+  context?: Partial<OperationContext>
+) => Promise<OperationResult<unknown, unknown>>;
 
+export type LoginInput = {
+  username: string;
+  password: string;
+};
 class Api {
+  static getItemsQuery = `#graphql
+  query {
+    items(startDate: "2022-03-01", endDate: "2022-04-01") {
+      item_uuid
+      item_name
+      item_price
+      create_dttm
+      cat_uuid
+    }
+  }`;
+
+  static async login(loginData: LoginInput) {
+    const usernameExists = loginData.hasOwnProperty('username') || loginData.username;
+    const passwordExists = loginData.hasOwnProperty('password') || loginData.password;
+
+    if (!usernameExists) throw new Error(`username not found`);
+    if (!passwordExists) throw new Error(`password not found`);
+
+    return await Rest.post('/login', {
+      body: JSON.stringify(loginData),
+    });
+  }
   static getDashboardData() {
     const query = `#graphql
       query {
