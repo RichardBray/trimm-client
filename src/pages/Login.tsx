@@ -23,7 +23,7 @@ type LoginState = {
 
 type LoginProps = {
   navigate?: (arg: string) => void;
-  dispatch: Dispatch;
+  dispatch?: Dispatch;
 };
 
 type AuthResponse = {
@@ -128,6 +128,7 @@ class Login extends Component<LoginProps, LoginState> {
   }
 
   #storeAccessToken(response: AuthResponse) {
+    if (!this.props.dispatch) throw new Error('Dispatch prop not passed down');
     if (!response.accessToken) throw new Error('Access token not returned from AWS');
 
     this.props.dispatch({
