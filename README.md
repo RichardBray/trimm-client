@@ -17,6 +17,7 @@ fekisimi@tempmailin.com
 - delete spending items
 - change dates
 - logout
+- registration
 - finish removing redux
 - add spinner to login button
 - add focus to all buttons and inputs

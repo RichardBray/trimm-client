@@ -4,7 +4,7 @@ import { cacheExchange, SystemFields } from '@urql/exchange-graphcache';
 import { devtoolsExchange } from '@urql/devtools';
 
 import { GlobalStore } from '@services/GlobalStore';
-import Api, {Spending} from '@services/Api';
+import Api, { Spending } from '@services/Api';
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
@@ -12,47 +12,48 @@ export type ReactChildren = {
   children: React.ReactNode;
 };
 
-type GraphqlData = SystemFields & {items: Spending[]}
+type GraphqlData = SystemFields & { items: Spending[] };
 
-function GraphqlProvider({ children }: ReactChildren) {
+function GraphqlProvider({ children }: ReactChildren): JSX.Element | null {
   try {
-  const globalStore = useContext(GlobalStore);
-  const accessToken = sessionStorage.getItem('accessToken') || globalStore?.state.accessToken;
+    const globalStore = useContext(GlobalStore);
+    const accessToken = sessionStorage.getItem('accessToken') ?? globalStore?.state.accessToken;
 
-  const client = createClient({
-    url: `${API_URL}/graphql`,
-    fetchOptions: {
-      headers: {
-        Authorization: `bearer ${accessToken}`,
+    const client = createClient({
+      url: `${API_URL}/graphql`,
+      fetchOptions: {
+        headers: {
+          Authorization: `bearer ${accessToken}`,
+        },
       },
-    },
-    exchanges: [
-      devtoolsExchange,
-      dedupExchange,
-      cacheExchange({
-        updates: {
-          Mutation: {
-            createItem: (result, _args, cache) => {
-              cache.updateQuery({ query: Api.getItemsQuery }, (data: GraphqlData | null) => {
-                if (!data) throw new Error('Grapql data not found');
+      exchanges: [
+        devtoolsExchange,
+        dedupExchange,
+        cacheExchange({
+          updates: {
+            Mutation: {
+              createItem: (result, _args, cache) => {
+                cache.updateQuery({ query: Api.getItemsQuery }, (data: GraphqlData | null) => {
+                  if (!data) throw new Error('Grapql data not found');
 
-                return {
-                  ...data,
-                  items: [...data.items, result.createItem],
-                } as GraphqlData;
-              });
+                  return {
+                    ...data,
+                    items: [...data.items, result.createItem],
+                  } as GraphqlData;
+                });
+              },
             },
           },
-        },
-      }),
-      fetchExchange,
-    ],
-  });
+        }),
+        fetchExchange,
+      ],
+    });
 
-  return <Provider value={client}>{children}</Provider>;
-} catch(error) {
-  console.error(`GraphqlProvider: ${error}`);
-}
+    return <Provider value={client}>{children}</Provider> ?? null;
+  } catch (error) {
+    console.error(`GraphqlProvider: ${error}`);
+    return null;
+  }
 }
 
 export default GraphqlProvider;
