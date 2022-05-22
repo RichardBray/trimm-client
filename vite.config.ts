@@ -17,6 +17,7 @@ export default (args: ViteConfigInput) => {
     resolve: {
       alias: {
         '@assets': path.resolve(__dirname, './assets'),
+        '@pages': path.resolve(__dirname, './src/pages'),
         '@services': path.resolve(__dirname, './src/services'),
         '@templates': path.resolve(__dirname, './src/templates'),
       },
