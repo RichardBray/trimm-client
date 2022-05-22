@@ -92,25 +92,6 @@ class Api {
     return result;
   }
 
-  static refreshSpendingAllItems() {
-    const query = `#graphql
-      query {
-        items(startDate: "2022-03-01", endDate: "2022-04-01") {
-          item_uuid
-          item_name
-          item_price
-          create_dttm
-          cat_uuid
-        }
-      }
-  `;
-
-    return useQuery({
-      query,
-    });
-    // reexecuteQuery({ requestPolicy: 'network-only' });
-  }
-
   static createItem() {
     const query = `#graphql
       mutation ($itemCreateInput: ItemCreateInput!) {
@@ -129,7 +110,7 @@ class Api {
     // return Api.#executeMutation(query, { itemCreateInput });
   }
 
-  static deleteItem(itemUuid: string) {
+  static deleteItem() {
     const query = `#graphql
       mutation ($itemUuid: String!) {
         deleteItem(item_uuid: $itemUuid) {
@@ -138,7 +119,7 @@ class Api {
       }
     `;
 
-    return Api.#executeMutation(query, { itemUuid });
+    return useMutation(query);
   }
 
   static getCategories() {
@@ -167,7 +148,7 @@ class Api {
       }
     `;
 
-    return Api.#executeMutation(query, { catName });
+    return useMutation(query);
   }
 
   static deleteCategory(catUuid: string) {
@@ -179,13 +160,7 @@ class Api {
       }
     `;
 
-    return Api.#executeMutation(query, { catUuid });
-  }
-
-  static #executeMutation(query: string, mutationIdenfifier: Record<string, string> | Record<string, CreateItemInput>) {
-    const [_updateResults, updateFn] = useMutation(query);
-
-    return updateFn(mutationIdenfifier);
+    return useMutation(query);
   }
 }
 
