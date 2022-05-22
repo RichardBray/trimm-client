@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { monthToText, roundNumber } from '@services/index';
-import Api, { Spending, Category } from '@services/Api';
+import Api, { Spending, Category, UpdateMutationFn } from '@services/Api';
 
 // - styles
 import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
@@ -19,6 +19,7 @@ type SpendingItemsProps = {
 class SpendingItems {
   static main(props: SpendingItemsProps) {
     try {
+      const [_updateDeketeItem, deleteItemMutation] = Api.deleteItem();
       const { items } = props;
       const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
 
@@ -46,7 +47,7 @@ class SpendingItems {
               src={deleteIcon}
               alt="Delete Icon"
               className={GlobalCss['delete-icon']}
-              onClick={() => SpendingItems.#deleteItem(item.item_uuid)}
+              onClick={() => SpendingItems.#deleteItem(deleteItemMutation as UpdateMutationFn, item.item_uuid)}
             />
           </div>
         </section>
@@ -83,13 +84,13 @@ class SpendingItems {
     return `${day} ${month} ${year}`;
   }
 
-  static async #deleteItem(item_uuid: string): Promise<void> {
+  static async #deleteItem(deleteItemMutation: UpdateMutationFn, itemUuid: string): Promise<void> {
     try {
-      const result = await Api.deleteItem(item_uuid);
+      const result = await deleteItemMutation({ itemUuid });
 
       if (result.error) throw new Error(result.error.message);
     } catch (err) {
-      console.error(err);
+      console.error(`deleteItem:${err}`);
     }
   }
 }

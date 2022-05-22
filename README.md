@@ -13,8 +13,7 @@ $ npm start
 ```
 fekisimi@tempmailin.com
 
-- session expired page, add server error (500), console.error(s)
-- delete spending items
+- delete spending items - update graphqlprovider with deleteItem
 - change dates
 - logout
 - registration
