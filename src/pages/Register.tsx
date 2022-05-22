@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Navigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { IRegister} from '../services/interfaces';
-
 // Styles
 import Inputs from '@assets/styles/components/Inputs.module.css';
 import Buttons from '@assets/styles/components/Buttons.module.css';
@@ -13,14 +11,20 @@ import LoginCss from '@assets/styles/views/Login.module.css';
 import logo from '@assets/img/trimm-logo.svg';
 
 type RegisterProps = {
-  postRegister: (arg0: unknown) => void;
-  register: {
+  postRegister?: (arg: unknown) => void;
+  register?: {
     code: number,
     message: string,
   };
 }
 
-class Register extends Component<RegisterProps, IRegister> {
+export interface RegisterState {
+  [key: string]: string;
+  password: string;
+  username: string;
+}
+
+class Register extends Component<RegisterProps, RegisterState> {
   state = {
     username: '',
     email: '',

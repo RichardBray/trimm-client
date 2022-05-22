@@ -1,9 +1,5 @@
 
-export interface IRegister {
-  [key: string]: string;
-  password: string;
-  username: string;
-}
+
 
 export interface ILoginResponse {
   refreshToken: string;
