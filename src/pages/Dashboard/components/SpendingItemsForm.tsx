@@ -26,7 +26,7 @@ type StateOutput = [SpendingItemsFormState, React.Dispatch<React.SetStateAction<
 type CreateSpendingItemInput = {
   formEvent: FormEvent<HTMLFormElement>;
   stateData: StateOutput;
-  updateFn: UpdateMutationFn;
+  createItem: UpdateMutationFn;
 };
 
 class SpendingItemsForm {
@@ -43,8 +43,7 @@ class SpendingItemsForm {
     const stateData = useState(SpendingItemsForm.#defaultState);
     const [state] = stateData;
     const { item_name, create_dttm, item_price } = state.spending_item;
-    const [_updateResults, updateFn] = Api.createItem();
-    const [_rsult, refresh] = Api.refreshSpendingAllItems();
+    const [_updateResults, createItem] = Api.createItem();
 
     const categoryList = props.categoriesData?.map((cat: Category) => (
       <option key={cat.cat_uuid} value={cat.cat_uuid}>
@@ -56,7 +55,7 @@ class SpendingItemsForm {
       <form
         className={DashboardCss['spending-form']}
         onSubmit={(e) =>
-          SpendingItemsForm.#createSpendingItem({ formEvent: e, stateData, updateFn: updateFn as UpdateMutationFn })
+          SpendingItemsForm.#createSpendingItem({ formEvent: e, stateData, createItem: createItem as UpdateMutationFn })
         }
       >
         <section className={`${HelpersCss['w-70']} dis-f`}>
@@ -135,7 +134,7 @@ class SpendingItemsForm {
   }
 
   static async #createSpendingItem(options: CreateSpendingItemInput) {
-    const { formEvent, stateData, updateFn } = options;
+    const { formEvent, stateData, createItem } = options;
     const [state] = stateData;
 
     formEvent.preventDefault();
@@ -148,13 +147,13 @@ class SpendingItemsForm {
         createDttm: new Date(state.spending_item.create_dttm),
       };
 
-      const res = await updateFn({ itemCreateInput });
+      const res = await createItem({ itemCreateInput });
 
       if (res.error) {
         throw new Error(res.error.message);
       }
     } catch (error) {
-      console.error(`createSpendingItem error: ${error}`);
+      console.error(`createSpendingItem: ${error}`);
     }
   }
 }
