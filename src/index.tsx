@@ -39,6 +39,7 @@ root.render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<RedirectPage />} />
+          <Route path="*" element={<GeneralError />} />
         </Routes>
       </BrowserRouter>
     </GraphqlProvider>

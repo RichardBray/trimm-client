@@ -146,11 +146,14 @@ class Login extends Component<LoginProps, LoginState> {
 
 function addHooksTo(Comp: typeof Login) {
   function CompWithHooks(props: LoginProps) {
-    const navigate = useNavigate();
     const globalStore = useContext(GlobalStore);
-    const dispatch = globalStore?.dispatch as Dispatch;
+    const updatedProps = {
+      ...props,
+      navigate: useNavigate(),
+      dispatch: globalStore?.dispatch as Dispatch,
+    }
 
-    return <Comp {...props} navigate={navigate} dispatch={dispatch} />;
+    return <Comp {...updatedProps} />;
   }
 
   return CompWithHooks;

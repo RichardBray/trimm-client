@@ -65,6 +65,7 @@ class Api {
       body: JSON.stringify(loginData),
     });
   }
+
   static getDashboardData() {
     const query = `#graphql
       query {
