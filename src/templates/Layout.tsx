@@ -30,18 +30,18 @@ class Layout extends Component<ILayout, {}> {
     const date = new Date();
     const currentYear = date.getFullYear();
     return (
-      <Fragment>
+      <>
         <header className={LayoutCss['main-header']}>
           <div className={LayoutCss['header-container']}>
             <img
               src={logo}
               alt="Trimm Logo"
               className={LayoutCss['main-header__logo']} />
-            <aside>
+            <nav>
               <Link className={LayoutCss['header-link']} to="/dashboard">Dashboard</Link>
               <Link className={LayoutCss['header-link']} to="/settings">Settings</Link>
               <a className={LayoutCss['header-link']} onClick={() => this.handleLogout()}>Logout</a>
-            </aside>
+            </nav>
           </div>
         </header>
         <ErrorBoundary>
@@ -54,7 +54,7 @@ class Layout extends Component<ILayout, {}> {
             Trimm &copy; {currentYear}
           </section>
         </footer>
-      </Fragment>
+      </>
     )
   }
 }

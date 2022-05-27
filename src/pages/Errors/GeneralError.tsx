@@ -1,4 +1,6 @@
-function GeneralError() {
+function GeneralError(props: {error?: unknown}) {
+    console.error(props.error ?? 'no error message found');
+
     return (
         <>
             <h1>Looks like something has gone wrong</h1>

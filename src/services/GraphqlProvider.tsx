@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { createClient, Provider, dedupExchange, fetchExchange, errorExchange } from 'urql';
-import { cacheExchange, SystemFields } from '@urql/exchange-graphcache';
+import { Cache, cacheExchange, DataFields, SystemFields } from '@urql/exchange-graphcache';
 import { devtoolsExchange } from '@urql/devtools';
-import { Navigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 import { GlobalStore } from '@services/GlobalStore';
 import Api, { Spending } from '@services/Api';
@@ -13,11 +13,18 @@ export type ReactChildren = {
   children: React.ReactNode;
 };
 
+type UpdateItemsInCacheInput = {
+  result: DataFields;
+  cache: Cache;
+  queryName: string;
+};
+
 type GraphqlData = SystemFields & { items: Spending[] };
 
 function GraphqlProvider({ children }: ReactChildren): JSX.Element | null {
   try {
     const globalStore = useContext(GlobalStore);
+    const navigate = useNavigate();
     const accessToken = sessionStorage.getItem('accessToken') ?? globalStore?.state.accessToken;
     const addJWTTokenToRequests = {
       headers: {
@@ -34,28 +41,31 @@ function GraphqlProvider({ children }: ReactChildren): JSX.Element | null {
         cacheExchange({
           updates: {
             Mutation: {
-              createItem: (result, _args, cache) => {
-                cache.updateQuery({ query: Api.getItemsQuery }, (data: GraphqlData | null) => {
-                  if (!data) throw new Error('Grapql data not found');
-
-                  return {
-                    ...data,
-                    items: [...data.items, result.createItem],
-                  } as GraphqlData;
-                });
-              },
+              createItem: (result, _args, cache) =>
+                updateItemsInCache({
+                  result,
+                  cache,
+                  queryName: 'createItem',
+                }),
+              deleteItem: (result, _args, cache) =>
+                updateItemsInCache({
+                  result,
+                  cache,
+                  queryName: 'deleteItem',
+                }),
             },
           },
         }),
         errorExchange({
           onError: (error) => {
-            const isSessionTimeoutError = error.message.includes('JsonWebTokenError');
+            const isSessionTimeoutError = error.message.includes('jwt expired');
             if (isSessionTimeoutError) {
-              return <Navigate to="/session-error" />
+              navigate('/session-error');
+              return;
             }
 
-            return <Navigate to="/server-error" />
-          }
+            navigate('/server-error');
+          },
         }),
         fetchExchange,
       ],
@@ -66,6 +76,17 @@ function GraphqlProvider({ children }: ReactChildren): JSX.Element | null {
     console.error(`GraphqlProvider: ${error}`);
     return null;
   }
+}
+
+function updateItemsInCache(args: UpdateItemsInCacheInput) {
+  args.cache.updateQuery({ query: Api.getItemsQuery }, (data: GraphqlData | null) => {
+    if (!data) throw new Error('Grapql data not found');
+
+    return {
+      ...data,
+      items: [...data.items, args.result[args.queryName]],
+    } as GraphqlData;
+  });
 }
 
 export default GraphqlProvider;
