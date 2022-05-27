@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import * as Sentry from '@sentry/browser';
 
@@ -28,20 +29,22 @@ if (ENV === 'production') {
 }
 
 root.render(
-  <GlobalStoreProvider>
-    <GraphqlProvider>
+  <React.StrictMode>
+    <GlobalStoreProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/server-error" element={<GeneralError />} />
-          <Route path="/session-error" element={<SessionError />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<RedirectPage />} />
-          <Route path="*" element={<GeneralError />} />
-        </Routes>
+        <GraphqlProvider>
+          <Routes>
+            <Route path="/server-error" element={<GeneralError />} />
+            <Route path="/session-error" element={<SessionError />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<RedirectPage />} />
+            <Route path="*" element={<GeneralError />} />
+          </Routes>
+        </GraphqlProvider>
       </BrowserRouter>
-    </GraphqlProvider>
-  </GlobalStoreProvider>
+    </GlobalStoreProvider>
+  </React.StrictMode>
 );

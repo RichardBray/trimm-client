@@ -13,8 +13,7 @@ $ npm start
 ```
 fekisimi@tempmailin.com
 
-- delete spending items - update graphqlprovider with deleteItem
-- change dates
+
 - logout
 - registration
 - finish removing redux

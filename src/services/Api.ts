@@ -36,23 +36,30 @@ export type CreateItemInput = {
 export type UpdateMutationFn = (
   variables?: unknown,
   context?: Partial<OperationContext>
-) => Promise<OperationResult<unknown, unknown>>;
+) => Promise<OperationResult<unknown, unknown>>
 
 export type LoginInput = {
   username: string;
   password: string;
 };
+
+export type ItemsDateRange = {
+  startDate: string,
+  endDate: string,
+}
+
 class Api {
   static getItemsQuery = `#graphql
-  query {
-    items(startDate: "2022-03-01", endDate: "2022-04-01") {
-      item_uuid
-      item_name
-      item_price
-      create_dttm
-      cat_uuid
+    query {
+      items(startDate: "2022-03-01", endDate: "2022-04-01") {
+        item_uuid
+        item_name
+        item_price
+        create_dttm
+        cat_uuid
+      }
     }
-  }`;
+  `;
 
   static async login(loginData: LoginInput) {
     const usernameExists = loginData.hasOwnProperty('username') || loginData.username;
@@ -66,10 +73,10 @@ class Api {
     });
   }
 
-  static getDashboardData() {
+  static getDashboardData({startDate, endDate}: ItemsDateRange) {
     const query = `#graphql
-      query {
-        items(startDate: "2022-03-01", endDate: "2022-04-01") {
+      query ($startDate: String!, $endDate: String!) {
+        items(startDate: $startDate, endDate: $endDate) {
           item_uuid
           item_name
           item_price
@@ -88,6 +95,28 @@ class Api {
 
     const [result] = useQuery({
       query,
+      variables: {startDate, endDate},
+    });
+
+    return result;
+  }
+
+  static getAllItems({startDate, endDate}: ItemsDateRange) {
+    const query = `#graphql
+      query ($startDate: String!, $endDate: String!) {
+        items(startDate: $startDate, endDate: $endDate) {
+          item_uuid
+          item_name
+          item_price
+          create_dttm
+          cat_uuid
+        }
+      }
+    `;
+
+    const [result] = useQuery({
+      query,
+      variables: {startDate, endDate},
     });
 
     return result;
@@ -107,8 +136,6 @@ class Api {
     `;
 
     return useMutation(query);
-
-    // return Api.#executeMutation(query, { itemCreateInput });
   }
 
   static deleteItem() {

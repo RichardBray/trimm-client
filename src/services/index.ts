@@ -2,10 +2,10 @@
 
 /**
  * Adds `0` to month if it has single number
- * @example modifyMonth(8) // 08
- * @example modifyMonth(11) // 11
+ * @example addZeroIfSingleNumber(8) // 08
+ * @example addZeroIfSingleNumber(11) // 11
  */
-export function modifyMonth(month: number): string {
+export function addZeroIfSingleNumber(month: number): string {
   return `0${month}`.slice(-2);
 }
 
@@ -44,6 +44,7 @@ export function monthToText(month: string | number): string {
   if (month === 0) {
     return monthNames[11];
   }
+
   return monthNames[+month - 1];
 }
 
@@ -52,4 +53,26 @@ export function isObjEmpty(obj: Record<string, unknown>): boolean {
     if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
   }
   return true;
+}
+
+export function initialDateValues() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = addZeroIfSingleNumber(date.getMonth() + 1);
+  const startDate = `${year}-${month}-01`;
+
+  return {
+    startDate,
+    endDate: initialEndDate(date, month),
+    currentMonth: month,
+    currentYear: year
+  };
+}
+
+function initialEndDate(date: Date, currentMonth: string) {
+  date.setMonth(Number(currentMonth) + 1);
+  const year = date.getFullYear();
+  const month = addZeroIfSingleNumber(date.getMonth() + 1);
+
+  return `${year}-${month}-01`;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { monthToText, roundNumber } from '@services/index';
+import * as Helpers from '@services/index';
 import Api, { Spending, Category, UpdateMutationFn } from '@services/Api';
-
+import GeneralError from '@pages/Errors/GeneralError';
 // - styles
 import SpendingItemCss from '@assets/styles/components/SpendingItems.module.css';
 import HelpersCss from '@assets/styles/helpers.module.css';
@@ -19,9 +19,9 @@ type SpendingItemsProps = {
 class SpendingItems {
   static main(props: SpendingItemsProps) {
     try {
-      const [_updateDeketeItem, deleteItemMutation] = Api.deleteItem();
       const { items } = props;
       const dataDoesNotExist = typeof items === 'undefined' || items?.length === 0;
+      const [_updateDeketeItem, deleteItemMutation] = Api.deleteItem();
 
       if (dataDoesNotExist) {
         return <div className={SpendingItemCss['no-items']}>You have no items for this month 😢</div>;
@@ -39,30 +39,28 @@ class SpendingItems {
             <div className={HelpersCss['mb-1rem']}>{SpendingItems.#formatDate(item.create_dttm)}</div>
             <div className={SpendingItemCss['price-text']}>
               {props.currency}
-              {roundNumber(item.item_price)}
+              {Helpers.roundNumber(item.item_price)}
             </div>
           </div>
-          <div className={SpendingItemCss['third-column']}>
-            <img
-              src={deleteIcon}
-              alt="Delete Icon"
-              className={GlobalCss['delete-icon']}
-              onClick={() => SpendingItems.#deleteItem(deleteItemMutation as UpdateMutationFn, item.item_uuid)}
-            />
-          </div>
+          <button
+            type="button"
+            className={SpendingItemCss['third-column']}
+            onClick={() => SpendingItems.#deleteItem(deleteItemMutation as UpdateMutationFn, item.item_uuid)}
+          >
+            <img src={deleteIcon} alt="Delete Icon" className={GlobalCss['delete-icon']} />
+          </button>
         </section>
       ));
 
       return <>{spendingItems}</>;
     } catch (error) {
-      console.error(error);
-      return null;
+      return <GeneralError error={error} />;
     }
   }
 
   static #categoryNameFromUuid(categories: Category[] | undefined, catUuid: string): string {
     if (typeof categories === 'undefined') {
-      return '';
+      throw new Error('category does not exist or has not been selected');
     }
 
     const selectedCategory = categories.find((category) => category.cat_uuid === catUuid);
@@ -78,7 +76,7 @@ class SpendingItems {
     const splitTime = String(date).split('T');
     const splitDates = splitTime[0].split('-');
     const year = splitDates[0];
-    const month = monthToText(splitDates[1]);
+    const month = Helpers.monthToText(splitDates[1]);
     const day = splitDates[2];
 
     return `${day} ${month} ${year}`;

@@ -40,10 +40,9 @@ class SpendingItemsForm {
   };
 
   static main(props: SpendingItemsFormProps) {
+    const [_updateCreateItemResults, createItemMutatation] = Api.createItem();
     const stateData = useState(SpendingItemsForm.#defaultState);
     const [state] = stateData;
-    const { item_name, create_dttm, item_price } = state.spending_item;
-    const [_updateResults, createItem] = Api.createItem();
 
     const categoryList = props.categoriesData?.map((cat: Category) => (
       <option key={cat.cat_uuid} value={cat.cat_uuid}>
@@ -55,7 +54,7 @@ class SpendingItemsForm {
       <form
         className={DashboardCss['spending-form']}
         onSubmit={(e) =>
-          SpendingItemsForm.#createSpendingItem({ formEvent: e, stateData, createItem: createItem as UpdateMutationFn })
+          SpendingItemsForm.#createSpendingItem({ formEvent: e, stateData, createItem: createItemMutatation as UpdateMutationFn })
         }
       >
         <section className={`${HelpersCss['w-70']} dis-f`}>
@@ -78,8 +77,8 @@ class SpendingItemsForm {
               onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
               required
             >
-              <option value="0" disabled>
-                --
+              <option value="0">
+                Choose a category
               </option>
               {categoryList}
             </select>
@@ -88,7 +87,7 @@ class SpendingItemsForm {
               name="item_name"
               placeholder="Description"
               className={Inputs['input-spending-form']}
-              value={item_name}
+              value={state.spending_item.item_name}
               onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
               required
             />
@@ -98,7 +97,7 @@ class SpendingItemsForm {
               placeholder="Date"
               className={Inputs['input-spending-form']}
               onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
-              value={create_dttm}
+              value={state.spending_item.create_dttm}
               autoComplete="off"
               data-form-type="other"
             />
@@ -110,7 +109,7 @@ class SpendingItemsForm {
             name="item_price"
             placeholder="Price"
             className={Inputs['input-spending-form-price']}
-            value={item_price}
+            value={state.spending_item.item_price}
             onChange={(e) => SpendingItemsForm.#handleChange(e, stateData)}
             required
           />
